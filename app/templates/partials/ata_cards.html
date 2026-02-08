@@ -20,10 +20,10 @@
 
     <div class="card-footer">
         <div class="grid-2" style="gap: 10px;">
-            <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-details"
-                style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); color: var(--primary);">
-                <i class="fa-solid fa-download" style="margin-right: 5px;"></i> Ata
-            </a>
+            <button onclick="openAtaFilesModal('{{ ata.numeroControlePNCPCompra }}')" class="btn-details"
+                style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); color: var(--primary); cursor: pointer;">
+                <i class="fa-solid fa-folder-open" style="margin-right: 5px;"></i> Arquivos
+            </button>
             <a href="/ata/{{ ata.id }}/itens" class="btn-details"
                 style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: var(--primary); color: white; border: none;">
                 <i class="fa-solid fa-list" style="margin-right: 5px;"></i> Itens

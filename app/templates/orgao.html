@@ -31,6 +31,20 @@
 
                 <div
                     style="display: flex; align-items: center; gap: 5px; padding: 0 10px; border-left: 1px solid var(--border);">
+                    <select name="unidade"
+                        style="background: var(--bg-input); border: none; padding: 0.5rem; color: var(--text-main); font-size: 0.9rem; min-width: 200px;">
+                        <option value="" style="background: var(--bg-input); color: var(--text-main);">Todas as Unidades
+                        </option>
+                        {% for u in units %}
+                        <option value="{{ u }}" style="background: var(--bg-input); color: var(--text-main);" {% if
+                            u==selected_unit %}selected{% endif %}>{{ u|truncate(80) }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div
+                    style="display: flex; align-items: center; gap: 5px; padding: 0 10px; border-left: 1px solid var(--border);">
                     <label style="font-size: 0.8rem; color: var(--text-muted);">Vigência Início:</label>
                     <input type="date" name="vigencia_inicio" value="{{ vigencia_inicio }}"
                         style="background: transparent; border: 1px solid var(--border); padding: 0.5rem; color: var(--text-main); border-radius: 4px;">
@@ -45,7 +59,7 @@
                 <button type="submit" class="btn-search" style="padding: 0 1.5rem;">
                     <i class="fa-solid fa-filter"></i> Filtrar
                 </button>
-                {% if query_ata or vigencia_inicio or vigencia_fim %}
+                {% if query_ata or vigencia_inicio or vigencia_fim or selected_unit %}
                 <a href="{{ request.path }}" class="btn-details"
                     style="display: flex; align-items: center; text-decoration: none; border: 1px solid var(--border); margin-left: auto;">
                     <i class="fa-solid fa-xmark"></i> Limpar
@@ -82,6 +96,7 @@
                 const query = "{{ query_ata }}";
                 const vigenciaInicio = "{{ vigencia_inicio }}";
                 const vigenciaFim = "{{ vigencia_fim }}";
+                const selectedUnit = "{{ selected_unit }}";
                 const cnpj = "{{ orgao.cnpj }}"; // Not strictly needed as we are on the page, but helpful if we constructed URL manually. 
                 // Actually we can just use window.location.pathname
 
@@ -95,6 +110,7 @@
                     if (query) params.append('q', query);
                     if (vigenciaInicio) params.append('vigencia_inicio', vigenciaInicio);
                     if (vigenciaFim) params.append('vigencia_fim', vigenciaFim);
+                    if (selectedUnit) params.append('unidade', selectedUnit);
                     params.append('page', page);
                     params.append('partial', 'true');
 
@@ -122,6 +138,82 @@
                 });
             }
         });
+
+        // Modal Functions
+        function openAtaFilesModal(ctrlContent) {
+            const modal = document.getElementById("filesModal");
+            const list = document.getElementById("filesList");
+            const modalLoader = document.getElementById("modalLoader");
+
+            modal.style.display = "block";
+            list.innerHTML = "";
+            modalLoader.style.display = "block";
+
+            fetch(`/api/proxy/arquivos/${ctrlContent}`)
+                .then(response => response.json())
+                .then(data => {
+                    modalLoader.style.display = "none";
+                    if (data.error) {
+                        list.innerHTML = `<p style='color: red;'>Erro: ${data.error}</p>`;
+                        return;
+                    }
+                    if (Array.isArray(data) && data.length > 0) {
+                        let html = "";
+                        data.forEach(file => {
+                            html += `
+                            <div style="background: var(--bg-main); padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                                <div style="color: var(--text-main);">
+                                    <div style="font-weight: 500;">${file.titulo}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">${file.tipoDocumentoNome || 'Documento'} - ${(file.dataPublicacaoPncp || '').slice(0, 10)}</div>
+                                </div>
+                                <a href="${file.url}" target="_blank" class="btn-sm" style="white-space: nowrap;">
+                                    <i class="fa-solid fa-download"></i> Baixar
+                                </a>
+                            </div>`;
+                        });
+                        list.innerHTML = html;
+                    } else {
+                        list.innerHTML = "<p>Nenhum arquivo encontrado.</p>";
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    modalLoader.style.display = "none";
+                    list.innerHTML = "<p style='color: red;'>Erro ao buscar arquivos.</p>";
+                });
+        }
+
+        function closeAtaFilesModal() {
+            document.getElementById("filesModal").style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById("filesModal")) {
+                closeAtaFilesModal();
+            }
+        }
     </script>
+
+    <!-- Files Modal -->
+    <div id="filesModal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8);">
+        <div class="modal-content"
+            style="background-color: var(--bg-card); margin: 10% auto; padding: 20px; border: 1px solid var(--border); width: 80%; max-width: 600px; border-radius: 8px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+                <h2 style="margin: 0; font-size: 1.25rem;">Arquivos da Ata/Compra</h2>
+                <span onclick="closeAtaFilesModal()"
+                    style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            </div>
+
+            <div id="modalLoader" style="display: none; text-align: center; padding: 2rem;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+            </div>
+
+            <div id="filesList" class="files-list">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

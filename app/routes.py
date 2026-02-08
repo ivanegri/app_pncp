@@ -235,7 +235,45 @@ def item_details(item_id):
             # Itens has 'parent_numeroControlePNCPAta'.
             ata = db.session.query(Atas).filter_by(numeroControlePNCPAta=item.parent_numeroControlePNCPAta).first()
             
-        return render_template('item.html', item=item, orgao=orgao, ata=ata)
+        # Pega resultados (Vencedor) via API PNCP
+        # https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencialcompra}/itens/{numerodoitem}/resultados
+        item_results = []
+        if ata and ata.numeroControlePNCPCompra:
+            try:
+                import requests
+                # Parse numeroControlePNCPCompra: e.g., 45132495000140-1-000579/2024
+                # CNPJ: first 14
+                ctrl = ata.numeroControlePNCPCompra
+                cnpj = ctrl[:14]
+                
+                # Split by / to separate year part
+                parts = ctrl.split('/')
+                if len(parts) == 2:
+                    ano = parts[1][:4] # 4 chars after /
+                    
+                    # Sequence: 6 chars before /
+                    # parts[0] is everything before /. We take last 6 chars of that.
+                    sequencial = parts[0][-6:]
+                    
+                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item.numeroItem}/resultados"
+                    
+                    # print(f"Fetching item results: {url}")
+                    response = requests.get(url, timeout=5)
+                    if response.status_code == 200:
+                        item_results = response.json()
+                    
+                    # Fetch Files (Arquivos)
+                    # https://pncp.gov.br/api/pncp/v1/orgaos/{CNPJ}/compras/{ano}/{sequencialCompra}/arquivos
+                    url_files = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/arquivos"
+                    # print(f"Fetching files: {url_files}")
+                    resp_files = requests.get(url_files, timeout=5)
+                    if resp_files.status_code == 200:
+                        item_files = resp_files.json()
+
+            except Exception as api_err:
+                print(f"Error fetching item results from External API: {api_err}")
+
+        return render_template('item.html', item=item, orgao=orgao, ata=ata, item_results=item_results, item_files=item_files if 'item_files' in locals() else [])
             
     except Exception as e:
         print(f"Item detail error: {e}")
@@ -265,6 +303,17 @@ def orgao_details(cnpj):
         if not orgao:
              return render_template('results.html', query="", results=[], error="Órgão não encontrado")
              
+        # Fetch Distinct Units for Dropdown
+        distinct_units = db.session.query(Atas.nomeUnidadeOrgao).filter_by(cnpjOrgao=cnpj).distinct().order_by(Atas.nomeUnidadeOrgao).all()
+        # Flatten list of tuples
+        units = [u[0] for u in distinct_units if u[0]]
+        
+        # Filter params
+        query_ata = request.args.get('q', '')
+        vigencia_inicio = request.args.get('vigencia_inicio', '')
+        vigencia_fim = request.args.get('vigencia_fim', '')
+        selected_unit = request.args.get('unidade', '')
+        
         # Fetch Atas linked to this Orgao
         atas_query = db.session.query(Atas).filter_by(cnpjOrgao=cnpj)
         
@@ -277,6 +326,9 @@ def orgao_details(cnpj):
         if vigencia_fim:
             atas_query = atas_query.filter(Atas.vigenciaFim <= vigencia_fim)
             
+        if selected_unit:
+            atas_query = atas_query.filter(Atas.nomeUnidadeOrgao == selected_unit)
+            
         offset = (page - 1) * per_page
         atas = atas_query.offset(offset).limit(per_page + 1).all()
         
@@ -288,7 +340,7 @@ def orgao_details(cnpj):
         if is_partial:
             return render_template('partials/ata_cards.html', atas=atas)
         
-        return render_template('orgao.html', orgao=orgao, atas=atas, query_ata=query_ata, vigencia_inicio=vigencia_inicio, vigencia_fim=vigencia_fim, page=page, has_next=has_next)
+        return render_template('orgao.html', orgao=orgao, atas=atas, query_ata=query_ata, vigencia_inicio=vigencia_inicio, vigencia_fim=vigencia_fim, units=units, selected_unit=selected_unit, page=page, has_next=has_next)
         
     except Exception as e:
         print(f"Orgao detail error: {e}")

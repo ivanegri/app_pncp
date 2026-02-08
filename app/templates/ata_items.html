@@ -19,10 +19,10 @@
             <div style="text-align: right;">
                 <span class="badge-type">{{ ata.nomeOrgao }}</span>
                 <div style="margin-top: 10px;">
-                    <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-dashboard"
-                        style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                        <i class="fa-solid fa-download"></i> Baixar Ata
-                    </a>
+                    <button onclick="openAtaFilesModal('{{ ata.numeroControlePNCPCompra }}')" class="btn-dashboard"
+                        style="padding: 0.5rem 1rem; font-size: 0.9rem; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-folder-open"></i> Arquivos da Ata
+                    </button>
                 </div>
             </div>
         </div>
@@ -57,5 +57,82 @@
         </div>
         {% endfor %}
     </div>
+    <!-- Files Modal -->
+    <div id="filesModal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8);">
+        <div class="modal-content"
+            style="background-color: var(--bg-card); margin: 10% auto; padding: 20px; border: 1px solid var(--border); width: 80%; max-width: 600px; border-radius: 8px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+                <h2 style="margin: 0; font-size: 1.25rem;">Arquivos da Ata/Compra</h2>
+                <span onclick="closeAtaFilesModal()"
+                    style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            </div>
+
+            <div id="modalLoader" style="display: none; text-align: center; padding: 2rem;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+            </div>
+
+            <div id="filesList" class="files-list">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Functions
+        function openAtaFilesModal(ctrlContent) {
+            const modal = document.getElementById("filesModal");
+            const list = document.getElementById("filesList");
+            const modalLoader = document.getElementById("modalLoader");
+
+            modal.style.display = "block";
+            list.innerHTML = "";
+            modalLoader.style.display = "block";
+
+            fetch(`/api/proxy/arquivos/${ctrlContent}`)
+                .then(response => response.json())
+                .then(data => {
+                    modalLoader.style.display = "none";
+                    if (data.error) {
+                        list.innerHTML = `<p style='color: red;'>Erro: ${data.error}</p>`;
+                        return;
+                    }
+                    if (Array.isArray(data) && data.length > 0) {
+                        let html = "";
+                        data.forEach(file => {
+                            html += `
+                            <div style="background: var(--bg-main); padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                                <div style="color: var(--text-main);">
+                                    <div style="font-weight: 500;">${file.titulo}</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.7;">${file.tipoDocumentoNome || 'Documento'} - ${(file.dataPublicacaoPncp || '').slice(0, 10)}</div>
+                                </div>
+                                <a href="${file.url}" target="_blank" class="btn-sm" style="white-space: nowrap;">
+                                    <i class="fa-solid fa-download"></i> Baixar
+                                </a>
+                            </div>`;
+                        });
+                        list.innerHTML = html;
+                    } else {
+                        list.innerHTML = "<p>Nenhum arquivo encontrado.</p>";
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    modalLoader.style.display = "none";
+                    list.innerHTML = "<p style='color: red;'>Erro ao buscar arquivos.</p>";
+                });
+        }
+
+        function closeAtaFilesModal() {
+            document.getElementById("filesModal").style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById("filesModal")) {
+                closeAtaFilesModal();
+            }
+        }
+    </script>
 </div>
 {% endblock %}

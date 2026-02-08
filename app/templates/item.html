@@ -46,6 +46,44 @@
             </div>
         </div>
 
+        <!-- Supplier / Holder Info -->
+        <div class="detail-card">
+            <h3><i class="fa-solid fa-box-open"></i> Fornecedor / Detentor</h3>
+            <div class="info-content">
+                {% if item_results %}
+                {% for res in item_results %}
+                <div style="margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">{{ res.nomeRazaoSocialFornecedor }}</h4>
+                    <div class="info-row">
+                        <span class="label">CNPJ/CPF:</span>
+                        <span class="val">{{ res.niFornecedor }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Qtd. Homologada:</span>
+                        <span class="val">{{ res.quantidadeHomologada }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Valor Unit. Homologado:</span>
+                        <span class="val">R$ {{ res.valorUnitarioHomologado|format_currency }}</span>
+                    </div>
+                    {% if res.valorTotalHomologado %}
+                    <div class="info-row">
+                        <span class="label">Valor Total:</span>
+                        <span class="val">R$ {{ res.valorTotalHomologado|format_currency }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="info-row">
+                        <span class="label">Situação:</span>
+                        <span class="val">{{ res.situacaoCompraItemResultadoNome }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="opacity: 0.7;">Informações do fornecedor não disponíveis na API do PNCP.</p>
+                {% endif %}
+            </div>
+        </div>
+
         <!-- Ata Info -->
         <div class="detail-card">
             <h3><i class="fa-solid fa-file-contract"></i> Dados da Ata</h3>
@@ -79,10 +117,17 @@
                 {% endif %}
 
                 <div style="margin-top: 1.5rem;">
+                    {% if item_files %}
+                    <button onclick="openFilesModal()" class="btn-details"
+                        style="display: block; width: 100%; text-align: center; background: var(--primary); color: white; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-folder-open"></i> Ver Arquivos e Anexos ({{ item_files|length }})
+                    </button>
+                    {% else %}
                     <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-details"
                         style="display: block; text-align: center; text-decoration: none; background: var(--primary); color: white; border: none;">
-                        <i class="fa-solid fa-download"></i> Download ATA
+                        <i class="fa-solid fa-download"></i> Download ATA (Link Direto)
                     </a>
+                    {% endif %}
                 </div>
                 {% else %}
                 <p>Informações da ata não encontradas.</p>
@@ -91,4 +136,54 @@
         </div>
     </div>
 </div>
+
+<!-- Files Modal -->
+<div id="filesModal" class="modal"
+    style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8);">
+    <div class="modal-content"
+        style="background-color: var(--bg-card); margin: 10% auto; padding: 20px; border: 1px solid var(--border); width: 80%; max-width: 600px; border-radius: 8px;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+            <h2 style="margin: 0; font-size: 1.25rem;">Arquivos da Compra</h2>
+            <span onclick="closeFilesModal()"
+                style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+        </div>
+
+        <div class="files-list">
+            {% if item_files %}
+            {% for file in item_files %}
+            <div
+                style="background: var(--bg-main); padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                <div style="color: var(--text-main);">
+                    <div style="font-weight: 500;">{{ file.titulo }}</div>
+                    <div style="font-size: 0.8rem; opacity: 0.7;">{{ file.tipoDocumentoNome }} - {{
+                        file.dataPublicacaoPncp[:10] }}</div>
+                </div>
+                <a href="{{ file.url }}" target="_blank" class="btn-sm" style="white-space: nowrap;">
+                    <i class="fa-solid fa-download"></i> Baixar
+                </a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>Nenhum arquivo encontrado.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function openFilesModal() {
+        document.getElementById("filesModal").style.display = "block";
+    }
+
+    function closeFilesModal() {
+        document.getElementById("filesModal").style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == document.getElementById("filesModal")) {
+            closeFilesModal();
+        }
+    }
+</script>
 {% endblock %}
