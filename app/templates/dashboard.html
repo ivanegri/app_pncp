@@ -74,28 +74,33 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 50px;">#</th>
-                        <th>Órgão Público</th>
-                        <th style="text-align: right;">Qtd. Itens</th>
-                        <th style="width: 100px;">Ação</th>
+                        <th style="width: 50px; padding: 1rem;">#</th>
+                        <th style="padding: 1rem;">Órgão Público</th>
+                        <th style="text-align: right; padding: 1rem 2rem;">Qtd. Itens</th>
+                        <th style="text-align: right; padding: 1rem 2rem;">Qtd. Estimada</th>
+                        <th style="text-align: right; padding: 1rem 2rem;">Preço Médio</th>
+                        <th style="width: 100px; text-align: center; padding: 1rem;">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for org in top_orgaos %}
                     <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>
+                        <td style="padding: 1rem;">{{ loop.index }}</td>
+                        <td style="padding: 1rem;">
                             <div style="font-weight: 500;">{{ org.name }}</div>
                             <div style="font-size: 0.8em; opacity: 0.7;">CNPJ: {{ org.cnpj }}</div>
                         </td>
-                        <td style="text-align: right;">{{ org.count }}</td>
-                        <td>
+                        <td style="text-align: right; padding: 1rem 2rem;">{{ org.count }}</td>
+                        <td style="text-align: right; padding: 1rem 2rem;">{{ org.total_qty }}</td>
+                        <td style="text-align: right; padding: 1rem 2rem; white-space: nowrap;">R$ {{
+                            org.avg_price|format_currency }}</td>
+                        <td style="text-align: center; padding: 1rem;">
                             <a href="{{ url_for('main.orgao_details', cnpj=org.cnpj) }}" class="btn-sm">Ver</a>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="4" style="text-align: center; padding: 2rem;">Nenhum órgão encontrado com esta
+                        <td colspan="6" style="text-align: center; padding: 2rem;">Nenhum órgão encontrado com esta
                             unidade.</td>
                     </tr>
                     {% endfor %}

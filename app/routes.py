@@ -155,10 +155,13 @@ def dashboard():
         
         # Join Itens and Orgaos on parent_cnpj == cnpj
         # Join Itens and Orgaos on parent_cnpj == cnpj
+        # Join Itens and Orgaos on parent_cnpj == cnpj
         top_orgaos_query = db.session.query(
             Orgaos.razaoSocial,
             Orgaos.cnpj,
-            func.count(Itens.id).label('count')
+            func.count(Itens.id).label('count'),
+            func.sum(Itens.quantidade).label('total_qty'),
+            func.avg(Itens.valorUnitarioEstimado).label('avg_price')
         ).join(
             Orgaos, Itens.parent_cnpj == Orgaos.cnpj
         ).filter(
@@ -173,7 +176,13 @@ def dashboard():
         ).limit(20).all()
         
         # Pass full objects to template for table
-        top_orgaos = [{'name': r[0], 'cnpj': r[1], 'count': r[2]} for r in top_orgaos_query]
+        top_orgaos = [{
+            'name': r[0], 
+            'cnpj': r[1], 
+            'count': r[2], 
+            'total_qty': int(r[3] or 0), 
+            'avg_price': float(r[4] or 0)
+        } for r in top_orgaos_query]
         
         # Keep labels/values for chart if we still wanted it, but user asked for table. 
         # We can remove chart data prep if we are fully replacing.
