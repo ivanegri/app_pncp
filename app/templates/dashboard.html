@@ -117,34 +117,33 @@
         new Chart(ctxPrice, {
             type: 'bar',
             data: {
-                labels: {{ price_buckets_labels| tojson }},
-        datasets: [{
-            label: 'Frequência',
-            data: {{ price_buckets_values| tojson }},
-        backgroundColor: 'rgba(99, 102, 241, 0.5)',
-        borderColor: '#6366f1',
-        borderWidth: 1
+                labels: JSON.parse('{{ price_buckets_labels|tojson }}'),
+                datasets: [{
+                    label: 'Frequência',
+                    data: JSON.parse('{{ price_buckets_values|tojson }}'),
+                    backgroundColor: 'rgba(99, 102, 241, 0.5)',
+                    borderColor: '#6366f1',
+                    borderWidth: 1
                 }]
             },
-        options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                ticks: { color: '#9ca3af' }
-            },
-            x: {
-                grid: { display: false },
-                ticks: { color: '#9ca3af' }
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#9ca3af' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#9ca3af' }
+                    }
+                }
             }
-        }
-    }
         });
-
     });
 </script>
 {% endblock %}
