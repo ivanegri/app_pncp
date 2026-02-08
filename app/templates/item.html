@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-header">
+    <div class="container">
+        <a href="javascript:history.back()" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+        <h2>Detalhes do Item</h2>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom: 4rem;">
+    <div class="detail-grid">
+        <!-- Item Info -->
+        <div class="detail-card main-info">
+            <span class="badge-type">Item #{{ item.numeroItem }}</span>
+            <h1>{{ item.descricao }}</h1>
+
+            <div class="price-highlight">
+                <span class="value">R$ {{ item.valorUnitarioEstimado|format_currency }}</span>
+                <span class="label">Valor Unitário</span>
+            </div>
+
+            <div class="grid-2">
+                <div class="info-block">
+                    <span class="label">Quantidade</span>
+                    <span class="value-sm">{{ item.quantidade }} {{ item.unidadeMedida }}</span>
+                </div>
+                <div class="info-block">
+                    <span class="label">Valor Total</span>
+                    <span class="value-sm">R$ {{ item.valorTotal|format_currency }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orgao Info -->
+        <div class="detail-card">
+            <h3><i class="fa-solid fa-building-columns"></i> Órgão Responsável</h3>
+            <div class="info-content">
+                {% if orgao %}
+                <h4>{{ orgao.razaoSocial }}</h4>
+                <p class="meta">CNPJ: {{ orgao.cnpj }}</p>
+                <p class="meta">{{ orgao.esferaId }} - {{ orgao.poderId }}</p>
+                {% else %}
+                <p>Informações do órgão não encontradas (CNPJ: {{ item.parent_cnpj }})</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Ata Info -->
+        <div class="detail-card">
+            <h3><i class="fa-solid fa-file-contract"></i> Dados da Ata</h3>
+            <div class="info-content">
+                {% if ata %}
+                <div class="info-row">
+                    <span class="label">Nº da Ata:</span>
+                    <span class="val">{{ ata.numeroAtaRegistroPreco }}/{{ ata.anoAta }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Controle PNCP:</span>
+                    <span class="val">{{ ata.numeroControlePNCPAta }}</span>
+                </div>
+                {% if ata.objetoContratacao %}
+                <div class="info-row vertical">
+                    <span class="label">Objeto:</span>
+                    <p class="text-block">{{ ata.objetoContratacao }}</p>
+                </div>
+                {% endif %}
+                {% if ata.dataAssinatura %}
+                <div class="info-row">
+                    <span class="label">Assinatura:</span>
+                    <span class="val">{{ ata.dataAssinatura[:10] }}</span>
+                </div>
+                {% endif %}
+                {% if ata.vigenciaInicio and ata.vigenciaFim %}
+                <div class="info-row">
+                    <span class="label">Vigência:</span>
+                    <span class="val">{{ ata.vigenciaInicio[:10] }} a {{ ata.vigenciaFim[:10] }}</span>
+                </div>
+                {% endif %}
+
+                <div style="margin-top: 1.5rem;">
+                    <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-details"
+                        style="display: block; text-align: center; text-decoration: none; background: var(--primary); color: white; border: none;">
+                        <i class="fa-solid fa-download"></i> Download ATA
+                    </a>
+                </div>
+                {% else %}
+                <p>Informações da ata não encontradas.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

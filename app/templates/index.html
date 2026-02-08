@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <span class="badge">Análise em Tempo Real</span>
+        <h1>Descubra Insights no <span class="gradient-text">PNCP</span></h1>
+        <p class="subtitle">Pesquise milhões de itens, atas e órgãos públicos para tomar decisões inteligentes baseadas
+            em dados.</p>
+
+        <div class="search-container">
+            <form action="/search" method="GET" class="search-form">
+                <div class="select-wrapper">
+                    <select name="type">
+                        <option value="itens">Itens</option>
+                        <option value="atas">Atas</option>
+                        <option value="orgaos">Órgãos</option>
+                    </select>
+                </div>
+                <input type="text" name="q" placeholder="O que você procura hoje? (ex: 'notebook', 'papel A4')">
+                <button type="submit" class="btn-search">
+                    <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
+                </button>
+            </form>
+        </div>
+
+        <div class="stats-preview">
+            <div class="stat-card">
+                <div class="icon"><i class="fa-solid fa-box-open"></i></div>
+                <div class="info">
+                    <span class="value">2.5M+</span>
+                    <span class="label">Itens</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="icon"><i class="fa-solid fa-file-contract"></i></div>
+                <div class="info">
+                    <span class="value">1.1M+</span>
+                    <span class="label">Atas</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
+                <div class="info">
+                    <span class="value">50k+</span>
+                    <span class="label">Órgãos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

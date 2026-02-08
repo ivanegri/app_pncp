@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.DS_Store
+.vscode/
+venv/
+env/
+instance/
+.idea/
+.git/
+
+# Large Data Files (Not for Git)
+data/
+CSVs/
+*.zip
+*.csv
+orgaos_full/
+
+# Temporary Files
+dashboard_gripe.html
+dashboard_output.html
+item_debug.html
+migration_itens.log

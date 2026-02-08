@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-header">
+    <div class="container">
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar para Busca</a>
+        <h2>Resultados para <span class="highlight">"{{ query }}"</span></h2>
+        <div class="meta" style="margin-top: 5px; font-size: 0.9rem;">
+            Encontrados {{ results|length }} resultados em
+            {% if type == 'atas' %}Atas de Registro de Preço{% elif type == 'orgaos' %}Órgãos Públicos{% else %}Itens{%
+            endif %}
+        </div>
+
+        {% if type == 'itens' %}
+        <div style="margin-top: 1rem;">
+            <a href="/dashboard?q={{ query }}" class="btn-dashboard">
+                <i class="fa-solid fa-chart-pie"></i> Visualizar Relatório de Mercado
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    {% if error %}
+    <div class="no-results">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <h3>{{ error }}</h3>
+        <p>Tente refinar sua busca.</p>
+    </div>
+    {% elif results %}
+    <div class="results-grid">
+        {% for item in results %}
+        <div class="result-card">
+            <div class="card-header">
+                {% if type == 'atas' %}
+                <span class="badge-type">Ata {{ item.anoAta }}</span>
+                {% elif type == 'orgaos' %}
+                <span class="badge-type">CNPJ: {{ item.cnpj }}</span>
+                {% else %}
+                <span class="badge-type">Item #{{ item.numeroItem }}</span>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                {% if type == 'atas' %}
+                <h3>{{ item.numeroAtaRegistroPreco }} - {{ item.numeroControlePNCPAta }}</h3>
+                <p class="details">
+                    Vigência: {{ item.vigenciaInicio }} a {{ item.vigenciaFim }}
+                </p>
+                {% elif type == 'orgaos' %}
+                <h3>{{ item.razaoSocial }}</h3>
+                <p class="details">
+                    {{ item.nomeFantasia }}<br>
+                    {{ item.esferaId }} - {{ item.poderId }}
+                </p>
+                {% else %}
+                <h3>{{ item.descricao }}</h3>
+                <div class="price-tag">
+                    R$ {{ item.valorUnitarioEstimado|format_currency }}
+                </div>
+                <p class="details">
+                    Quantidade: {{ item.quantidade }} {{ item.unidadeMedida }}
+                </p>
+                {% endif %}
+            </div>
+
+            <div class="card-footer">
+                {% if type == 'orgaos' %}
+                <a href="/orgao/{{ item.cnpj }}" class="btn-details"
+                    style="display: block; text-align: center; text-decoration: none;">
+                    Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                {% elif type == 'atas' %}
+                <!-- For Atas search result, link to where? Maybe items? For now disabled or generic -->
+                <!-- Assuming we want to see items of this ata -->
+                <a href="/ata/{{ item.id }}/itens" class="btn-details"
+                    style="display: block; text-align: center; text-decoration: none;">
+                    Ver Itens <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                {% else %}
+                <a href="/item/{{ item.id }}" class="btn-details"
+                    style="display: block; text-align: center; text-decoration: none;">
+                    Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-results">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <h3>Nenhum resultado encontrado</h3>
+        <p>Tente buscar por termos diferentes ou verifique a ortografia.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-header">
+    <div class="container">
+        <a href="javascript:history.back()" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+        <h2>Itens da Ata</h2>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom: 4rem;">
+    <!-- Ata Info Summary -->
+    <div class="detail-card" style="margin-bottom: 2rem;">
+        <div class="info-row">
+            <div>
+                <h3>Ata {{ ata.numeroAtaRegistroPreco }}/{{ ata.anoAta }}</h3>
+                <p class="text-muted">{{ ata.objetoContratacao }}</p>
+            </div>
+            <div style="text-align: right;">
+                <span class="badge-type">{{ ata.nomeOrgao }}</span>
+                <div style="margin-top: 10px;">
+                    <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-dashboard"
+                        style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        <i class="fa-solid fa-download"></i> Baixar Ata
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3><i class="fa-solid fa-box"></i> Itens Relacionados ({{ items|length }})</h3>
+
+    <div class="results-grid">
+        {% for item in items %}
+        <div class="result-card">
+            <div class="card-header">
+                <span class="badge-type">Item #{{ item.numeroItem }}</span>
+            </div>
+
+            <div class="card-body">
+                <h3>{{ item.descricao }}</h3>
+                <div class="price-tag">
+                    R$ {{ item.valorUnitarioEstimado|format_currency }}
+                </div>
+                <p class="details">
+                    <strong>Qtd:</strong> {{ item.quantidade }} {{ item.unidadeMedida }}<br>
+                    <strong>Total:</strong> R$ {{ item.valorTotal|format_currency }}
+                </p>
+            </div>
+
+            <div class="card-footer">
+                <a href="/item/{{ item.id }}" class="btn-details"
+                    style="display: block; text-align: center; text-decoration: none;">
+                    Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

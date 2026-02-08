@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-header">
+    <div class="container">
+        <a href="javascript:history.back()" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+        <h2>Detalhes do Órgão</h2>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom: 4rem;">
+    <!-- Orgao Info -->
+    <div class="detail-card main-info" style="margin-bottom: 2rem;">
+        <span class="badge-type">CNPJ: {{ orgao.cnpj }}</span>
+        <h1>{{ orgao.razaoSocial }}</h1>
+        <div class="meta">
+            <span><i class="fa-solid fa-map-pin"></i> {{ orgao.esferaId }} / {{ orgao.poderId }}</span>
+            <span style="margin-left: 20px;"><i class="fa-solid fa-building"></i> {{ orgao.nomeFantasia }}</span>
+        </div>
+    </div>
+
+    <h3><i class="fa-solid fa-file-contract"></i> Atas de Registro de Preço ({{ atas|length }})</h3>
+
+    <!-- Search within Atas -->
+    <div style="margin-bottom: 2rem;">
+        <form action="" method="get" class="search-form" style="max-width: 100%; flex-direction: column;">
+            <div class="search-container"
+                style="display: flex; gap: 10px; width: 100%; box-shadow: none; border: 1px solid var(--border); background: var(--bg-input); flex-wrap: wrap;">
+                <input type="text" name="q" placeholder="Filtrar atas por objeto..." value="{{ query_ata }}"
+                    style="background: transparent; border: none; padding: 0.8rem; flex: 1; min-width: 200px;">
+
+                <div
+                    style="display: flex; align-items: center; gap: 5px; padding: 0 10px; border-left: 1px solid var(--border);">
+                    <label style="font-size: 0.8rem; color: var(--text-muted);">Vigência Início:</label>
+                    <input type="date" name="vigencia_inicio" value="{{ vigencia_inicio }}"
+                        style="background: transparent; border: 1px solid var(--border); padding: 0.5rem; color: var(--text-main); border-radius: 4px;">
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 5px; padding: 0 10px;">
+                    <label style="font-size: 0.8rem; color: var(--text-muted);">Vigência Fim:</label>
+                    <input type="date" name="vigencia_fim" value="{{ vigencia_fim }}"
+                        style="background: transparent; border: 1px solid var(--border); padding: 0.5rem; color: var(--text-main); border-radius: 4px;">
+                </div>
+
+                <button type="submit" class="btn-search" style="padding: 0 1.5rem;">
+                    <i class="fa-solid fa-filter"></i> Filtrar
+                </button>
+                {% if query_ata or vigencia_inicio or vigencia_fim %}
+                <a href="{{ request.path }}" class="btn-details"
+                    style="display: flex; align-items: center; text-decoration: none; border: 1px solid var(--border); margin-left: auto;">
+                    <i class="fa-solid fa-xmark"></i> Limpar
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <div class="results-grid">
+        {% for ata in atas %}
+        <div class="result-card">
+            <div class="card-header">
+                <span class="badge-type">Ata {{ ata.numeroAtaRegistroPreco }}/{{ ata.anoAta }}</span>
+                {% if ata.dataAssinatura %}
+                <span class="date">{{ ata.dataAssinatura[:10] }}</span>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                <h3>{{ ata.objetoContratacao|truncate(100) }}</h3>
+                <p class="details">
+                    <strong>Vigência:</strong> {{ ata.vigenciaInicio[:10] }} a {{ ata.vigenciaFim[:10] }}<br>
+                    <strong>Unidade:</strong> {{ ata.nomeUnidadeOrgao }}
+                </p>
+                <div class="meta" style="font-size: 0.8rem; margin-top: 5px;">
+                    Controle: {{ ata.numeroControlePNCPAta }}
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="grid-2" style="gap: 10px;">
+                    <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-details"
+                        style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); color: var(--primary);">
+                        <i class="fa-solid fa-download" style="margin-right: 5px;"></i> Ata
+                    </a>
+                    <a href="/ata/{{ ata.id }}/itens" class="btn-details"
+                        style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: var(--primary); color: white; border: none;">
+                        <i class="fa-solid fa-list" style="margin-right: 5px;"></i> Itens
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

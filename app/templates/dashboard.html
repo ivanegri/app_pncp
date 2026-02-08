@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="container">
+        <a href="/search?q={{ query }}&type=itens" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar aos
+            Resultados</a>
+        <h2>Análise de Mercado: <span class="highlight">"{{ query }}"</span></h2>
+        <p class="meta-info">Baseado em <strong>{{ total_items }}</strong> registros encontrados</p>
+    </div>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="icon"><i class="fa-solid fa-dollar-sign"></i></div>
+        <div class="info">
+            <span class="value">R$ {{ avg_price|format_currency }}</span>
+            <span class="label">Preço Médio</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="icon"><i class="fa-solid fa-arrow-down"></i></div>
+        <div class="info">
+            <span class="value">R$ {{ min_price|format_currency }}</span>
+            <span class="label">Preço Mínimo</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="icon"><i class="fa-solid fa-arrow-up"></i></div>
+        <div class="info">
+            <span class="value">R$ {{ max_price|format_currency }}</span>
+            <span class="label">Preço Máximo</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
+        <div class="info">
+            <span class="value">{{ total_quantity }}</span>
+            <span class="label">Quantidade Total</span>
+        </div>
+    </div>
+</div>
+
+<div class="charts-container">
+    <div class="chart-card">
+        <h3>Distribuição de Preços</h3>
+        <canvas id="priceChart"></canvas>
+    </div>
+    <div class="chart-card">
+        <h3>Top Órgãos Compradores (Quantidade)</h3>
+        <canvas id="orgaosChart"></canvas>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Price Distribution Chart
+        const ctxPrice = document.getElementById('priceChart').getContext('2d');
+        new Chart(ctxPrice, {
+            type: 'bar',
+            data: {
+                labels: {{ price_buckets_labels| tojson }},
+        datasets: [{
+            label: 'Frequência',
+            data: {{ price_buckets_values| tojson }},
+        backgroundColor: 'rgba(99, 102, 241, 0.5)',
+        borderColor: '#6366f1',
+        borderWidth: 1
+                }]
+            },
+        options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: { color: '#9ca3af' }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#9ca3af' }
+            }
+        }
+    }
+        });
+
+    // Top Orgaos Chart
+    const ctxOrgaos = document.getElementById('orgaosChart').getContext('2d');
+    new Chart(ctxOrgaos, {
+        type: 'doughnut',
+        data: {
+            labels: {{ top_orgaos_labels| tojson }},
+        datasets: [{
+            data: {{ top_orgaos_values| tojson }},
+        backgroundColor: [
+            '#6366f1', '#ec4899', '#8b5cf6', '#14b8a6', '#f59e0b'
+        ],
+        borderWidth: 0
+                }]
+            },
+        options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: { color: '#9ca3af' }
+            }
+        }
+    }
+        });
+    });
+</script>
+{% endblock %}
