@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request
 from .models import Base, db
 from sqlalchemy import or_, text
+from flask_login import login_required, current_user
 
 main_bp = Blueprint('main', __name__)
 
@@ -9,6 +10,7 @@ def index():
     return render_template('index.html')
 
 @main_bp.route('/search')
+@login_required
 def search():
     query_term = request.args.get('q', '')
     search_type = request.args.get('type', 'itens')
@@ -79,6 +81,7 @@ def search():
     return render_template('results.html', results=results, query=query_term, type=search_type, page=page, has_next=has_next, total_results=total_results if 'total_results' in locals() else 0)
 
 @main_bp.route('/dashboard')
+@login_required
 def dashboard():
     query_term = request.args.get('q', '')
     if not query_term:
@@ -212,6 +215,7 @@ def dashboard():
         return render_template('results.html', query=query_term, results=[], error="Erro ao gerar dashboard")
 
 @main_bp.route('/item/<int:item_id>')
+@login_required
 def item_details(item_id):
     try:
         Itens = Base.classes.itens
@@ -284,6 +288,7 @@ def item_details(item_id):
         return render_template('results.html', query="", results=[], error="Erro ao carregar detalhes do item")
 
 @main_bp.route('/orgao/<path:cnpj>')
+@login_required
 def orgao_details(cnpj):
     try:
         Orgaos = Base.classes.orgaos
@@ -349,6 +354,7 @@ def orgao_details(cnpj):
         return render_template('results.html', query="", results=[], error="Erro ao carregar detalhes do órgão")
 
 @main_bp.route('/ata/<int:ata_id>/itens')
+@login_required
 def ata_items(ata_id):
     try:
         Atas = Base.classes.atas
@@ -368,7 +374,114 @@ def ata_items(ata_id):
         print(f"Ata items error: {e}")
         return render_template('results.html', query="", results=[], error="Erro ao carregar itens da ata")
 
-@main_bp.route('/api/status')
+@main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>')
+@login_required
+def proxy_arquivos(numero_controle_compra):
+    try:
+        import requests
+        # Parse numeroControlePNCPCompra: e.g., 45132495000140-1-000579/2024
+        # CNPJ: first 14
+        ctrl = numero_controle_compra
+        cnpj = ctrl[:14]
+        
+        # Split by / to separate year part
+        parts = ctrl.split('/')
+        if len(parts) == 2:
+            ano = parts[1][:4] # 4 chars after /
+            
+            # Sequence: 6 chars before /
+            sequencial = parts[0][-6:]
+            
+            # https://pncp.gov.br/api/pncp/v1/orgaos/{CNPJ}/compras/{ano}/{sequencialCompra}/arquivos
+            url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/arquivos"
+            
+            response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                return jsonify(response.json())
+            return jsonify({"error": f"PNCP API Error: {response.status_code}"}), response.status_code
+            
+        return jsonify({"error": "Invalid control number format"}), 400
+        
+    except Exception as e:
+        print(f"Proxy error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>/zip')
+@login_required
+def proxy_download_all_arquivos(numero_controle_compra):
+    try:
+        import requests
+        import zipfile
+        import io
+        from flask import send_file
+
+        # 1. Fetch File List
+        ctrl = numero_controle_compra
+        cnpj = ctrl[:14]
+        parts = ctrl.split('/')
+        if len(parts) != 2:
+             return jsonify({"error": "Invalid format"}), 400
+             
+        ano = parts[1][:4]
+        sequencial = parts[0][-6:]
+        
+        list_url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/arquivos"
+        resp_list = requests.get(list_url, timeout=10)
+        
+        if resp_list.status_code != 200:
+            return jsonify({"error": "Failed to fetch file list"}), resp_list.status_code
+            
+        files = resp_list.json()
+        if not files:
+            return jsonify({"error": "No files found"}), 404
+
+        # 2. Prepare Zip
+        memory_file = io.BytesIO()
+        with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+            for file_info in files:
+                file_url = file_info.get('url')
+                file_name = file_info.get('titulo', 'documento')
+                # Sanitize filename
+                file_name = "".join([c for c in file_name if c.isalpha() or c.isdigit() or c==' ' or c=='_']).strip()
+                if not file_name:
+                    file_name = f"doc_{file_info.get('sequencialDocumento')}"
+                
+                # Try to get extension from URL or content-disposition? Just assume generic or fetch it.
+                # Simplification: PNCP urls often redirect to a storage.
+                # Let's simple fetch.
+                try:
+                    # Generic request
+                    f_resp = requests.get(file_url, timeout=30)
+                    if f_resp.status_code == 200:
+                        # try guess extension
+                        content_type = f_resp.headers.get('Content-Type', '')
+                        ext = '.pdf' # Default
+                        if 'pdf' in content_type: ext = '.pdf'
+                        elif 'xml' in content_type: ext = '.xml'
+                        elif 'html' in content_type: ext = '.html'
+                        elif 'zip' in content_type: ext = '.zip'
+                        elif 'word' in content_type: ext = '.docx'
+                        
+                        # Avoid duplicates
+                        final_name = f"{file_name}{ext}"
+                        
+                        zf.writestr(final_name, f_resp.content)
+                except Exception as e:
+                    print(f"Error downloading {file_url}: {e}")
+                    # Continue to next file
+                    pass
+        
+        memory_file.seek(0)
+        return send_file(
+            memory_file,
+            mimetype='application/zip',
+            as_attachment=True,
+            download_name=f'documentos_{numero_controle_compra.replace("/","-")}.zip'
+        )
+
+    except Exception as e:
+        print(f"Zip error: {e}")
+        return jsonify({"error": str(e)}), 500
 def status():
     return jsonify({
         "status": "online",

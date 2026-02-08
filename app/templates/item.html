@@ -145,8 +145,17 @@
         <div
             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
             <h2 style="margin: 0; font-size: 1.25rem;">Arquivos da Compra</h2>
-            <span onclick="closeFilesModal()"
-                style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                {% if ata and ata.numeroControlePNCPCompra %}
+                <a href="{{ url_for('main.proxy_download_all_arquivos', numero_controle_compra=ata.numeroControlePNCPCompra) }}"
+                    target="_blank" class="btn-dashboard"
+                    style="padding: 0.4rem 1rem; font-size: 0.8rem; text-decoration: none;">
+                    <i class="fa-solid fa-file-zipper"></i> Baixar Todos (ZIP)
+                </a>
+                {% endif %}
+                <span onclick="closeFilesModal()"
+                    style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            </div>
         </div>
 
         <div class="files-list">

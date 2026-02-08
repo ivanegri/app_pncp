@@ -1,36 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jupiter PNCP | Análise Avançada</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="background-glow"></div>
-    
+
     <nav class="navbar">
         <div class="container navbar-content">
             <a href="/" class="brand">
                 <i class="fa-solid fa-planet-ringed"></i> Jupiter <span class="brand-highlight">PNCP</span>
             </a>
             <div class="nav-links">
-                <a href="/" class="active">Início</a>
-                <a href="/dashboard">Dashboard</a>
-                <a href="#">Sobre</a>
+                <a href="/" class="{% if request.path == '/' %}active{% endif %}">Início</a>
+                {% if current_user.is_authenticated %}
+                <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+                {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin_bp.list_users') }}"
+                    class="{% if 'admin' in request.path %}active{% endif %}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('auth_bp.logout') }}">Sair</a>
+                {% else %}
+                <a href="{{ url_for('auth_bp.login') }}"
+                    class="{% if request.path == '/login' %}active{% endif %}">Entrar</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -47,4 +60,5 @@
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
+
 </html>

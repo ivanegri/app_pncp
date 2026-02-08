@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Gerenciamento de Usuários</h1>
+        <div class="stats-card" style="padding: 0.5rem 1rem; background: var(--bg-card); display: inline-block;">
+            Total: <strong>{{ users|length }}</strong>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <style>
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        /* Roles */
+        .badge-admin {
+            background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+            color: white;
+            box-shadow: 0 2px 5px rgba(255, 94, 98, 0.4);
+        }
+
+        .badge-user {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tiers */
+        .badge-full {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            color: #4a148c;
+            /* Dark text for contrast on light gradient */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Purple/Blue */
+            color: white;
+            box-shadow: 0 2px 5px rgba(118, 75, 162, 0.4);
+        }
+
+        .badge-starter {
+            background: linear-gradient(135deg, #2980b9, #6dd5fa);
+            color: white;
+        }
+
+        .badge-free {
+            background: #95a5a6;
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Alerts */
+        .alert {
+            margin-bottom: 1rem;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .alert-success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid green;
+            color: #2e7d32;
+        }
+
+        .alert-danger {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid red;
+            color: #c62828;
+        }
+
+        .alert-warning {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid orange;
+            color: #ef6c00;
+        }
+    </style>
+
+    <div class="detail-card" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; color: var(--text-main);">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border); text-align: left;">
+                    <th style="padding: 1rem;">ID</th>
+                    <th style="padding: 1rem;">Nome / Email</th>
+                    <th style="padding: 1rem;">Data Cadastro</th>
+                    <th style="padding: 1rem;">Role</th>
+                    <th style="padding: 1rem;">Tier (Plano)</th>
+                    <th style="padding: 1rem;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="border-bottom: 1px solid var(--border-light);">
+                    <td style="padding: 1rem; color: var(--text-muted);">#{{ user.id }}</td>
+                    <td style="padding: 1rem;">
+                        <div style="font-weight: 600; font-size: 0.95rem;">{{ user.name or 'Usuário' }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ user.email }}</div>
+                    </td>
+                    <td style="padding: 1rem; font-size: 0.9rem; color: var(--text-muted);">{{
+                        user.created_at.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding: 1rem;">
+                        <span class="badge badge-{{ user.role }}">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <span class="badge badge-{{ user.tier }}">
+                            {{ user.tier|upper }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem;">
+                        <form action="{{ url_for('admin_bp.update_user_tier', user_id=user.id) }}" method="POST"
+                            style="display: flex; gap: 8px; align-items: center;">
+                            <select name="tier" class="form-select"
+                                style="padding: 6px; border-radius: 6px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); font-size: 0.85rem; outline: none; cursor: pointer;">
+                                <option value="free" {% if user.tier=='free' %}selected{% endif %}>Free</option>
+                                <option value="starter" {% if user.tier=='starter' %}selected{% endif %}>Starter
+                                </option>
+                                <option value="full" {% if user.tier=='full' %}selected{% endif %}>Full</option>
+                            </select>
+                            <button type="submit" class="btn-sm" title="Salvar Alterações"
+                                style="cursor: pointer; background: var(--success); border: none; color: white; padding: 6px 10px; border-radius: 6px; transition: opacity 0.2s;">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

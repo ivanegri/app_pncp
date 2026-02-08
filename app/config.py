@@ -11,3 +11,5 @@ class Config:
     
     SQLALCHEMY_DATABASE_URI = f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_key_pncp_2026')

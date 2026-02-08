@@ -65,8 +65,14 @@
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
                 <h2 style="margin: 0; font-size: 1.25rem;">Arquivos da Ata/Compra</h2>
-                <span onclick="closeAtaFilesModal()"
-                    style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <a id="btnDownloadAll" href="#" target="_blank" class="btn-dashboard"
+                        style="display: none; padding: 0.4rem 1rem; font-size: 0.8rem; text-decoration: none;">
+                        <i class="fa-solid fa-file-zipper"></i> Baixar Todos (ZIP)
+                    </a>
+                    <span onclick="closeAtaFilesModal()"
+                        style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                </div>
             </div>
 
             <div id="modalLoader" style="display: none; text-align: center; padding: 2rem;">
@@ -85,10 +91,12 @@
             const modal = document.getElementById("filesModal");
             const list = document.getElementById("filesList");
             const modalLoader = document.getElementById("modalLoader");
+            const btnDownloadAll = document.getElementById("btnDownloadAll");
 
             modal.style.display = "block";
             list.innerHTML = "";
             modalLoader.style.display = "block";
+            btnDownloadAll.style.display = "none";
 
             fetch(`/api/proxy/arquivos/${ctrlContent}`)
                 .then(response => response.json())
@@ -99,6 +107,10 @@
                         return;
                     }
                     if (Array.isArray(data) && data.length > 0) {
+                        // Setup Download All Button
+                        btnDownloadAll.style.display = "inline-block";
+                        btnDownloadAll.href = `/api/proxy/arquivos/${ctrlContent}/zip`;
+
                         let html = "";
                         data.forEach(file => {
                             html += `

@@ -1,6 +1,7 @@
 from flask import Flask
+from flask_login import LoginManager
 from .config import Config
-from .models import db, init_db
+from .models import db, init_db, User
 
 def create_app():
     app = Flask(__name__)
@@ -9,9 +10,23 @@ def create_app():
     # Initialize DB
     init_db(app)
 
+    # Initialize LoginManager
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth_bp.login' # Will be created later
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     # Register Blueprints / Routes
     from .routes import main_bp
+    from .auth_routes import auth_bp
+    from .admin_routes import admin_bp
+    
     app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)
 
     def format_currency(value):
         if value is None:
