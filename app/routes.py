@@ -12,49 +12,71 @@ def index():
 def search():
     query_term = request.args.get('q', '')
     search_type = request.args.get('type', 'itens')
+    page = request.args.get('page', 1, type=int)
+    per_page = 20
+    is_partial = request.args.get('partial', 'false') == 'true'
     
     results = []
+    has_next = False
     
     if query_term:
         try:
+            offset = (page - 1) * per_page
+            
             if search_type == 'itens':
                 Itens = Base.classes.itens
                 # Using ilike for case-insensitive search on 'descricao'
-                # Limit to 50 results for performance
-                db_results = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%')).limit(50).all()
+                query = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
+                total_results = query.count()
+                db_results = query.offset(offset).limit(per_page + 1).all()
+                
+                if len(db_results) > per_page:
+                    has_next = True
+                    db_results = db_results[:-1]
+                    
                 results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
                 
             elif search_type == 'atas':
                 Atas = Base.classes.atas
-                # Search by 'objeto' (assuming it exists in CSV header inspection result, 
-                # looking back at headers: "objeto" was not explicitly listed in my brief check, 
-                # but "descricao" or similar likely exists. 
-                # Let's check headers again if needed, but 'objeto' is standard in PNCP.
-                # Actually, in atas_full.csv head it showed: id, numeroControlePNCP, ...
-                # Let's use generic approach or check schema if fails.
-                # For now assuming 'objeto' or similar column. 
-                # Wait, looking at header from step 19: "Agrupamento de itens de..." 
-                # It has 'objetoCompra'? No.
-                # Let's check columns for Atas using reflection or previous knowledge.
-                # Inspecting 'atas' columns via python might be safer.
-                pass 
+                # Search by 'objetoContratacao'
+                query = db.session.query(Atas).filter(Atas.objetoContratacao.ilike(f'%{query_term}%'))
+                total_results = query.count()
+                db_results = query.offset(offset).limit(per_page + 1).all()
+                
+                if len(db_results) > per_page:
+                    has_next = True
+                    db_results = db_results[:-1]
+
+                results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
                 
             elif search_type == 'orgaos':
                 Orgaos = Base.classes.orgaos
                 # Search by 'razaoSocial' or 'nomeFantasia'
-                db_results = db.session.query(Orgaos).filter(
+                query = db.session.query(Orgaos).filter(
                     or_(
                         Orgaos.razaoSocial.ilike(f'%{query_term}%'),
                         Orgaos.nomeFantasia.ilike(f'%{query_term}%')
                     )
-                ).limit(50).all()
+                )
+                total_results = query.count()
+                db_results = query.offset(offset).limit(per_page + 1).all()
+                
+                if len(db_results) > per_page:
+                    has_next = True
+                    db_results = db_results[:-1]
+
                 results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
 
         except Exception as e:
             print(f"Search error: {e}")
+            if is_partial:
+                return jsonify({'error': str(e)}), 500
             return render_template('results.html', query=query_term, results=[], error=str(e))
 
-    return render_template('results.html', results=results, query=query_term, type=search_type)
+    if is_partial:
+        return render_template('partials/result_cards.html', results=results, type=search_type)
+
+    return render_template('results.html', results=results, query=query_term, type=search_type, page=page, has_next=has_next, total_results=total_results if 'total_results' in locals() else 0)
 
 @main_bp.route('/dashboard')
 def dashboard():
@@ -87,9 +109,9 @@ def dashboard():
             func.sum(Itens.quantidade).label('total_qty')
         ).first()
         
-        # Price Distribution (Histogram-like) using Python for simplicity on small-medium datasets filtered
-        # Fetching all prices might be heavy if > 10k items. limit to 1000 for chart sample.
-        prices = [r[0] for r in items_query.with_entities(Itens.valorUnitarioEstimado).limit(1000).all() if r[0] is not None]
+        # Price Distribution (Histogram-like) using Python
+        # Fetching all prices for accurate distribution as requested by user
+        prices = [r[0] for r in items_query.with_entities(Itens.valorUnitarioEstimado).all() if r[0] is not None]
         
         # Create buckets
         if prices:
@@ -188,6 +210,9 @@ def orgao_details(cnpj):
         query_ata = request.args.get('q', '')
         vigencia_inicio = request.args.get('vigencia_inicio', '')
         vigencia_fim = request.args.get('vigencia_fim', '')
+        page = request.args.get('page', 1, type=int)
+        per_page = 20
+        is_partial = request.args.get('partial', 'false') == 'true'
         
         # Determine the correct primary key or unique field. 
         # Cnpj is unique but 'id' is pk. Route parameter gives cnpj.
@@ -208,12 +233,23 @@ def orgao_details(cnpj):
         if vigencia_fim:
             atas_query = atas_query.filter(Atas.vigenciaFim <= vigencia_fim)
             
-        atas = atas_query.limit(100).all()
+        offset = (page - 1) * per_page
+        atas = atas_query.offset(offset).limit(per_page + 1).all()
         
-        return render_template('orgao.html', orgao=orgao, atas=atas, query_ata=query_ata, vigencia_inicio=vigencia_inicio, vigencia_fim=vigencia_fim)
+        has_next = False
+        if len(atas) > per_page:
+            has_next = True
+            atas = atas[:-1] # Remove the extra item used for checking next page
+
+        if is_partial:
+            return render_template('partials/ata_cards.html', atas=atas)
+        
+        return render_template('orgao.html', orgao=orgao, atas=atas, query_ata=query_ata, vigencia_inicio=vigencia_inicio, vigencia_fim=vigencia_fim, page=page, has_next=has_next)
         
     except Exception as e:
         print(f"Orgao detail error: {e}")
+        if is_partial:
+             return jsonify({'error': str(e)}), 500
         return render_template('results.html', query="", results=[], error="Erro ao carregar detalhes do órgão")
 
 @main_bp.route('/ata/<int:ata_id>/itens')

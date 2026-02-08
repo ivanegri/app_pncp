@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <h3><i class="fa-solid fa-file-contract"></i> Atas de Registro de Preço ({{ atas|length }})</h3>
+    <h3><i class="fa-solid fa-file-contract"></i> Atas de Registro de Preço</h3>
 
     <!-- Search within Atas -->
     <div style="margin-bottom: 2rem;">
@@ -55,41 +55,73 @@
         </form>
     </div>
 
-    <div class="results-grid">
-        {% for ata in atas %}
-        <div class="result-card">
-            <div class="card-header">
-                <span class="badge-type">Ata {{ ata.numeroAtaRegistroPreco }}/{{ ata.anoAta }}</span>
-                {% if ata.dataAssinatura %}
-                <span class="date">{{ ata.dataAssinatura[:10] }}</span>
-                {% endif %}
-            </div>
-
-            <div class="card-body">
-                <h3>{{ ata.objetoContratacao|truncate(100) }}</h3>
-                <p class="details">
-                    <strong>Vigência:</strong> {{ ata.vigenciaInicio[:10] }} a {{ ata.vigenciaFim[:10] }}<br>
-                    <strong>Unidade:</strong> {{ ata.nomeUnidadeOrgao }}
-                </p>
-                <div class="meta" style="font-size: 0.8rem; margin-top: 5px;">
-                    Controle: {{ ata.numeroControlePNCPAta }}
-                </div>
-            </div>
-
-            <div class="card-footer">
-                <div class="grid-2" style="gap: 10px;">
-                    <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-details"
-                        style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); color: var(--primary);">
-                        <i class="fa-solid fa-download" style="margin-right: 5px;"></i> Ata
-                    </a>
-                    <a href="/ata/{{ ata.id }}/itens" class="btn-details"
-                        style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: var(--primary); color: white; border: none;">
-                        <i class="fa-solid fa-list" style="margin-right: 5px;"></i> Itens
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+    <div class="results-grid" id="results-grid">
+        {% include "partials/ata_cards.html" %}
     </div>
+
+    {% if has_next %}
+    <div style="text-align: center; margin-top: 2rem;">
+        <button id="btn-load-more" class="btn-details"
+            style="background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.8rem 2rem; cursor: pointer;">
+            Carregar Mais
+        </button>
+        <div id="loader" style="display: none; margin-top: 1rem;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary);"></i>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnLoadMore = document.getElementById('btn-load-more');
+            const grid = document.getElementById('results-grid');
+            const loader = document.getElementById('loader');
+
+            if (btnLoadMore) {
+                let page = 1;
+                const query = "{{ query_ata }}";
+                const vigenciaInicio = "{{ vigencia_inicio }}";
+                const vigenciaFim = "{{ vigencia_fim }}";
+                const cnpj = "{{ orgao.cnpj }}"; // Not strictly needed as we are on the page, but helpful if we constructed URL manually. 
+                // Actually we can just use window.location.pathname
+
+                btnLoadMore.addEventListener('click', function () {
+                    page++;
+                    btnLoadMore.style.display = 'none';
+                    if (loader) loader.style.display = 'block';
+
+                    // Construct search params
+                    let params = new URLSearchParams();
+                    if (query) params.append('q', query);
+                    if (vigenciaInicio) params.append('vigencia_inicio', vigenciaInicio);
+                    if (vigenciaFim) params.append('vigencia_fim', vigenciaFim);
+                    params.append('page', page);
+                    params.append('partial', 'true');
+
+                    fetch(`${window.location.pathname}?${params.toString()}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            return response.text();
+                        })
+                        .then(html => {
+                            if (html.trim().length > 0) {
+                                grid.insertAdjacentHTML('beforeend', html);
+                                btnLoadMore.style.display = 'inline-block';
+                            } else {
+                                btnLoadMore.remove();
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error loading more:', err);
+                            btnLoadMore.style.display = 'inline-block';
+                            btnLoadMore.textContent = "Erro ao carregar.";
+                        })
+                        .finally(() => {
+                            if (loader) loader.style.display = 'none';
+                        });
+                });
+            }
+        });
+    </script>
 </div>
 {% endblock %}

@@ -6,7 +6,7 @@
         <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar para Busca</a>
         <h2>Resultados para <span class="highlight">"{{ query }}"</span></h2>
         <div class="meta" style="margin-top: 5px; font-size: 0.9rem;">
-            Encontrados {{ results|length }} resultados em
+            Encontrados {{ total_results }} resultados em
             {% if type == 'atas' %}Atas de Registro de Preço{% elif type == 'orgaos' %}Órgãos Públicos{% else %}Itens{%
             endif %}
         </div>
@@ -29,65 +29,76 @@
         <p>Tente refinar sua busca.</p>
     </div>
     {% elif results %}
-    <div class="results-grid">
-        {% for item in results %}
-        <div class="result-card">
-            <div class="card-header">
-                {% if type == 'atas' %}
-                <span class="badge-type">Ata {{ item.anoAta }}</span>
-                {% elif type == 'orgaos' %}
-                <span class="badge-type">CNPJ: {{ item.cnpj }}</span>
-                {% else %}
-                <span class="badge-type">Item #{{ item.numeroItem }}</span>
-                {% endif %}
-            </div>
-
-            <div class="card-body">
-                {% if type == 'atas' %}
-                <h3>{{ item.numeroAtaRegistroPreco }} - {{ item.numeroControlePNCPAta }}</h3>
-                <p class="details">
-                    Vigência: {{ item.vigenciaInicio }} a {{ item.vigenciaFim }}
-                </p>
-                {% elif type == 'orgaos' %}
-                <h3>{{ item.razaoSocial }}</h3>
-                <p class="details">
-                    {{ item.nomeFantasia }}<br>
-                    {{ item.esferaId }} - {{ item.poderId }}
-                </p>
-                {% else %}
-                <h3>{{ item.descricao }}</h3>
-                <div class="price-tag">
-                    R$ {{ item.valorUnitarioEstimado|format_currency }}
-                </div>
-                <p class="details">
-                    Quantidade: {{ item.quantidade }} {{ item.unidadeMedida }}
-                </p>
-                {% endif %}
-            </div>
-
-            <div class="card-footer">
-                {% if type == 'orgaos' %}
-                <a href="/orgao/{{ item.cnpj }}" class="btn-details"
-                    style="display: block; text-align: center; text-decoration: none;">
-                    Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                {% elif type == 'atas' %}
-                <!-- For Atas search result, link to where? Maybe items? For now disabled or generic -->
-                <!-- Assuming we want to see items of this ata -->
-                <a href="/ata/{{ item.id }}/itens" class="btn-details"
-                    style="display: block; text-align: center; text-decoration: none;">
-                    Ver Itens <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                {% else %}
-                <a href="/item/{{ item.id }}" class="btn-details"
-                    style="display: block; text-align: center; text-decoration: none;">
-                    Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
+    <div class="results-grid" id="results-grid">
+        {% include "partials/result_cards.html" %}
     </div>
+
+    {% if has_next %}
+    <div style="text-align: center; margin-top: 2rem;">
+        <button id="btn-load-more" class="btn-details"
+            style="background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 0.8rem 2rem; cursor: pointer;">
+            Carregar Mais
+        </button>
+        <div id="loader" style="display: none; margin-top: 1rem;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--primary);"></i>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnLoadMore = document.getElementById('btn-load-more');
+            const grid = document.getElementById('results-grid');
+            const loader = document.getElementById('loader');
+
+            if (btnLoadMore) {
+                let page = 1;
+                const query = "{{ query }}";
+                const type = "{{ type }}";
+
+                btnLoadMore.addEventListener('click', function () {
+                    page++;
+                    btnLoadMore.style.display = 'none';
+                    if (loader) loader.style.display = 'block';
+
+                    fetch(`/search?q=${encodeURIComponent(query)}&type=${type}&page=${page}&partial=true`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            return response.text();
+                        })
+                        .then(html => {
+                            if (html.trim().length > 0) {
+                                // Append new results
+                                grid.insertAdjacentHTML('beforeend', html);
+
+                                // Check if we got less items than expected (per_page=20)
+                                // Only crude way is checking char length or relying on backend flag. 
+                                // Ideally backend should return has_next in header or similar, 
+                                // but for now let's assume if we got content we *might* have more.
+                                // Actually, simpler: always show button if we got results, 
+                                // unless we implement a strict check.
+                                // Improvement: The backend only sets has_next on initial load. 
+                                // For AJAX, checking 20 items logic is harder without JSON.
+                                // Let's keep button visible unless response is empty or small.
+
+                                btnLoadMore.style.display = 'inline-block';
+                            } else {
+                                // No more results
+                                btnLoadMore.remove();
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error loading more:', err);
+                            btnLoadMore.style.display = 'inline-block';
+                            btnLoadMore.textContent = "Erro ao carregar. Tente novamente.";
+                        })
+                        .finally(() => {
+                            if (loader) loader.style.display = 'none';
+                        });
+                });
+            }
+        });
+    </script>
     {% else %}
     <div class="no-results">
         <i class="fa-solid fa-magnifying-glass"></i>
