@@ -6,7 +6,28 @@
         <a href="/search?q={{ query }}&type=itens" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar aos
             Resultados</a>
         <h2>Análise de Mercado: <span class="highlight">"{{ query }}"</span></h2>
-        <p class="meta-info">Baseado em <strong>{{ total_items }}</strong> registros encontrados</p>
+
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+            <p class="meta-info" style="margin: 0;">
+                Baseado em <strong>{{ total_items }}</strong> registros de <strong>{{ selected_unit }}</strong>
+                <span style="font-size: 0.8em; opacity: 0.7;">(Total Geral: {{ total_items_global }})</span>
+            </p>
+
+            <form action="{{ url_for('main.dashboard') }}" method="get"
+                style="display: flex; align-items: center; gap: 10px;">
+                <input type="hidden" name="q" value="{{ query }}">
+                <label for="unit" style="color: var(--text-muted);">Unidade:</label>
+                <select name="unit" id="unit" onchange="this.form.submit()"
+                    style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.5rem; border-radius: 4px;">
+                    {% for u in units %}
+                    <option value="{{ u.name }}" {% if u.name==selected_unit %}selected{% endif %}>
+                        {{ u.name }} ({{ u.count }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -15,7 +36,7 @@
         <div class="icon"><i class="fa-solid fa-dollar-sign"></i></div>
         <div class="info">
             <span class="value">R$ {{ avg_price|format_currency }}</span>
-            <span class="label">Preço Médio</span>
+            <span class="label">Preço Médio ({{ selected_unit }})</span>
         </div>
     </div>
     <div class="stat-card">
@@ -36,19 +57,51 @@
         <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
         <div class="info">
             <span class="value">{{ total_quantity }}</span>
-            <span class="label">Quantidade Total</span>
+            <span class="label">Qtd. Total ({{ selected_unit }})</span>
         </div>
     </div>
 </div>
 
-<div class="charts-container">
-    <div class="chart-card">
+<div class="charts-container" style="display: block;">
+    <div class="chart-card" style="margin-bottom: 2rem;">
         <h3>Distribuição de Preços</h3>
-        <canvas id="priceChart"></canvas>
+        <canvas id="priceChart" style="max-height: 300px;"></canvas>
     </div>
+
     <div class="chart-card">
-        <h3>Top Órgãos Compradores (Quantidade)</h3>
-        <canvas id="orgaosChart"></canvas>
+        <h3>Top 20 Órgãos Compradores (Por Quantidade)</h3>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">#</th>
+                        <th>Órgão Público</th>
+                        <th style="text-align: right;">Qtd. Itens</th>
+                        <th style="width: 100px;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for org in top_orgaos %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div style="font-weight: 500;">{{ org.name }}</div>
+                            <div style="font-size: 0.8em; opacity: 0.7;">CNPJ: {{ org.cnpj }}</div>
+                        </td>
+                        <td style="text-align: right;">{{ org.count }}</td>
+                        <td>
+                            <a href="{{ url_for('main.orgao_details', cnpj=org.cnpj) }}" class="btn-sm">Ver</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 2rem;">Nenhum órgão encontrado com esta
+                            unidade.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -87,30 +140,6 @@
     }
         });
 
-    // Top Orgaos Chart
-    const ctxOrgaos = document.getElementById('orgaosChart').getContext('2d');
-    new Chart(ctxOrgaos, {
-        type: 'doughnut',
-        data: {
-            labels: {{ top_orgaos_labels| tojson }},
-        datasets: [{
-            data: {{ top_orgaos_values| tojson }},
-        backgroundColor: [
-            '#6366f1', '#ec4899', '#8b5cf6', '#14b8a6', '#f59e0b'
-        ],
-        borderWidth: 0
-                }]
-            },
-        options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'right',
-                labels: { color: '#9ca3af' }
-            }
-        }
-    }
-        });
     });
 </script>
 {% endblock %}

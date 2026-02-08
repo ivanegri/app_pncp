@@ -87,21 +87,44 @@ def dashboard():
     try:
         Itens = Base.classes.itens
         # Filter items by description
-        # Ideally we would link to Orgaos table to get names, but automap relationships might need checking.
-        # For now, let's just do single table stats or assume basic fields.
+        items_query_base = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
+        total_items_global = items_query_base.count() 
         
-        items_query = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
-        total_items = items_query.count()
-        
-        if total_items == 0:
+        if total_items_global == 0:
              return render_template('results.html', query=query_term, results=[], error="Sem dados para análise")
 
-        # Basic Stats
-        # We need to broadcast types correctly for math operations if they are strings in DB
-        # Since we just used migration script, check models.
-        # Actually our migration script relied on pandas to_sql, so types should be reasonably inferred (float/int).
+        # 1. Get Units Distribution
+        from sqlalchemy import func, desc
+        units_query = db.session.query(
+            Itens.unidadeMedida,
+            func.count(Itens.id).label('count')
+        ).filter(
+            Itens.descricao.ilike(f'%{query_term}%')
+        ).group_by(
+            Itens.unidadeMedida
+        ).order_by(
+            desc('count')
+        ).all()
+
+        units = [{'name': u[0], 'count': u[1]} for u in units_query if u[0]]
         
-        from sqlalchemy import func
+        # 2. Determine Selected Unit
+        selected_unit = request.args.get('unit')
+        
+        # Default to first unit if none selected, or if selected is invalid (though we won't validate strictly for now)
+        if not selected_unit and units:
+            selected_unit = units[0]['name']
+
+        # 3. Filter for Stats
+        if selected_unit:
+            # Case-insensitive comparison just in case, though usually exact match from DB group by is fine
+            items_query = items_query_base.filter(Itens.unidadeMedida == selected_unit)
+        else:
+            items_query = items_query_base 
+
+        total_items_filtered = items_query.count()
+
+        # Basic Stats
         stats = items_query.with_entities(
             func.avg(Itens.valorUnitarioEstimado).label('avg_price'),
             func.min(Itens.valorUnitarioEstimado).label('min_price'),
@@ -131,34 +154,46 @@ def dashboard():
         Orgaos = Base.classes.orgaos
         
         # Join Itens and Orgaos on parent_cnpj == cnpj
+        # Join Itens and Orgaos on parent_cnpj == cnpj
         top_orgaos_query = db.session.query(
-            Orgaos.razaoSocial, 
+            Orgaos.razaoSocial,
+            Orgaos.cnpj,
             func.count(Itens.id).label('count')
         ).join(
             Orgaos, Itens.parent_cnpj == Orgaos.cnpj
         ).filter(
             Itens.descricao.ilike(f'%{query_term}%')
+        ).filter(
+            Itens.unidadeMedida == selected_unit if selected_unit else text('1=1')
         ).group_by(
-            Orgaos.razaoSocial
+            Orgaos.razaoSocial,
+            Orgaos.cnpj
         ).order_by(
-            text('count DESC')
-        ).limit(5).all()
+            desc('count')
+        ).limit(20).all()
         
-        top_orgaos_labels = [str(r[0])[:30] + '...' if len(str(r[0])) > 30 else str(r[0]) for r in top_orgaos_query]
-        top_orgaos_values = [r[1] for r in top_orgaos_query]
+        # Pass full objects to template for table
+        top_orgaos = [{'name': r[0], 'cnpj': r[1], 'count': r[2]} for r in top_orgaos_query]
+        
+        # Keep labels/values for chart if we still wanted it, but user asked for table. 
+        # We can remove chart data prep if we are fully replacing.
+        # But let's leave it compatible if template needs it (unlikely).
+        # We'll just pass 'top_orgaos' list.
 
         return render_template(
             'dashboard.html',
             query=query_term,
-            total_items=total_items,
+            total_items=total_items_filtered,
+            total_items_global=total_items_global,
+            units=units,
+            selected_unit=selected_unit,
             avg_price=stats.avg_price or 0,
             min_price=stats.min_price or 0,
             max_price=stats.max_price or 0,
             total_quantity=int(stats.total_qty or 0),
             price_buckets_labels=price_buckets_labels,
             price_buckets_values=price_buckets_values,
-            top_orgaos_labels=top_orgaos_labels,
-            top_orgaos_values=top_orgaos_values
+            top_orgaos=top_orgaos
         )
 
     except Exception as e:
