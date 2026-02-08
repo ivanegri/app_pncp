@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build: https://github.com/ivanegri/app_pncp.git#main
     ports:
       - "5000:5000"
     environment:
