@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_USER=admin
+      - DB_PASS=admin123
+      - DB_HOST=216.22.5.204
+      - DB_PORT=5432
+      - DB_NAME=jupiter
+    volumes:
+      - .:/app
+      - /app/venv
+      - /app/__pycache__
+  # Local DB service (Commented out for Remote DB usage)
+  # db:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=jupiter
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5433:5432"
+
+volumes:
+  postgres_data:
