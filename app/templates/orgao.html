@@ -166,8 +166,26 @@
                     }
                     if (Array.isArray(data) && data.length > 0) {
                         // Setup Download All Button
+                        const userTier = "{{ current_user.tier }}";
                         btnDownloadAll.style.display = "inline-block";
-                        btnDownloadAll.href = `/api/proxy/arquivos/${ctrlContent}/zip`;
+
+                        if (userTier === 'full' || "{{ current_user.role }}" === 'admin') {
+                            btnDownloadAll.href = `/api/proxy/arquivos/${ctrlContent}/zip`;
+                            btnDownloadAll.innerHTML = '<i class="fa-solid fa-file-zipper"></i> Baixar Todos (ZIP)';
+                            btnDownloadAll.target = "_blank";
+                            btnDownloadAll.style.background = ""; // Default
+                            btnDownloadAll.style.color = "";
+                            btnDownloadAll.style.border = "";
+                            btnDownloadAll.style.opacity = "1";
+                        } else {
+                            btnDownloadAll.href = "{{ url_for('main.pricing') }}";
+                            btnDownloadAll.innerHTML = '<i class="fa-solid fa-lock" style="color: var(--warning);"></i> Baixar Todos (Full)';
+                            btnDownloadAll.target = "_self";
+                            btnDownloadAll.style.background = "var(--bg-card)";
+                            btnDownloadAll.style.color = "var(--text-main)";
+                            btnDownloadAll.style.border = "1px solid var(--border)";
+                            btnDownloadAll.style.opacity = "0.8";
+                        }
 
                         let html = "";
                         data.forEach(file => {

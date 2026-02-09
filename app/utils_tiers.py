@@ -59,5 +59,8 @@ def check_tier_access(feature):
         
     if feature == 'unlimited_search':
         return user_tier in ['starter', 'full']
+
+    if feature == 'export_excel':
+        return user_tier == 'full'
         
     return False

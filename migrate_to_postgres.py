@@ -29,7 +29,7 @@ def migrate_data():
     # ]
     # file_orgaos = 'CSVs/orgaos_full.csv'
     # Fixed path for itens
-    file_itens = 'data/itens/itens_consolidado_2024_padronizado.csv'
+    file_itens =  'data/itens/itens_consolidado_2025_padronizado.csv'
 
     # 1. Process ATAS (Skipping as it's done)
     # print("\nProcessing ATAS table...")
@@ -76,21 +76,40 @@ def migrate_data():
     # 3. Process ITENS
     print("\nProcessing ITENS table...")
     try:
-        if os.path.exists(file_itens):
-            print(f"Reading {file_itens}...")
-            # Ideally use chunks for large files to avoid OOM, but let's see if it fits in memory first.
-            # If it's very large, chunked reading and writing is better.
-            # Given the file name 'itens_consolidado', it might be large.
-            # Let's implement a chunked read/write for this one to be safe.
+        itens_files = [
+            'data/itens/itens_consolidado_2024_padronizado.csv',
+            'data/itens/itens_consolidado_2025_padronizado.csv'
+        ]
+        
+        dfs = []
+        for f in itens_files:
+            if os.path.exists(f):
+                print(f"Reading {f}...")
+                df = pd.read_csv(f, low_memory=False)
+                dfs.append(df)
+            else:
+                print(f"Warning: File {f} not found.")
+
+        if dfs:
+            print("Concatenating files...")
+            combined_itens = pd.concat(dfs, ignore_index=True)
             
-            # Load entire file into memory to avoid potential iterator/chunking issues with to_sql
-            # and match the successful pattern used for 'atas'.
-            df_itens = pd.read_csv(file_itens, low_memory=False)
-            print(f"Uploading {len(df_itens)} rows to 'itens' table...")
-            df_itens.to_sql('itens', engine, if_exists='replace', index=False, chunksize=1000)
+            initial_count = len(combined_itens)
+            print(f"Total rows before deduplication: {initial_count}")
+            
+            print("Removing exact duplicates...")
+            combined_itens.drop_duplicates(inplace=True)
+            
+            final_count = len(combined_itens)
+            print(f"Total rows after deduplication: {final_count}")
+            print(f"Removed {initial_count - final_count} duplicates.")
+
+            print(f"Uploading {final_count} rows to 'itens' table...")
+            # Use 'replace' to ensure we have a clean state with the full dataset
+            combined_itens.to_sql('itens', engine, if_exists='replace', index=False, chunksize=1000)
             print("ITENS upload complete.")
         else:
-            print(f"Warning: File {file_itens} not found.")
+            print("No ITENS files found.")
 
     except Exception as e:
         import traceback

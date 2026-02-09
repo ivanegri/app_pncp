@@ -154,11 +154,18 @@
             <h2 style="margin: 0; font-size: 1.25rem;">Arquivos da Compra</h2>
             <div style="display: flex; align-items: center; gap: 15px;">
                 {% if ata and ata.numeroControlePNCPCompra %}
+                {% if current_user.tier == 'full' or current_user.role == 'admin' %}
                 <a href="{{ url_for('main.proxy_download_all_arquivos', numero_controle_compra=ata.numeroControlePNCPCompra) }}"
                     target="_blank" class="btn-dashboard"
                     style="padding: 0.4rem 1rem; font-size: 0.8rem; text-decoration: none;">
                     <i class="fa-solid fa-file-zipper"></i> Baixar Todos (ZIP)
                 </a>
+                {% else %}
+                <a href="{{ url_for('main.pricing') }}" class="btn-dashboard"
+                    style="padding: 0.4rem 1rem; font-size: 0.8rem; text-decoration: none; opacity: 0.8; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">
+                    <i class="fa-solid fa-lock" style="color: var(--warning);"></i> Baixar Todos (Full)
+                </a>
+                {% endif %}
                 {% endif %}
                 <span onclick="closeFilesModal()"
                     style="color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>

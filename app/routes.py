@@ -28,10 +28,15 @@ def search():
             
             if search_type == 'itens':
                 Itens = Base.classes.itens
-                # Using ilike for case-insensitive search on 'descricao'
-                query = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
-                total_results = query.count()
-                db_results = query.offset(offset).limit(per_page + 1).all()
+                # FTS Search against 'busca_descricao_idx'
+                fts_condition = text("busca_descricao_idx @@ websearch_to_tsquery('portuguese', :q)")
+                query = db.session.query(Itens).filter(fts_condition)
+                
+                # Use params safely
+                count_query = query.params(q=query_term)
+                total_results = count_query.count()
+                
+                db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
                 
                 if len(db_results) > per_page:
                     has_next = True
@@ -41,10 +46,14 @@ def search():
                 
             elif search_type == 'atas':
                 Atas = Base.classes.atas
-                # Search by 'objetoContratacao'
-                query = db.session.query(Atas).filter(Atas.objetoContratacao.ilike(f'%{query_term}%'))
-                total_results = query.count()
-                db_results = query.offset(offset).limit(per_page + 1).all()
+                # FTS Search against 'busca_objeto_idx'
+                fts_condition = text("busca_objeto_idx @@ websearch_to_tsquery('portuguese', :q)")
+                query = db.session.query(Atas).filter(fts_condition)
+                
+                count_query = query.params(q=query_term)
+                total_results = count_query.count()
+                
+                db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
                 
                 if len(db_results) > per_page:
                     has_next = True
@@ -54,20 +63,19 @@ def search():
                 
             elif search_type == 'orgaos':
                 Orgaos = Base.classes.orgaos
-                # Search by 'razaoSocial' or 'nomeFantasia'
-                query = db.session.query(Orgaos).filter(
-                    or_(
-                        Orgaos.razaoSocial.ilike(f'%{query_term}%'),
-                        Orgaos.nomeFantasia.ilike(f'%{query_term}%')
-                    )
-                )
-                total_results = query.count()
-                db_results = query.offset(offset).limit(per_page + 1).all()
+                # FTS Search against 'busca_orgao_idx'
+                fts_condition = text("busca_orgao_idx @@ websearch_to_tsquery('portuguese', :q)")
+                query = db.session.query(Orgaos).filter(fts_condition)
+                
+                count_query = query.params(q=query_term)
+                total_results = count_query.count()
+                
+                db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
                 
                 if len(db_results) > per_page:
                     has_next = True
                     db_results = db_results[:-1]
-
+                
                 results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
 
         except Exception as e:
@@ -79,13 +87,16 @@ def search():
     if is_partial:
         return render_template('partials/result_cards.html', results=results, type=search_type)
 
+    limit_applied = False
     if not check_tier_access('unlimited_search'):
         # Free tier limit
-        results = results[:5]
+        if len(results) > 5:
+            results = results[:5]
+            limit_applied = True
         has_next = False # Hide pagination for limited results
-        flash('Você está vendo apenas os 5 primeiros resultados. Atualize para ver tudo!', 'info')
+        # Flash removed to prevent spam on login screen
 
-    return render_template('results.html', results=results, query=query_term, type=search_type, page=page, has_next=has_next, total_results=total_results if 'total_results' in locals() else 0)
+    return render_template('results.html', results=results, query=query_term, type=search_type, page=page, has_next=has_next, total_results=total_results if 'total_results' in locals() else 0, limit_applied=limit_applied)
 
 @main_bp.route('/pricing')
 @login_required
@@ -579,7 +590,8 @@ def proxy_arquivos(url):
 @login_required
 def proxy_download_all_arquivos(numero_controle_compra):
     if not check_tier_access('download_zip'):
-        return abort(403, description="Upgrade to Full to download all files as ZIP.")
+        flash("Funcionalidade exclusiva do plano Full. Atualize para baixar tudo de uma vez!", "warning")
+        return redirect(url_for('main.pricing'))
     try:
         import requests
         import zipfile
@@ -653,6 +665,84 @@ def proxy_download_all_arquivos(numero_controle_compra):
     except Exception as e:
         print(f"Zip error: {e}")
         return jsonify({"error": str(e)}), 500
+
+@main_bp.route('/export_excel')
+@login_required
+def export_excel():
+    if not check_tier_access('export_excel'):
+        flash("Funcionalidade exclusiva do plano Full!", "warning")
+        return redirect(url_for('main.pricing'))
+
+    query_term = request.args.get('q', '')
+    search_type = request.args.get('type', 'itens')
+    
+    try:
+        import pandas as pd
+        import io
+        from flask import send_file
+        
+        results = []
+        limit = 5000 # Hard limit to prevent server overload
+        
+        if search_type == 'itens':
+            Itens = Base.classes.itens
+            query = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%')) if query_term else db.session.query(Itens)
+            db_results = query.limit(limit).all()
+            results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+            filename = f"itens_pncp_{query_term}.xlsx"
+            
+        elif search_type == 'atas':
+            Atas = Base.classes.atas
+            query = db.session.query(Atas).filter(Atas.objetoContratacao.ilike(f'%{query_term}%')) if query_term else db.session.query(Atas)
+            db_results = query.limit(limit).all()
+            results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+            filename = f"atas_pncp_{query_term}.xlsx"
+            
+        elif search_type == 'orgaos':
+            Orgaos = Base.classes.orgaos
+            query = db.session.query(Orgaos).filter(
+                or_(
+                    Orgaos.razaoSocial.ilike(f'%{query_term}%'),
+                    Orgaos.nomeFantasia.ilike(f'%{query_term}%')
+                )
+            ) if query_term else db.session.query(Orgaos)
+            db_results = query.limit(limit).all()
+            results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+            filename = f"orgaos_pncp_{query_term}.xlsx"
+            
+        else:
+            flash("Tipo de busca inválido", "danger")
+            return redirect(url_for('main.index'))
+
+        if not results:
+             flash("Sem dados para exportar", "warning")
+             return redirect(request.referrer or url_for('main.index'))
+
+        # Create DataFrame
+        df = pd.DataFrame(results)
+        
+        # Remove SQLAlchemy specific or unnecessary columns if any (optional cleaning)
+        # For now, export raw data is usually what admins/power users want.
+        
+        # Output to BytesIO
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Dados')
+            
+        output.seek(0)
+        
+        return send_file(
+            output,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name=filename
+        )
+        
+    except Exception as e:
+        print(f"Export error: {e}")
+        flash(f"Erro ao exportar: {str(e)}", "danger")
+        return redirect(request.referrer or url_for('main.index'))
+
 def status():
     return jsonify({
         "status": "online",

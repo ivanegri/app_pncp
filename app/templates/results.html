@@ -11,20 +11,30 @@
             endif %}
         </div>
 
-        {% if type == 'itens' %}
         <div style="margin-top: 1rem;">
             {% if current_user.role == 'admin' or current_user.tier == 'full' %}
+            {% if type == 'itens' %} <!-- Only show Market Analysis for Items -->
             <a href="/market_analysis_dashboard?q={{ query }}" class="btn-dashboard">
                 <i class="fa-solid fa-chart-pie"></i> Visualizar Relatório de Mercado
             </a>
+            {% endif %}
+            <a href="{{ url_for('main.export_excel', q=query, type=type) }}" class="btn-dashboard"
+                style="background: #28a745; margin-left: 10px;">
+                <i class="fa-solid fa-file-excel"></i> Exportar Excel
+            </a>
             {% else %}
+            {% if type == 'itens' %}
             <a href="{{ url_for('main.pricing') }}" class="btn-dashboard"
                 style="opacity: 0.7; background: var(--bg-card); border: 1px solid var(--border);">
                 <i class="fa-solid fa-lock" style="color: var(--warning);"></i> Relatório de Mercado (Premium)
             </a>
             {% endif %}
+            <a href="{{ url_for('main.pricing') }}" class="btn-dashboard"
+                style="opacity: 0.7; background: var(--bg-card); border: 1px solid var(--border); margin-left: 10px;">
+                <i class="fa-solid fa-lock" style="color: var(--warning);"></i> Exportar Excel (Full)
+            </a>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
 
@@ -39,6 +49,18 @@
     <div class="results-grid" id="results-grid">
         {% include "partials/result_cards.html" %}
     </div>
+
+    {% if limit_applied %}
+    <div class="limit-banner"
+        style="background: rgba(255, 193, 7, 0.1); border: 1px solid var(--warning); border-radius: 8px; padding: 1.5rem; text-align: center; margin-top: 2rem;">
+        <i class="fa-solid fa-lock" style="font-size: 2rem; color: var(--warning); margin-bottom: 1rem;"></i>
+        <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">Você atingiu o limite do plano Gratuito</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Mostrando apenas os 5 primeiros resultados. Atualize
+            para ver tudo!</p>
+        <a href="{{ url_for('main.pricing') }}" class="btn-dashboard" style="display: inline-block;">Ver Planos
+            Premium</a>
+    </div>
+    {% endif %}
 
     {% if has_next %}
     <div style="text-align: center; margin-top: 2rem;">
