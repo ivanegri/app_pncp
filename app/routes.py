@@ -436,7 +436,7 @@ def item_details(item_id):
                     # parts[0] is everything before /. We take last 6 chars of that.
                     sequencial = parts[0][-6:]
                     
-                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item.numeroItem}/resultados"
+                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item.numeroItem}/resultados/1"
                     
                     # print(f"Fetching item results: {url}")
                     response = requests.get(url, timeout=5)
