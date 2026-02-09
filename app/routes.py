@@ -80,6 +80,30 @@ def search():
 
     return render_template('results.html', results=results, query=query_term, type=search_type, page=page, has_next=has_next, total_results=total_results if 'total_results' in locals() else 0)
 
+@main_bp.route('/pricing')
+@login_required
+def pricing():
+    return render_template('pricing.html')
+
+@main_bp.route('/select_plan/<tier>')
+@login_required
+def select_plan(tier):
+    if tier not in ['free', 'starter', 'full']:
+        flash('Plano inválido.', 'danger')
+        return redirect(url_for('main.pricing'))
+    
+    current_user.tier = tier
+    # Logic to handle payment would go here
+    try:
+        from .models import db
+        db.session.commit()
+        flash(f'Plano {tier.upper()} selecionado com sucesso! Bem-vindo.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('Erro ao atualizar plano.', 'danger')
+        
+    return redirect(url_for('main.dashboard'))
+
 @main_bp.route('/dashboard')
 @login_required
 def dashboard():

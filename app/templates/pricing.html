@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding-top: 4rem; padding-bottom: 4rem;">
+    <div style="text-align: center; margin-bottom: 4rem;">
+        <h1
+            style="font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Escolha o plano ideal para você</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Desbloqueie todo o
+            potencial dos dados do PNCP e tome decisões estratégicas com nossa plataforma.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+
+        <!-- Free Tier -->
+        <div class="pricing-card"
+            style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; transition: transform 0.3s; position: relative;">
+            <div style="margin-bottom: 1.5rem;">
+                <span class="badge badge-free" style="padding: 6px 12px; font-size: 0.9rem;">Free</span>
+                <h2 style="font-size: 2rem; margin: 1rem 0;">R$ 0<span
+                        style="font-size: 1rem; color: var(--text-muted); font-weight: normal;">/mês</span></h2>
+                <p style="color: var(--text-muted);">Para quem está começando a explorar o mercado público.</p>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-bottom: 2rem; flex-grow: 1;">
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color: var(--success);"></i> Buscas limitadas</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color: var(--success);"></i> Visualização básica de itens</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-muted); opacity: 0.5;"><i
+                        class="fa-solid fa-xmark"></i> Download de arquivos</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-muted); opacity: 0.5;"><i
+                        class="fa-solid fa-xmark"></i> Análise de mercado</li>
+            </ul>
+            <a href="{{ url_for('main.select_plan', tier='free') }}" class="btn-dashboard"
+                style="text-align: center; background: transparent; border: 1px solid var(--border); width: 100%;">Começar
+                Grátis</a>
+        </div>
+
+        <!-- Starter Tier -->
+        <div class="pricing-card"
+            style="background: var(--bg-card); border: 1px solid var(--primary); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; transform: scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: 0; right: 0; background: var(--primary); color: white; padding: 4px 12px; font-size: 0.8rem; border-bottom-left-radius: 8px;">
+                Popular</div>
+            <div style="margin-bottom: 1.5rem;">
+                <span class="badge badge-starter" style="padding: 6px 12px; font-size: 0.9rem;">Starter</span>
+                <h2 style="font-size: 2rem; margin: 1rem 0;">R$ 49<span
+                        style="font-size: 1rem; color: var(--text-muted); font-weight: normal;">/mês</span></h2>
+                <p style="color: var(--text-muted);">Ideal para pequenas empresas e analistas independentes.</p>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-bottom: 2rem; flex-grow: 1;">
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color: var(--success);"></i> Buscas ilimitadas</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color: var(--success);"></i> Detalhes completos de Atas</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color: var(--success);"></i> Download de arquivos (limitado)
+                </li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-muted); opacity: 0.5;"><i
+                        class="fa-solid fa-xmark"></i> Análise avançada de concorrentes</li>
+            </ul>
+            <a href="{{ url_for('main.select_plan', tier='starter') }}" class="btn-dashboard"
+                style="text-align: center; width: 100%;">Selecionar Starter</a>
+        </div>
+
+        <!-- Full Tier -->
+        <div class="pricing-card"
+            style="background: linear-gradient(145deg, var(--bg-card), rgba(142, 68, 173, 0.1)); border: 1px solid #8e44ad; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; transition: transform 0.3s; position: relative;">
+            <div style="margin-bottom: 1.5rem;">
+                <span class="badge badge-full" style="padding: 6px 12px; font-size: 0.9rem;">Full</span>
+                <h2 style="font-size: 2rem; margin: 1rem 0;">R$ 99<span
+                        style="font-size: 1rem; color: var(--text-muted); font-weight: normal;">/mês</span></h2>
+                <p style="color: var(--text-muted);">Potência máxima para grandes negócios e licitações.</p>
+            </div>
+            <ul style="list-style: none; padding: 0; margin-bottom: 2rem; flex-grow: 1;">
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color:#8e44ad;"></i> Tudo do Starter</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color:#8e44ad;"></i> Download em massa (ZIP)</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color:#8e44ad;"></i> Análise de mercado completa</li>
+                <li style="margin-bottom: 10px; display: flex; gap: 10px; color: var(--text-main);"><i
+                        class="fa-solid fa-check" style="color:#8e44ad;"></i> Suporte prioritário</li>
+            </ul>
+            <a href="{{ url_for('main.select_plan', tier='full') }}" class="btn-dashboard"
+                style="text-align: center; background: linear-gradient(135deg, #8e44ad, #9b59b6); border: none; width: 100%;">Obter
+                Acesso Total</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pricing-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+    }
+
+    .badge-full {
+        background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+        color: white;
+        box-shadow: 0 2px 5px rgba(142, 68, 173, 0.4);
+    }
+
+    .badge-starter {
+        background: linear-gradient(135deg, #2980b9, #6dd5fa);
+        color: white;
+    }
+
+    .badge-free {
+        background: #95a5a6;
+        color: white;
+    }
+</style>
+{% endblock %}

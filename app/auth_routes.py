@@ -47,11 +47,16 @@ def register():
         try:
             db.session.add(new_user)
             db.session.commit()
-            flash('Conta criada com sucesso! Faça login.', 'success')
-            return redirect(url_for('auth_bp.login'))
+            
+            # Auto login
+            login_user(new_user)
+            flash('Cadastro realizado! Escolha seu plano.', 'success')
+            return redirect(url_for('main.pricing'))
+            
         except Exception as e:
             db.session.rollback()
             flash(f'Erro ao criar conta: {str(e)}', 'danger')
+            return redirect(url_for('auth_bp.register'))
             
     return render_template('register.html')
 
