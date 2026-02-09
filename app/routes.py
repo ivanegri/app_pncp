@@ -179,8 +179,17 @@ def market_analysis_dashboard():
         ).first()
         
         # Price Distribution (Histogram-like) using Python
-        # Fetching all prices for accurate distribution as requested by user
-        prices = [r[0] for r in items_query.with_entities(Itens.valorUnitarioEstimado).all() if r[0] is not None]
+        # OPTIMIZATION: Use a sample for histogram if dataset is large to improve performance
+        
+        # Check if we have too many items to fetch all prices
+        if total_items_filtered > 10000:
+             # Fetch a random sample of prices
+             # PostgreSQL RANDOM() is fast enough for sampling 10k out of millions
+             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).order_by(func.random()).limit(10000).all()
+        else:
+             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).all()
+
+        prices = [r[0] for r in prices_query if r[0] is not None]
         
         # Create buckets
         if prices:
@@ -313,8 +322,17 @@ def dashboard():
         ).first()
         
         # Price Distribution (Histogram-like) using Python
-        # Fetching all prices for accurate distribution as requested by user
-        prices = [r[0] for r in items_query.with_entities(Itens.valorUnitarioEstimado).all() if r[0] is not None]
+        # OPTIMIZATION: Use a sample for histogram if dataset is large to improve performance
+        
+        # Check if we have too many items to fetch all prices
+        if total_items_filtered > 10000:
+             # Fetch a random sample of prices
+             # PostgreSQL RANDOM() is fast enough for sampling 10k out of millions
+             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).order_by(func.random()).limit(10000).all()
+        else:
+             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).all()
+             
+        prices = [r[0] for r in prices_query if r[0] is not None]
         
         # Create buckets
         if prices:
@@ -697,7 +715,17 @@ def export_excel():
         
         if search_type == 'itens':
             Itens = Base.classes.itens
-            query = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%')) if query_term else db.session.query(Itens)
+            
+            # OPTIMIZATION: Use FTS if query_term is present (same logic as search engine)
+            if query_term:
+                search_query = func.websearch_to_tsquery('portuguese', query_term)
+                # Use the FTS index column for speed
+                query = db.session.query(Itens).filter(
+                    Itens.busca_descricao_idx.op('@@')(search_query)
+                )
+            else:
+                 query = db.session.query(Itens)
+                 
             db_results = query.limit(limit).all()
             results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
             filename = f"itens_pncp_{query_term}.xlsx"
@@ -711,6 +739,7 @@ def export_excel():
             
         elif search_type == 'orgaos':
             Orgaos = Base.classes.orgaos
+            # Keep ILIKE for Orgaos as we might not have FTS there yet, and volume is smaller
             query = db.session.query(Orgaos).filter(
                 or_(
                     Orgaos.razaoSocial.ilike(f'%{query_term}%'),
