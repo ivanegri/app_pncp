@@ -117,6 +117,7 @@
                 {% endif %}
 
                 <div style="margin-top: 1.5rem;">
+                    {% if current_user.role == 'admin' or current_user.tier in ['starter', 'full'] %}
                     {% if item_files %}
                     <button onclick="openFilesModal()" class="btn-details"
                         style="display: block; width: 100%; text-align: center; background: var(--primary); color: white; border: none; cursor: pointer;">
@@ -126,6 +127,12 @@
                     <a href="{{ ata.numeroControlePNCPAta|pncp_url }}" target="_blank" class="btn-details"
                         style="display: block; text-align: center; text-decoration: none; background: var(--primary); color: white; border: none;">
                         <i class="fa-solid fa-download"></i> Download ATA (Link Direto)
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{{ url_for('main.pricing') }}" class="btn-details"
+                        style="display: block; width: 100%; text-align: center; background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); text-decoration: none;">
+                        <i class="fa-solid fa-lock" style="color: var(--warning);"></i> Upgrade para Baixar Arquivos
                     </a>
                     {% endif %}
                 </div>

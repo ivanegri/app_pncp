@@ -13,9 +13,16 @@
 
         {% if type == 'itens' %}
         <div style="margin-top: 1rem;">
-            <a href="/dashboard?q={{ query }}" class="btn-dashboard">
+            {% if current_user.role == 'admin' or current_user.tier == 'full' %}
+            <a href="/market_analysis_dashboard?q={{ query }}" class="btn-dashboard">
                 <i class="fa-solid fa-chart-pie"></i> Visualizar Relatório de Mercado
             </a>
+            {% else %}
+            <a href="{{ url_for('main.pricing') }}" class="btn-dashboard"
+                style="opacity: 0.7; background: var(--bg-card); border: 1px solid var(--border);">
+                <i class="fa-solid fa-lock" style="color: var(--warning);"></i> Relatório de Mercado (Premium)
+            </a>
+            {% endif %}
         </div>
         {% endif %}
     </div>

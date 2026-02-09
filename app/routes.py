@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
-from .models import Base, db
+from .models import Base, db, User
+from .utils_tiers import check_tier_access, requires_tier
 from sqlalchemy import or_, text
 from flask_login import login_required, current_user
 
@@ -78,6 +79,12 @@ def search():
     if is_partial:
         return render_template('partials/result_cards.html', results=results, type=search_type)
 
+    if not check_tier_access('unlimited_search'):
+        # Free tier limit
+        results = results[:5]
+        has_next = False # Hide pagination for limited results
+        flash('Você está vendo apenas os 5 primeiros resultados. Atualize para ver tudo!', 'info')
+
     return render_template('results.html', results=results, query=query_term, type=search_type, page=page, has_next=has_next, total_results=total_results if 'total_results' in locals() else 0)
 
 @main_bp.route('/pricing')
@@ -103,6 +110,141 @@ def select_plan(tier):
         flash('Erro ao atualizar plano.', 'danger')
         
     return redirect(url_for('main.dashboard'))
+
+@main_bp.route('/market_analysis_dashboard')
+@login_required
+@requires_tier('full')
+def market_analysis_dashboard():
+    query_term = request.args.get('q', '')
+    if not query_term:
+        return render_template('index.html') # Redirect to search if no query
+    
+    try:
+        Itens = Base.classes.itens
+        # Filter items by description
+        items_query_base = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
+        total_items_global = items_query_base.count() 
+        
+        if total_items_global == 0:
+             return render_template('results.html', query=query_term, results=[], error="Sem dados para análise")
+
+        # 1. Get Units Distribution
+        from sqlalchemy import func, desc
+        units_query = db.session.query(
+            Itens.unidadeMedida,
+            func.count(Itens.id).label('count')
+        ).filter(
+            Itens.descricao.ilike(f'%{query_term}%')
+        ).group_by(
+            Itens.unidadeMedida
+        ).order_by(
+            desc('count')
+        ).all()
+
+        units = [{'name': u[0], 'count': u[1]} for u in units_query if u[0]]
+        
+        # 2. Determine Selected Unit
+        selected_unit = request.args.get('unit')
+        
+        # Default to first unit if none selected, or if selected is invalid (though we won't validate strictly for now)
+        if not selected_unit and units:
+            selected_unit = units[0]['name']
+
+        # 3. Filter for Stats
+        if selected_unit:
+            # Case-insensitive comparison just in case, though usually exact match from DB group by is fine
+            items_query = items_query_base.filter(Itens.unidadeMedida == selected_unit)
+        else:
+            items_query = items_query_base 
+
+        total_items_filtered = items_query.count()
+
+        # Basic Stats
+        stats = items_query.with_entities(
+            func.avg(Itens.valorUnitarioEstimado).label('avg_price'),
+            func.min(Itens.valorUnitarioEstimado).label('min_price'),
+            func.max(Itens.valorUnitarioEstimado).label('max_price'),
+            func.sum(Itens.quantidade).label('total_qty')
+        ).first()
+        
+        # Price Distribution (Histogram-like) using Python
+        # Fetching all prices for accurate distribution as requested by user
+        prices = [r[0] for r in items_query.with_entities(Itens.valorUnitarioEstimado).all() if r[0] is not None]
+        
+        # Create buckets
+        if prices:
+            import numpy as np
+            counts, bins = np.histogram(prices, bins=10)
+            price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
+            price_buckets_values = counts.tolist()
+        else:
+            price_buckets_labels = []
+            price_buckets_values = []
+            
+        # Top Orgaos (by qty) - This requires linking to Orgaos or using cnpj from item which is 'parent_cnpj' possibly?
+        # In migration script step 19 output: 'parent_cnpj' column existed in itens csv.
+        # Let's check Itens model attributes in a separate step if needed, but 'parent_cnpj' is likely the FK.
+        # We can group by parent_cnpj.
+        
+        Orgaos = Base.classes.orgaos
+        
+        # Join Itens and Orgaos on parent_cnpj == cnpj
+        # Join Itens and Orgaos on parent_cnpj == cnpj
+        # Join Itens and Orgaos on parent_cnpj == cnpj
+        top_orgaos_query = db.session.query(
+            Orgaos.razaoSocial,
+            Orgaos.cnpj,
+            func.count(Itens.id).label('count'),
+            func.sum(Itens.quantidade).label('total_qty'),
+            func.avg(Itens.valorUnitarioEstimado).label('avg_price')
+        ).join(
+            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
+        ).filter(
+            Itens.descricao.ilike(f'%{query_term}%')
+        ).filter(
+            Itens.unidadeMedida == selected_unit if selected_unit else text('1=1')
+        ).group_by(
+            Orgaos.razaoSocial,
+            Orgaos.cnpj
+        ).order_by(
+            desc('count')
+        ).limit(20).all()
+        
+        # Pass full objects to template for table
+        top_orgaos = [{
+            'name': r[0], 
+            'cnpj': r[1], 
+            'count': r[2], 
+            'total_qty': int(r[3] or 0), 
+            'avg_price': float(r[4] or 0)
+        } for r in top_orgaos_query]
+        
+        # Keep labels/values for chart if we still wanted it, but user asked for table. 
+        # We can remove chart data prep if we are fully replacing.
+        # But let's leave it compatible if template needs it (unlikely).
+        # We'll just pass 'top_orgaos' list.
+
+        return render_template(
+            'dashboard.html',
+            query=query_term,
+            total_items=total_items_filtered,
+            total_items_global=total_items_global,
+            units=units,
+            selected_unit=selected_unit,
+            avg_price=stats.avg_price or 0,
+            min_price=stats.min_price or 0,
+            max_price=stats.max_price or 0,
+            total_quantity=int(stats.total_qty or 0),
+            price_buckets_labels=price_buckets_labels,
+            price_buckets_values=price_buckets_values,
+            top_orgaos=top_orgaos
+        )
+
+    except Exception as e:
+        print(f"Dashboard error: {e}")
+        import traceback
+        traceback.print_exc()
+        return render_template('results.html', query=query_term, results=[], error="Erro ao gerar dashboard")
 
 @main_bp.route('/dashboard')
 @login_required
@@ -398,15 +540,18 @@ def ata_items(ata_id):
         print(f"Ata items error: {e}")
         return render_template('results.html', query="", results=[], error="Erro ao carregar itens da ata")
 
-@main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>')
+@main_bp.route('/api/proxy/arquivos/<path:url>')
 @login_required
-def proxy_arquivos(numero_controle_compra):
+def proxy_arquivos(url):
+    if not check_tier_access('download_single'):
+        return abort(403, description="Upgrade to Starter or Full to download files.")
+        
+    # PNCP URL to fetch frompra):
     try:
         import requests
         # Parse numeroControlePNCPCompra: e.g., 45132495000140-1-000579/2024
         # CNPJ: first 14
         ctrl = numero_controle_compra
-        cnpj = ctrl[:14]
         
         # Split by / to separate year part
         parts = ctrl.split('/')
@@ -433,6 +578,8 @@ def proxy_arquivos(numero_controle_compra):
 @main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>/zip')
 @login_required
 def proxy_download_all_arquivos(numero_controle_compra):
+    if not check_tier_access('download_zip'):
+        return abort(403, description="Upgrade to Full to download all files as ZIP.")
     try:
         import requests
         import zipfile
