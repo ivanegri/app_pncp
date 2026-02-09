@@ -580,18 +580,19 @@ def ata_items(ata_id):
         print(f"Ata items error: {e}")
         return render_template('results.html', query="", results=[], error="Erro ao carregar itens da ata")
 
-@main_bp.route('/api/proxy/arquivos/<path:url>')
+@main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>')
 @login_required
-def proxy_arquivos(url):
+def proxy_arquivos(numero_controle_compra):
     if not check_tier_access('download_single'):
         return abort(403, description="Upgrade to Starter or Full to download files.")
         
-    # PNCP URL to fetch frompra):
+    # PNCP URL to fetch from
     try:
         import requests
         # Parse numeroControlePNCPCompra: e.g., 45132495000140-1-000579/2024
         # CNPJ: first 14
         ctrl = numero_controle_compra
+        cnpj = ctrl[:14]
         
         # Split by / to separate year part
         parts = ctrl.split('/')
