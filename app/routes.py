@@ -436,12 +436,23 @@ def item_details(item_id):
                     # parts[0] is everything before /. We take last 6 chars of that.
                     sequencial = parts[0][-6:]
                     
-                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item.numeroItem}/resultados/1"
+                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item.numeroItem}/resultados"
                     
-                    # print(f"Fetching item results: {url}")
-                    response = requests.get(url, timeout=5)
+                    print(f"Fetching item results: {url}")
+                    response = requests.get(url, timeout=10)
                     if response.status_code == 200:
-                        item_results = response.json()
+                        data = response.json()
+                        # Ensure it's a list. If /1 was used it would be dict.
+                        # Since we removed /1, it should be list.
+                        if isinstance(data, list):
+                            item_results = data
+                            # Sort by price (lowest first) as a proxy for classification if not already sorted
+                            try:
+                                item_results.sort(key=lambda x: x.get('valorUnitarioHomologado', float('inf')))
+                            except:
+                                pass # Keep original order if sort fails
+                        else:
+                            item_results = [data] # Handle single object just in case
                     
                     # Fetch Files (Arquivos)
                     # https://pncp.gov.br/api/pncp/v1/orgaos/{CNPJ}/compras/{ano}/{sequencialCompra}/arquivos
