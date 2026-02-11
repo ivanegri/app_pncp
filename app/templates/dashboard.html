@@ -8,24 +8,60 @@
         <h2>Análise de Mercado: <span class="highlight">"{{ query }}"</span></h2>
 
         <div
-            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 1rem;">
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 1rem; gap: 20px;">
             <p class="meta-info" style="margin: 0;">
-                Baseado em <strong>{{ total_items }}</strong> registros de <strong>{{ selected_unit }}</strong>
+                Baseado em <strong>{{ total_items }}</strong> registros
+                {% if selected_region %}(Região: <strong>{{ selected_region }}</strong>){% endif %}
+                {% if selected_state %}(Estado: <strong>{{ selected_state }}</strong>){% endif %}
+                de <strong>{{ selected_unit }}</strong>
                 <span style="font-size: 0.8em; opacity: 0.7;">(Total Geral: {{ total_items_global }})</span>
             </p>
 
             <form action="{{ url_for('main.dashboard') }}" method="get"
-                style="display: flex; align-items: center; gap: 10px;">
+                style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                 <input type="hidden" name="q" value="{{ query }}">
-                <label for="unit" style="color: var(--text-muted);">Unidade:</label>
-                <select name="unit" id="unit" onchange="this.form.submit()"
-                    style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.5rem; border-radius: 4px;">
-                    {% for u in units %}
-                    <option value="{{ u.name }}" {% if u.name==selected_unit %}selected{% endif %}>
-                        {{ u.name }} ({{ u.count }})
-                    </option>
-                    {% endfor %}
-                </select>
+
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label for="region" style="color: var(--text-muted); font-size: 0.9rem;">Região:</label>
+                    <select name="region" id="region" onchange="this.form.submit()"
+                        style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem; border-radius: 4px; font-size: 0.9rem;">
+                        <option value="">Todas</option>
+                        {% for r in regions %}
+                        <option value="{{ r }}" {% if r|string==selected_region|string %}selected{% endif %}>{{ r }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label for="state" style="color: var(--text-muted); font-size: 0.9rem;">UF:</label>
+                    <select name="state" id="state" onchange="this.form.submit()"
+                        style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem; border-radius: 4px; font-size: 0.9rem;">
+                        <option value="">Todas</option>
+                        {% for s in states %}
+                        <option value="{{ s }}" {% if s|string==selected_state|string %}selected{% endif %}>{{ s }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label for="unit" style="color: var(--text-muted); font-size: 0.9rem;">Unidade:</label>
+                    <select name="unit" id="unit" onchange="this.form.submit()"
+                        style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem; border-radius: 4px; font-size: 0.9rem;">
+                        <option value="">Todas</option>
+                        {% for u in units %}
+                        <option value="{{ u.name }}" {% if u.name|string==selected_unit|string %}selected{% endif %}>
+                            {{ u.name }} ({{ u.count }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <a href="{{ url_for('main.dashboard', q=query) }}" class="btn-sm"
+                    style="text-decoration: none; padding: 0.4rem 0.8rem; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; gap: 5px; color: var(--text-main);">
+                    <i class="fa-solid fa-filter-circle-xmark"></i> Limpar
+                </a>
             </form>
         </div>
     </div>
@@ -36,7 +72,7 @@
         <div class="icon"><i class="fa-solid fa-dollar-sign"></i></div>
         <div class="info">
             <span class="value">R$ {{ avg_price|format_currency }}</span>
-            <span class="label">Preço Médio ({{ selected_unit }})</span>
+            <span class="label">Preço Médio</span>
         </div>
     </div>
     <div class="stat-card">
@@ -57,7 +93,7 @@
         <div class="icon"><i class="fa-solid fa-layer-group"></i></div>
         <div class="info">
             <span class="value">{{ total_quantity }}</span>
-            <span class="label">Qtd. Total ({{ selected_unit }})</span>
+            <span class="label">Qtd. Total Estimada</span>
         </div>
     </div>
 </div>
@@ -76,6 +112,7 @@
                     <tr>
                         <th style="width: 50px; padding: 1rem;">#</th>
                         <th style="padding: 1rem;">Órgão Público</th>
+                        <th style="padding: 1rem;">Localização</th>
                         <th style="text-align: right; padding: 1rem 2rem;">Qtd. Itens</th>
                         <th style="text-align: right; padding: 1rem 2rem;">Qtd. Estimada</th>
                         <th style="text-align: right; padding: 1rem 2rem;">Preço Médio</th>
@@ -89,6 +126,10 @@
                         <td style="padding: 1rem;">
                             <div style="font-weight: 500;">{{ org.name }}</div>
                             <div style="font-size: 0.8em; opacity: 0.7;">CNPJ: {{ org.cnpj }}</div>
+                        </td>
+                        <td style="padding: 1rem;">
+                            <div style="font-size: 0.9rem;">{{ org.city or '-' }} / {{ org.state or '-' }}</div>
+                            <div style="font-size: 0.75rem; opacity: 0.6;">{{ org.region or '-' }}</div>
                         </td>
                         <td style="text-align: right; padding: 1rem 2rem;">{{ org.count }}</td>
                         <td style="text-align: right; padding: 1rem 2rem;">{{ org.total_qty }}</td>

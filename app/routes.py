@@ -3,15 +3,31 @@ from .models import Base, db, User
 from .utils_tiers import check_tier_access, requires_tier
 from sqlalchemy import or_, text
 from flask_login import login_required, current_user
+from .utils_bigquery import bq_client
+from . import cache
 
 main_bp = Blueprint('main', __name__)
 
+def make_cache_key():
+    """Custom cache key that includes user tier and query parameters"""
+    from flask import request
+    from flask_login import current_user
+    tier = getattr(current_user, 'tier', 'free')
+    # Versioning to force refresh if logic changes
+    version = "v5" 
+    # Use path and sorted query params to avoid duplicate cache entries for different param order
+    args = sorted(request.args.items())
+    args_str = "&".join(f"{k}={v}" for k, v in args)
+    return f"{version}_{request.path}?{args_str}&tier={tier}"
+
 @main_bp.route('/')
+@cache.cached(timeout=3600) # Cache static home page for an hour
 def index():
     return render_template('index.html')
 
 @main_bp.route('/search')
 @login_required
+@cache.cached(timeout=300, key_prefix=make_cache_key)
 def search():
     query_term = request.args.get('q', '')
     search_type = request.args.get('type', 'itens')
@@ -27,22 +43,33 @@ def search():
             offset = (page - 1) * per_page
             
             if search_type == 'itens':
-                Itens = Base.classes.itens
-                # FTS Search against 'busca_descricao_idx'
-                fts_condition = text("busca_descricao_idx @@ websearch_to_tsquery('portuguese', :q)")
-                query = db.session.query(Itens).filter(fts_condition)
-                
-                # Use params safely
-                count_query = query.params(q=query_term)
-                total_results = count_query.count()
-                
-                db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
-                
-                if len(db_results) > per_page:
-                    has_next = True
-                    db_results = db_results[:-1]
+                is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+                if is_full_access:
+                    # BigQuery Search
+                    results = bq_client.search_items(query_term, limit=per_page+1, offset=offset)
+                    total_results = bq_client.count_items(query_term)
                     
-                results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+                    if len(results) > per_page:
+                        has_next = True
+                        results = results[:-1]
+                else:
+                    # Postgres Search
+                    Itens = Base.classes.itens
+                    # FTS Search against 'busca_descricao_idx'
+                    fts_condition = text("busca_descricao_idx @@ websearch_to_tsquery('portuguese', :q)")
+                    query = db.session.query(Itens).filter(fts_condition)
+                    
+                    # Use params safely
+                    count_query = query.params(q=query_term)
+                    total_results = count_query.count()
+                    
+                    db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
+                    
+                    if len(db_results) > per_page:
+                        has_next = True
+                        db_results = db_results[:-1]
+                        
+                    results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
                 
             elif search_type == 'atas':
                 Atas = Base.classes.atas
@@ -125,12 +152,77 @@ def select_plan(tier):
 @main_bp.route('/market_analysis_dashboard')
 @login_required
 @requires_tier('full')
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def market_analysis_dashboard():
     query_term = request.args.get('q', '')
     if not query_term:
         return render_template('index.html') # Redirect to search if no query
     
     try:
+        # Check if we should use BigQuery (Full tier or Admin)
+        is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+        
+        if is_full_access:
+            # BigQuery Dashboard
+            units = bq_client.get_unit_distribution(query_term)
+            states = bq_client.get_states(query_term)
+            regions = bq_client.get_regions(query_term)
+            
+            selected_unit = request.args.get('unit')
+            selected_state = request.args.get('state')
+            selected_region = request.args.get('region')
+            
+            if not selected_unit and units:
+                selected_unit = units[0]['name']
+                
+            stats = bq_client.get_price_stats(query_term, selected_unit, selected_state, selected_region)
+            
+            # Extract stats
+            avg_price = stats.get('avg_price') or 0
+            min_price = stats.get('min_price') or 0
+            max_price = stats.get('max_price') or 0
+            total_quantity = int(stats.get('total_qty') or 0)
+            
+            prices = bq_client.get_price_sample(query_term, selected_unit, selected_state, selected_region)
+            top_orgaos = bq_client.get_top_orgaos(query_term, selected_unit, selected_state, selected_region)
+            
+            # Buckets
+            if prices:
+                import numpy as np
+                counts, bins = np.histogram(prices, bins=10)
+                price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
+                price_buckets_values = counts.tolist()
+            else:
+                 price_buckets_labels = []
+                 price_buckets_values = []
+
+            total_items_filtered = int(stats.get('count_rows') or 0)
+            if selected_unit or selected_state or selected_region:
+                 total_items_global = bq_client.count_items(query_term)
+            else:
+                 total_items_global = total_items_filtered
+
+            return render_template(
+                'dashboard.html',
+                query=query_term,
+                total_items=total_items_filtered, 
+                total_items_global=total_items_global,
+                units=units,
+                selected_unit=selected_unit,
+                states=states,
+                selected_state=selected_state,
+                regions=regions,
+                selected_region=selected_region,
+                avg_price=avg_price,
+                min_price=min_price,
+                max_price=max_price,
+                total_quantity=total_quantity,
+                price_buckets_labels=price_buckets_labels,
+                price_buckets_values=price_buckets_values,
+                top_orgaos=top_orgaos
+            )
+
+        # Postgres Dashboard (Existing Logic)
         Itens = Base.classes.itens
         # Filter items by description
         items_query_base = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
@@ -268,12 +360,79 @@ def market_analysis_dashboard():
 
 @main_bp.route('/dashboard')
 @login_required
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def dashboard():
     query_term = request.args.get('q', '')
     if not query_term:
         return render_template('index.html') # Redirect to search if no query
     
     try:
+        # Check if we should use BigQuery (Full tier or Admin)
+        is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+        
+        if is_full_access:
+            # BigQuery Dashboard
+            units = bq_client.get_unit_distribution(query_term)
+            states = bq_client.get_states(query_term)
+            regions = bq_client.get_regions(query_term)
+            
+            selected_unit = request.args.get('unit')
+            selected_state = request.args.get('state')
+            selected_region = request.args.get('region')
+            
+            # Allow selected_unit to be empty for 'All'
+            if selected_unit == 'Todas':
+                 selected_unit = None
+                
+            stats = bq_client.get_price_stats(query_term, selected_unit, selected_state, selected_region)
+            
+            # Extract stats
+            avg_price = stats.get('avg_price') or 0
+            min_price = stats.get('min_price') or 0
+            max_price = stats.get('max_price') or 0
+            total_quantity = int(stats.get('total_qty') or 0)
+            
+            prices = bq_client.get_price_sample(query_term, selected_unit, selected_state, selected_region)
+            top_orgaos = bq_client.get_top_orgaos(query_term, selected_unit, selected_state, selected_region)
+            
+            # Buckets
+            if prices:
+                import numpy as np
+                counts, bins = np.histogram(prices, bins=10)
+                price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
+                price_buckets_values = counts.tolist()
+            else:
+                 price_buckets_labels = []
+                 price_buckets_values = []
+
+            total_items_filtered = int(stats.get('count_rows') or 0)
+            # If unit is selected, global count is different. If not, it's same.
+            if selected_unit or selected_state or selected_region:
+                 total_items_global = bq_client.count_items(query_term)
+            else:
+                 total_items_global = total_items_filtered
+
+            return render_template(
+                'dashboard.html',
+                query=query_term,
+                total_items=total_items_filtered, 
+                total_items_global=total_items_global,
+                units=units,
+                selected_unit=selected_unit,
+                states=states,
+                selected_state=selected_state,
+                regions=regions,
+                selected_region=selected_region,
+                avg_price=avg_price,
+                min_price=min_price,
+                max_price=max_price,
+                total_quantity=total_quantity,
+                price_buckets_labels=price_buckets_labels,
+                price_buckets_values=price_buckets_values,
+                top_orgaos=top_orgaos
+            )
+
+        # Postgres Dashboard
         Itens = Base.classes.itens
         # Filter items by description
         items_query_base = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
@@ -409,73 +568,153 @@ def dashboard():
         traceback.print_exc()
         return render_template('results.html', query=query_term, results=[], error="Erro ao gerar dashboard")
 
-@main_bp.route('/item/<int:item_id>')
+@main_bp.route('/item/<string:numero_controle_encoded>/<int:numero_item>')
 @login_required
-def item_details(item_id):
+@cache.cached(timeout=3600, key_prefix=make_cache_key)
+def item_details(numero_controle_encoded, numero_item):
     try:
-        Itens = Base.classes.itens
-        Atas = Base.classes.atas
-        Orgaos = Base.classes.orgaos
+        # Decode base64-encoded numero_controle
+        import base64
+        numero_controle = base64.b64decode(numero_controle_encoded).decode('utf-8')
         
-        # Get Item
-        item = db.session.query(Itens).get(item_id)
-        if not item:
-            return render_template('results.html', query="", results=[], error="Item não encontrado")
+        is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+        
+        # Query based on user tier
+        if is_full_access:
+            # BigQuery query
+            client = bq_client.get_client()
+            sql = f"""
+                SELECT *
+                FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens`
+                WHERE parent_numeroControlePNCPAta = @numero_controle
+                AND numeroItem = @numero_item
+                LIMIT 1
+            """
+            from google.cloud import bigquery
+            job_config = bigquery.QueryJobConfig(
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("numero_controle", "STRING", numero_controle),
+                    bigquery.ScalarQueryParameter("numero_item", "INT64", numero_item),
+                ]
+            )
+            query_job = client.query(sql, job_config=job_config)
+            results = list(query_job.result())
             
-        # Get Orgao
-        orgao = None
-        if item.parent_cnpj:
-            orgao = db.session.query(Orgaos).filter_by(cnpj=item.parent_cnpj).first()
+            if not results:
+                return render_template('results.html', query="", results=[], error="Item não encontrado")
             
-        # Get Ata
-        ata = None
-        if item.parent_numeroControlePNCPAta:
-            # Note: script output showed 'numeroControlePNCPAta' in Atas columns. 
-            # Itens has 'parent_numeroControlePNCPAta'.
-            ata = db.session.query(Atas).filter_by(numeroControlePNCPAta=item.parent_numeroControlePNCPAta).first()
+            item = dict(results[0])
             
-        # Pega resultados (Vencedor) via API PNCP
-        # https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencialcompra}/itens/{numerodoitem}/resultados
+            # Get Orgao from BigQuery
+            orgao = None
+            if item.get('parent_cnpj'):
+                sql_orgao = f"""
+                    SELECT *
+                    FROM `{bq_client.project_id}.{bq_client.dataset_id}.orgaos`
+                    WHERE cnpj = @cnpj
+                    LIMIT 1
+                """
+                job_config_orgao = bigquery.QueryJobConfig(
+                    query_parameters=[
+                        bigquery.ScalarQueryParameter("cnpj", "INT64", int(item['parent_cnpj'])),
+                    ]
+                )
+                query_job_orgao = client.query(sql_orgao, job_config=job_config_orgao)
+                orgao_results = list(query_job_orgao.result())
+                if orgao_results:
+                    orgao = dict(orgao_results[0])
+            
+            # Get Ata from BigQuery
+            ata = None
+            if item.get('parent_numeroControlePNCPAta'):
+                sql_ata = f"""
+                    SELECT *
+                    FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas`
+                    WHERE numeroControlePNCPAta = @numero_controle_ata
+                    LIMIT 1
+                """
+                job_config_ata = bigquery.QueryJobConfig(
+                    query_parameters=[
+                        bigquery.ScalarQueryParameter("numero_controle_ata", "STRING", item['parent_numeroControlePNCPAta']),
+                    ]
+                )
+                query_job_ata = client.query(sql_ata, job_config=job_config_ata)
+                ata_results = list(query_job_ata.result())
+                if ata_results:
+                    ata = dict(ata_results[0])
+        else:
+            # PostgreSQL query
+            Itens = Base.classes.itens
+            Atas = Base.classes.atas
+            Orgaos = Base.classes.orgaos
+            
+            # Get Item
+            item = db.session.query(Itens).filter_by(
+                parent_numeroControlePNCPAta=numero_controle,
+                numeroItem=numero_item
+            ).first()
+            
+            if not item:
+                return render_template('results.html', query="", results=[], error="Item não encontrado")
+            
+            # Convert to dict for consistent template usage
+            item = {k: v for k, v in item.__dict__.items() if not k.startswith('_')}
+                
+            # Get Orgao
+            orgao = None
+            if item.get('parent_cnpj'):
+                orgao_obj = db.session.query(Orgaos).filter_by(cnpj=item['parent_cnpj']).first()
+                if orgao_obj:
+                    orgao = {k: v for k, v in orgao_obj.__dict__.items() if not k.startswith('_')}
+                
+            # Get Ata
+            ata = None
+            if item.get('parent_numeroControlePNCPAta'):
+                ata_obj = db.session.query(Atas).filter_by(numeroControlePNCPAta=item['parent_numeroControlePNCPAta']).first()
+                if ata_obj:
+                    ata = {k: v for k, v in ata_obj.__dict__.items() if not k.startswith('_')}
+            
+        # Pega resultados (Vencedor) via API PNCP ou tabela resultados
         item_results = []
-        if ata and ata.numeroControlePNCPCompra:
+        item_files = []
+        
+        if ata and ata.get('numeroControlePNCPCompra'):
             try:
                 import requests
                 # Parse numeroControlePNCPCompra: e.g., 45132495000140-1-000579/2024
-                # CNPJ: first 14
-                ctrl = ata.numeroControlePNCPCompra
+                ctrl = ata['numeroControlePNCPCompra']
                 cnpj = ctrl[:14]
                 
                 # Split by / to separate year part
                 parts = ctrl.split('/')
                 if len(parts) == 2:
-                    ano = parts[1][:4] # 4 chars after /
+                    ano_part = parts[1]
+                    ano = ano_part.split('-')[0] if '-' in ano_part else ano_part[:4]
                     
-                    # Sequence: 6 chars before /
-                    # parts[0] is everything before /. We take last 6 chars of that.
-                    sequencial = parts[0][-6:]
+                    # Sequence: last part before /
+                    dash_parts = parts[0].split('-')
+                    if len(dash_parts) >= 3:
+                        sequencial = dash_parts[2]
+                    else:
+                        sequencial = parts[0][-6:]
                     
-                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item.numeroItem}/resultados"
+                    url = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/itens/{item['numeroItem']}/resultados"
                     
                     print(f"Fetching item results: {url}")
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
                         data = response.json()
-                        # Ensure it's a list. If /1 was used it would be dict.
-                        # Since we removed /1, it should be list.
                         if isinstance(data, list):
                             item_results = data
-                            # Sort by price (lowest first) as a proxy for classification if not already sorted
                             try:
                                 item_results.sort(key=lambda x: x.get('valorUnitarioHomologado', float('inf')))
                             except:
-                                pass # Keep original order if sort fails
+                                pass
                         else:
-                            item_results = [data] # Handle single object just in case
+                            item_results = [data]
                     
-                    # Fetch Files (Arquivos)
-                    # https://pncp.gov.br/api/pncp/v1/orgaos/{CNPJ}/compras/{ano}/{sequencialCompra}/arquivos
+                    # Fetch Files
                     url_files = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{sequencial}/arquivos"
-                    # print(f"Fetching files: {url_files}")
                     resp_files = requests.get(url_files, timeout=5)
                     if resp_files.status_code == 200:
                         item_files = resp_files.json()
@@ -483,18 +722,17 @@ def item_details(item_id):
             except Exception as api_err:
                 print(f"Error fetching item results from External API: {api_err}")
 
-        return render_template('item.html', item=item, orgao=orgao, ata=ata, item_results=item_results, item_files=item_files if 'item_files' in locals() else [])
+        return render_template('item.html', item=item, orgao=orgao, ata=ata, item_results=item_results, item_files=item_files)
             
     except Exception as e:
         print(f"Item detail error: {e}")
-        return render_template('results.html', query="", results=[], error="Erro ao carregar detalhes do item")
-
-    except Exception as e:
-        print(f"Item detail error: {e}")
+        import traceback
+        traceback.print_exc()
         return render_template('results.html', query="", results=[], error="Erro ao carregar detalhes do item")
 
 @main_bp.route('/orgao/<path:cnpj>')
 @login_required
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def orgao_details(cnpj):
     try:
         Orgaos = Base.classes.orgaos
@@ -561,6 +799,7 @@ def orgao_details(cnpj):
 
 @main_bp.route('/ata/<int:ata_id>/itens')
 @login_required
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def ata_items(ata_id):
     try:
         Atas = Base.classes.atas
@@ -582,6 +821,7 @@ def ata_items(ata_id):
 
 @main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>')
 @login_required
+@cache.cached(timeout=600, key_prefix=make_cache_key)
 def proxy_arquivos(numero_controle_compra):
     if not check_tier_access('download_single'):
         return abort(403, description="Upgrade to Starter or Full to download files.")
@@ -708,6 +948,7 @@ def export_excel():
     
     try:
         import pandas as pd
+        import openpyxl
         import io
         from flask import send_file
         
@@ -715,20 +956,133 @@ def export_excel():
         limit = 5000 # Hard limit to prevent server overload
         
         if search_type == 'itens':
-            Itens = Base.classes.itens
-            
-            # OPTIMIZATION: Use FTS if query_term is present (same logic as search engine)
-            if query_term:
-                search_query = func.websearch_to_tsquery('portuguese', query_term)
-                # Use the FTS index column for speed
-                query = db.session.query(Itens).filter(
-                    Itens.busca_descricao_idx.op('@@')(search_query)
+            is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+            if is_full_access:
+                # BigQuery Export with JOIN to resultados table
+                client = bq_client.get_client()
+                sql = f"""
+                    SELECT 
+                        i.descricao,
+                        i.valorUnitarioEstimado,
+                        i.quantidade,
+                        i.unidadeMedida,
+                        i.situacaoCompraItemNome,
+                        i.dataAtualizacao,
+                        o.razaoSocial as orgaoNome,
+                        r.nomeRazaoSocialFornecedor as fornecedor,
+                        r.valorUnitarioHomologado as valorVencedor
+                    FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens` i
+                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` o
+                        ON i.parent_cnpj = o.cnpj
+                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.resultados` r
+                        ON i.parent_numeroControlePNCPAta = r.numeroControlePNCPCompra
+                        AND i.numeroItem = r.numeroItem
+                    WHERE SEARCH(i.descricao, @query_term)
+                    LIMIT @limit
+                """
+                from google.cloud import bigquery
+                job_config = bigquery.QueryJobConfig(
+                    query_parameters=[
+                        bigquery.ScalarQueryParameter("query_term", "STRING", query_term),
+                        bigquery.ScalarQueryParameter("limit", "INT64", limit),
+                    ]
                 )
+                query_job = client.query(sql, job_config=job_config)
+                results = [dict(row) for row in query_job.result()]
             else:
-                 query = db.session.query(Itens)
-                 
-            db_results = query.limit(limit).all()
-            results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+                Itens = Base.classes.itens
+                Orgaos = Base.classes.orgaos
+                
+                # Check if resultados table exists
+                try:
+                    Resultados = Base.classes.resultados
+                    has_resultados = True
+                except:
+                    has_resultados = False
+                
+                # Join query with specific columns
+                if query_term:
+                    search_query = func.websearch_to_tsquery('portuguese', query_term)
+                    
+                    if has_resultados:
+                        query = db.session.query(
+                            Itens.descricao,
+                            Itens.valorUnitarioEstimado,
+                            Itens.quantidade,
+                            Itens.unidadeMedida,
+                            Itens.situacaoCompraItemNome,
+                            Itens.dataAtualizacao,
+                            Orgaos.razaoSocial.label('orgaoNome'),
+                            Resultados.nomerazaosocialfornecedor.label('fornecedor'),
+                            Resultados.valorunitariohomologado.label('valorVencedor')
+                        ).outerjoin(
+                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
+                        ).outerjoin(
+                            Resultados, 
+                            db.and_(
+                                Itens.parent_numeroControlePNCPAta == Resultados.numerocontrolepncpcompra,
+                                Itens.numeroItem == Resultados.numeroitem
+                            )
+                        ).filter(
+                            Itens.busca_descricao_idx.op('@@')(search_query)
+                        )
+                    else:
+                        query = db.session.query(
+                            Itens.descricao,
+                            Itens.valorUnitarioEstimado,
+                            Itens.quantidade,
+                            Itens.unidadeMedida,
+                            Itens.situacaoCompraItemNome,
+                            Itens.dataAtualizacao,
+                            Orgaos.razaoSocial.label('orgaoNome')
+                        ).outerjoin(
+                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
+                        ).filter(
+                            Itens.busca_descricao_idx.op('@@')(search_query)
+                        )
+                else:
+                    if has_resultados:
+                        query = db.session.query(
+                            Itens.descricao,
+                            Itens.valorUnitarioEstimado,
+                            Itens.quantidade,
+                            Itens.unidadeMedida,
+                            Itens.situacaoCompraItemNome,
+                            Itens.dataAtualizacao,
+                            Orgaos.razaoSocial.label('orgaoNome'),
+                            Resultados.nomerazaosocialfornecedor.label('fornecedor'),
+                            Resultados.valorunitariohomologado.label('valorVencedor')
+                        ).outerjoin(
+                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
+                        ).outerjoin(
+                            Resultados, 
+                            db.and_(
+                                Itens.parent_numeroControlePNCPAta == Resultados.numerocontrolepncpcompra,
+                                Itens.numeroItem == Resultados.numeroitem
+                            )
+                        )
+                    else:
+                        query = db.session.query(
+                            Itens.descricao,
+                            Itens.valorUnitarioEstimado,
+                            Itens.quantidade,
+                            Itens.unidadeMedida,
+                            Itens.situacaoCompraItemNome,
+                            Itens.dataAtualizacao,
+                            Orgaos.razaoSocial.label('orgaoNome')
+                        ).outerjoin(
+                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
+                        )
+                     
+                db_results = query.limit(limit).all()
+                results = [dict(row._mapping) for row in db_results]
+                
+                # Add empty columns if resultados table doesn't exist
+                if not has_resultados:
+                    for r in results:
+                        r['fornecedor'] = None
+                        r['valorVencedor'] = None
+            
             filename = f"itens_pncp_{query_term}.xlsx"
             
         elif search_type == 'atas':
@@ -762,9 +1116,10 @@ def export_excel():
         # Create DataFrame
         df = pd.DataFrame(results)
         
-        # Remove SQLAlchemy specific or unnecessary columns if any (optional cleaning)
-        # For now, export raw data is usually what admins/power users want.
-        
+        # Remove timezone information from datetime columns
+        for col in df.select_dtypes(include=['datetime', 'datetimetz']).columns:
+            df[col] = df[col].dt.tz_localize(None)
+
         # Output to BytesIO
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:

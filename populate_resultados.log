@@ -1,0 +1,2107 @@
+nohup: ignorando entrada
+Criando tabela resultados...
+Tabela criada com sucesso!
+Buscando itens com resultados (limit=1000)...
+Encontrados 1000 itens com resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/1/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/2/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/3/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/4/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/5/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/6/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/7/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/8/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/9/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/10/resultados
+Processados 10/1000 itens, 10 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/11/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/12/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/13/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/14/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/15/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/16/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/17/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/18/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/19/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/20/resultados
+Processados 20/1000 itens, 20 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/21/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/22/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/23/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/24/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/25/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/26/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/27/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/28/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/29/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/30/resultados
+Processados 30/1000 itens, 30 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/31/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/32/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/33/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/34/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/35/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/36/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/37/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/38/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/39/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/40/resultados
+Processados 40/1000 itens, 40 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/41/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/42/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/43/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/45/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/46/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/47/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/48/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000007/itens/49/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/1/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/2/resultados
+Processados 50/1000 itens, 50 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/3/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/4/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/5/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/6/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/7/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/8/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/9/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000012/itens/10/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/1/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/2/resultados
+Processados 60/1000 itens, 60 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/3/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/4/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/5/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/6/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/7/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/8/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/9/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/10/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/11/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/12/resultados
+Processados 70/1000 itens, 70 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/13/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/14/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/15/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/16/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/17/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/18/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/19/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/20/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/21/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/22/resultados
+Processados 80/1000 itens, 80 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/23/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/24/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/25/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/26/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/27/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/28/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/29/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/30/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/31/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/32/resultados
+Processados 90/1000 itens, 90 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/33/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/34/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/35/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/36/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/37/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/38/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/39/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/40/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/41/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/42/resultados
+Processados 100/1000 itens, 100 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/43/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/44/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/45/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/46/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/47/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/48/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/49/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/50/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/51/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/52/resultados
+Processados 110/1000 itens, 110 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/53/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/54/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/55/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/56/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/57/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/58/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/59/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/60/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/61/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/62/resultados
+Processados 120/1000 itens, 120 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/63/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/64/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/65/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/66/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/67/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/68/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/69/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/70/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/71/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/72/resultados
+Processados 130/1000 itens, 130 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/73/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/74/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/75/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/76/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/77/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/78/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/79/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/80/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/81/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/82/resultados
+Processados 140/1000 itens, 140 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/83/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/84/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/85/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/86/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/87/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/88/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/89/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/90/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/91/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/92/resultados
+Processados 150/1000 itens, 150 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/93/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/94/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/95/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/96/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/97/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/98/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/99/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/100/resultados
+Parsed: CNPJ=10091502000129, Ano=2024, Seq=000019
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2024/000019/itens/101/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000035
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000035/itens/1/resultados
+Processados 160/1000 itens, 160 resultados inseridos
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000035
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000035/itens/2/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000035
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000035/itens/3/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000035
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000035/itens/4/resultados
+Parsed: CNPJ=10091502000129, Ano=2025, Seq=000035
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091502000129/compras/2025/000035/itens/5/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/1/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/2/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/3/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/4/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/5/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/6/resultados
+Processados 170/1000 itens, 170 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/7/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/8/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/9/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/10/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/11/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/12/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/13/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/14/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/15/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/16/resultados
+Processados 180/1000 itens, 180 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/17/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/18/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/19/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/20/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/21/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/22/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/23/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/24/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/25/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/26/resultados
+Processados 190/1000 itens, 190 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/27/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/28/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/29/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/30/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/31/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/32/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/33/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/34/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/35/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/36/resultados
+Processados 200/1000 itens, 200 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/37/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/38/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/39/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/40/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/41/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/42/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/43/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/44/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/45/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/46/resultados
+Processados 210/1000 itens, 210 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/47/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/48/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000003
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000003/itens/49/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/1/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/2/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/3/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/4/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/5/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/6/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/7/resultados
+Processados 220/1000 itens, 220 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/8/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/9/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/10/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/11/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/12/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/13/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000057
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000057/itens/14/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/1/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/2/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/3/resultados
+Processados 230/1000 itens, 230 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/4/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/5/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/6/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/7/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/8/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/9/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/10/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/11/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/12/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/13/resultados
+Processados 240/1000 itens, 240 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/14/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/15/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/16/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/17/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/18/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/19/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/20/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/21/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/22/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/23/resultados
+Processados 250/1000 itens, 250 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/24/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/25/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/26/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/27/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/28/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/29/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/30/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/31/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/32/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/33/resultados
+Processados 260/1000 itens, 260 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/34/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/35/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/36/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/37/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/38/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/39/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/42/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/43/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/44/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/45/resultados
+Processados 270/1000 itens, 270 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/46/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/47/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/48/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/49/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/50/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/51/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/52/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/53/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/54/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/55/resultados
+Processados 280/1000 itens, 280 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/56/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/57/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/58/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/59/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/60/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/61/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/62/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/63/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/64/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/65/resultados
+Processados 290/1000 itens, 290 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/66/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/68/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/69/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/70/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/71/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/72/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/73/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/74/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/75/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/76/resultados
+Processados 300/1000 itens, 300 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/77/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/78/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/79/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/80/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/81/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/82/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/83/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/85/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/86/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/87/resultados
+Processados 310/1000 itens, 310 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/89/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/90/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/91/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/92/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/93/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/94/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/95/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/96/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000076
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000076/itens/97/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000082
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000082/itens/1/resultados
+Processados 320/1000 itens, 320 resultados inseridos
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000082
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000082/itens/2/resultados
+Parsed: CNPJ=10091510000175, Ano=2025, Seq=000082
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091510000175/compras/2025/000082/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000004
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000004/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000004
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000004/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000004
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000004/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000004
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000004/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000004
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000004/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/6/resultados
+Processados 330/1000 itens, 330 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/14/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/16/resultados
+Processados 340/1000 itens, 340 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/18/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/19/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/20/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/21/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/22/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/23/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/24/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/25/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/26/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/27/resultados
+Processados 350/1000 itens, 350 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/28/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/29/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/30/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/31/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/32/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/33/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/34/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/35/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/36/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/37/resultados
+Processados 360/1000 itens, 360 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/38/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/39/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/40/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/41/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/42/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/43/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/44/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/45/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/46/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/47/resultados
+Processados 370/1000 itens, 370 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/48/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/49/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/50/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/51/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/52/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/53/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/54/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000006
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000006/itens/55/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/2/resultados
+Processados 380/1000 itens, 380 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/13/resultados
+Processados 390/1000 itens, 390 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/14/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/16/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/17/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/18/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/19/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/20/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/21/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/22/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/23/resultados
+Processados 400/1000 itens, 400 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/24/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/25/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/26/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/27/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/28/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/29/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/30/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/31/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/32/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/33/resultados
+Processados 410/1000 itens, 410 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/34/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/35/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/36/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/37/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/38/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/39/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/40/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/41/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/42/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/43/resultados
+Processados 420/1000 itens, 420 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/44/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/45/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/46/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/47/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/48/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/49/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/50/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/51/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/52/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/53/resultados
+Processados 430/1000 itens, 430 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/54/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/55/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/56/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/57/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/58/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/59/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/60/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/61/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/62/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/63/resultados
+Processados 440/1000 itens, 440 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/64/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/65/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/66/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/67/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/68/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/69/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/70/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/71/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/72/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/73/resultados
+Processados 450/1000 itens, 450 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/74/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/75/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/76/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/77/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/78/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/79/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/80/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000007
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000007/itens/81/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/2/resultados
+Processados 460/1000 itens, 460 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/12/resultados
+Processados 470/1000 itens, 470 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/14/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/16/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/17/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/18/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/19/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/20/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/21/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/22/resultados
+Processados 480/1000 itens, 480 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/23/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/24/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/25/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/26/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/27/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/28/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/29/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/30/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/31/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/32/resultados
+Processados 490/1000 itens, 490 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/33/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/34/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/35/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/36/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/39/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/40/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/41/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/42/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/43/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/44/resultados
+Processados 500/1000 itens, 500 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/45/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/46/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/47/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/48/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/49/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/50/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/51/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/52/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/53/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/54/resultados
+Processados 510/1000 itens, 510 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/55/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/56/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000012
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000012/itens/57/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/7/resultados
+Processados 520/1000 itens, 520 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/14/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/17/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/18/resultados
+Processados 530/1000 itens, 530 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/19/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/20/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/21/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/22/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/23/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/24/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/25/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/26/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/27/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/28/resultados
+Processados 540/1000 itens, 540 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/29/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/30/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/31/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/32/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/33/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000017/itens/34/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/4/resultados
+Processados 550/1000 itens, 550 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/14/resultados
+Processados 560/1000 itens, 560 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/16/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/17/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/18/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/19/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/20/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/21/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/22/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/23/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/24/resultados
+Processados 570/1000 itens, 570 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/25/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/26/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/27/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/28/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/29/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/30/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/31/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/32/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/33/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/34/resultados
+Processados 580/1000 itens, 580 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/35/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/36/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/37/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/38/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/39/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/40/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/41/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/42/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/43/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/44/resultados
+Processados 590/1000 itens, 590 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/45/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/46/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/47/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/48/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/49/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/50/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/51/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/52/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/53/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/54/resultados
+Processados 600/1000 itens, 600 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/55/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/56/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/57/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/58/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/59/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/60/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/61/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/62/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/63/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/64/resultados
+Processados 610/1000 itens, 610 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/65/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/66/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/67/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/68/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/69/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/70/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/71/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/72/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/73/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/74/resultados
+Processados 620/1000 itens, 620 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/75/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/76/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/77/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/78/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/79/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/80/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/81/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/82/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/83/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/84/resultados
+Processados 630/1000 itens, 630 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/85/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/86/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/87/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/88/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/89/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/90/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/91/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/92/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/93/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/94/resultados
+Processados 640/1000 itens, 640 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/95/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/96/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/97/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/98/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/99/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/100/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/101/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/102/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/103/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/104/resultados
+Processados 650/1000 itens, 650 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/105/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/106/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/107/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/108/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/109/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/110/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/111/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/112/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/113/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/114/resultados
+Processados 660/1000 itens, 660 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/115/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/116/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/117/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/118/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/119/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/120/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/121/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/122/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/123/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/124/resultados
+Processados 670/1000 itens, 670 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/125/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/126/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/127/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/128/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/129/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/130/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/131/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/132/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/133/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/134/resultados
+Processados 680/1000 itens, 680 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/135/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/136/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/137/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/138/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/139/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/140/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/141/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/142/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/143/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/144/resultados
+Processados 690/1000 itens, 690 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/145/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/146/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/147/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/148/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/149/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/150/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/151/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/152/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/153/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/154/resultados
+Processados 700/1000 itens, 700 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/155/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/156/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/157/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/158/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/159/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/160/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/161/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/162/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/163/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/164/resultados
+Processados 710/1000 itens, 710 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/165/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/166/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/167/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/168/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/169/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/170/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/171/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/172/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/173/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/174/resultados
+Processados 720/1000 itens, 720 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/175/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/176/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/177/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/178/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/179/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/180/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/181/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/182/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/183/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/184/resultados
+Processados 730/1000 itens, 730 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/185/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/186/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/187/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/188/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/189/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/190/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/191/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/192/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/193/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/194/resultados
+Processados 740/1000 itens, 740 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/195/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/196/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/197/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/198/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/199/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/200/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/201/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/202/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/203/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/204/resultados
+Processados 750/1000 itens, 750 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/205/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/206/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/207/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/208/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/209/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/210/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/211/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/212/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/213/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/214/resultados
+Processados 760/1000 itens, 760 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/215/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/216/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/217/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/218/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/219/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/220/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/221/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/222/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/223/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/224/resultados
+Processados 770/1000 itens, 770 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/225/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/226/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/227/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/228/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/229/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/230/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/231/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/232/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/233/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/234/resultados
+Processados 780/1000 itens, 780 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/235/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/236/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/237/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/238/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/239/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/240/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/241/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/242/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/243/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/244/resultados
+Processados 790/1000 itens, 790 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/245/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/246/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/247/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/248/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/249/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/250/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/251/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/252/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/253/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/254/resultados
+Processados 800/1000 itens, 800 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/255/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/256/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/257/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/258/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/259/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/260/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/261/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/262/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/263/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/264/resultados
+Processados 810/1000 itens, 810 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/265/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/266/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/267/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/268/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/269/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/270/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/271/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/272/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/273/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/274/resultados
+Processados 820/1000 itens, 820 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/275/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/276/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/277/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/278/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/279/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/280/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/281/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/282/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/283/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/284/resultados
+Processados 830/1000 itens, 830 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/285/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/286/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/287/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/288/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/289/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/290/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/291/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/292/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/293/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/294/resultados
+Processados 840/1000 itens, 840 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/295/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/296/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/297/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/298/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/299/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/300/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/301/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/302/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/303/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/304/resultados
+Processados 850/1000 itens, 850 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/305/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/306/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/307/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/308/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/309/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/310/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/311/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/312/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/313/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/314/resultados
+Processados 860/1000 itens, 860 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/315/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/316/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/317/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/318/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/319/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/320/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/321/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/322/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/323/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/324/resultados
+Processados 870/1000 itens, 870 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/325/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/326/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/327/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/328/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/329/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/330/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/331/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/332/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/333/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/334/resultados
+Processados 880/1000 itens, 880 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/335/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/336/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/337/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/338/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/339/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000017
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000017/itens/340/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/4/resultados
+Processados 890/1000 itens, 890 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/4/resultados
+Processados 900/1000 itens, 900 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000025
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000025/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/4/resultados
+Processados 910/1000 itens, 910 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/14/resultados
+Processados 920/1000 itens, 920 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/9/resultados
+Processados 930/1000 itens, 930 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/14/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000026
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000026/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/4/resultados
+Processados 940/1000 itens, 940 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/3/resultados
+Processados 950/1000 itens, 950 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000027
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000027/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000028
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000028/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000028
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000028/itens/3/resultados
+Processados 960/1000 itens, 960 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000028
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000028/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2025, Seq=000028
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2025/000028/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/4/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/8/resultados
+Processados 970/1000 itens, 970 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000029
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000029/itens/14/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/1/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/2/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/3/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/4/resultados
+Processados 980/1000 itens, 980 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/5/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/6/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/7/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/8/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/9/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/10/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/11/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/12/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/13/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/14/resultados
+Processados 990/1000 itens, 990 resultados inseridos
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/15/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/16/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/17/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/18/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/19/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/20/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/21/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/22/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/23/resultados
+Parsed: CNPJ=10091528000177, Ano=2024, Seq=000031
+Buscando: https://pncp.gov.br/api/pncp/v1/orgaos/10091528000177/compras/2024/000031/itens/24/resultados
+Processados 1000/1000 itens, 1000 resultados inseridos
+
+✅ Finalizado! Total de resultados inseridos: 1000

@@ -106,13 +106,13 @@
                 {% if ata.dataAssinatura %}
                 <div class="info-row">
                     <span class="label">Assinatura:</span>
-                    <span class="val">{{ ata.dataAssinatura[:10] }}</span>
+                    <span class="val">{{ ata.dataAssinatura|format_date }}</span>
                 </div>
                 {% endif %}
                 {% if ata.vigenciaInicio and ata.vigenciaFim %}
                 <div class="info-row">
                     <span class="label">Vigência:</span>
-                    <span class="val">{{ ata.vigenciaInicio[:10] }} a {{ ata.vigenciaFim[:10] }}</span>
+                    <span class="val">{{ ata.vigenciaInicio|format_date }} a {{ ata.vigenciaFim|format_date }}</span>
                 </div>
                 {% endif %}
 
@@ -180,7 +180,7 @@
                 <div style="color: var(--text-main);">
                     <div style="font-weight: 500;">{{ file.titulo }}</div>
                     <div style="font-size: 0.8rem; opacity: 0.7;">{{ file.tipoDocumentoNome }} - {{
-                        file.dataPublicacaoPncp[:10] }}</div>
+                        file.dataPublicacaoPncp|format_date }}</div>
                 </div>
                 <a href="{{ file.url }}" target="_blank" class="btn-sm" style="white-space: nowrap;">
                     <i class="fa-solid fa-download"></i> Baixar

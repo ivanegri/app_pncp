@@ -1,11 +1,23 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_caching import Cache
 from .config import Config
 from .models import db, init_db, User
+
+# Initialize cache
+cache = Cache()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    
+    # Configure cache
+    # Using simple in-memory cache (for production, use Redis)
+    app.config['CACHE_TYPE'] = 'SimpleCache'  # or 'RedisCache' for production
+    app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # 5 minutes default
+    
+    # Initialize cache
+    cache.init_app(app)
 
     # Initialize DB
     init_db(app)
@@ -86,5 +98,29 @@ def create_app():
             return "#"
 
     app.jinja_env.filters['pncp_url'] = pncp_url
+
+    def b64encode_filter(value):
+        """Base64 encode a string for URL safety"""
+        if not value:
+            return ""
+        import base64
+        return base64.b64encode(value.encode('utf-8')).decode('utf-8')
+    
+    app.jinja_env.filters['b64encode'] = b64encode_filter
+
+    def format_date(value):
+        """Format date for display - handles both date objects and strings"""
+        if not value:
+            return ""
+        # If it's already a string, try to extract just the date part
+        if isinstance(value, str):
+            return value[:10] if len(value) >= 10 else value
+        # If it's a date/datetime object, format it
+        try:
+            return value.strftime('%Y-%m-%d')
+        except:
+            return str(value)
+    
+    app.jinja_env.filters['format_date'] = format_date
 
     return app

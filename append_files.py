@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Diretório onde estão os arquivos CSV
-directory = 'data/atas_2025'
+directory = 'CSVs/compras_2026/compras'
 
 # Lista para armazenar os DataFrames
 df_list = []
@@ -23,7 +23,7 @@ if df_list:
     #final_df.drop_duplicates(subset=['cnpj'], keep='first', inplace=True)
     
     # Salva o DataFrame resultante em um novo CSV
-    output_file = 'atas_2025_full.csv'
+    output_file = 'CSVs/compras_2026/compras/compras_2026_abertas.csv'
     final_df.to_csv(output_file, index=False)
     print(f'\nArquivo final salvo como: {output_file}')
     print(f'Total de linhas: {len(final_df)}')
