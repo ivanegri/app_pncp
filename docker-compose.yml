@@ -9,10 +9,12 @@ services:
       - DB_HOST=216.22.5.204
       - DB_PORT=5432
       - DB_NAME=jupiter
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
     volumes:
       - .:/app
       - /app/venv
       - /app/__pycache__
+      - /home/ivan/.config/gcloud/application_default_credentials.json:/app/credentials.json:ro
   # Local DB service (Commented out for Remote DB usage)
   # db:
   #   image: postgres:15-alpine
