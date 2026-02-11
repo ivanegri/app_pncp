@@ -4167,3 +4167,145 @@ Erro ao inserir resultado: (psycopg2.ProgrammingError) can't adapt type 'dict'
                 ]
 [parameters: {'numeroControlePNCPCompra': '76105550000137-1-000098/2024-000003', 'numeroItem': 18, 'sequencialResultado': 1, 'niFornecedor': '32282308000163', 'nomeRazaoSocialFornecedor': 'J DE BRITO - DISTRIBUIDORA DE MEDICAMENTOS E CORRELATOS LTDA', 'tipoPessoa': 'PJ', 'porteFornecedorId': 1, 'porteFornecedorNome': 'ME', 'valorUnitarioHomologado': 4.58, 'quantidadeHomologada': 960.0, 'valorTotalHomologado': 4396.8, 'percentualDesconto': 0.0, 'situacaoCompraItemResultadoId': 1, 'situacaoCompraItemResultadoNome': 'Informado', 'dataResultado': '2024-10-10', 'dataInclusao': '2024-10-10T16:32:46', 'dataAtualizacao': '2024-10-10T16:32:46', 'ordemClassificacaoSrp': 1, 'indicadorSubcontratacao': False, 'aplicacaoMargemPreferencia': False, 'aplicacaoBeneficioMeEpp': True, 'aplicacaoCriterioDesempate': True, 'motivoCancelamento': None, 'dataCancelamento': None, 'codigoPais': 'BRA', 'paisOrigemProdutoServico': None, 'naturezaJuridicaId': '2062', 'naturezaJuridicaNome': 'Sociedade Empresária Limitada', 'amparoLegalMargemPreferencia': None, 'amparoLegalCriterioDesempate': {'id': 148, 'nome': 'Lei 14.133/2021, art. 60, outros incisos', 'descricao': 'Critério de desempate: Utilizar esse código quando a justificativa de de ... (82 characters truncated) ... evistos nos Amparos Legais, códigos 145; 146; e 147, constantes no Manual de Integração do PNCP em seu item 5.15. Amparo Legal.', 'statusAtivo': True}, 'moedaEstrangeira': None, 'valorNominalMoedaEstrangeira': None, 'dataCotacaoMoedaEstrangeira': None, 'timezoneCotacaoMoedaEstrangeira': None}]
 (Background on this error at: https://sqlalche.me/e/20/f405)
+✅ Lote processado: 98 resultados inseridos
+📊 Total acumulado: 52130 resultados
+🔖 Checkpoint salvo: último ID = 72454
+
+Processando lote de 100 itens (ID 72455 a 72567)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52230 resultados
+🔖 Checkpoint salvo: último ID = 72567
+
+Processando lote de 100 itens (ID 72568 a 72676)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52330 resultados
+🔖 Checkpoint salvo: último ID = 72676
+
+Processando lote de 100 itens (ID 72677 a 72815)...
+Erro ao inserir resultado: (psycopg2.ProgrammingError) can't adapt type 'dict'
+[SQL: 
+                    INSERT INTO resultados (
+                        numeroControlePNCPCompra, numeroItem, sequencialResultado,
+                        niFornecedor, nomeRazaoSocialFornecedor, tipoPessoa,
+                        porteFornecedorId, porteFornecedorNome,
+                        valorUnitarioHomologado, quantidadeHomologada, valorTotalHomologado,
+                        percentualDesconto, situacaoCompraItemResultadoId, situacaoCompraItemResultadoNome,
+                        dataResultado, dataInclusao, dataAtualizacao,
+                        ordemClassificacaoSrp, indicadorSubcontratacao,
+                        aplicacaoMargemPreferencia, aplicacaoBeneficioMeEpp, aplicacaoCriterioDesempate,
+                        motivoCancelamento, dataCancelamento, codigoPais, paisOrigemProdutoServico,
+                        naturezaJuridicaId, naturezaJuridicaNome,
+                        amparoLegalMargemPreferencia, amparoLegalCriterioDesempate,
+                        moedaEstrangeira, valorNominalMoedaEstrangeira, dataCotacaoMoedaEstrangeira,
+                        timezoneCotacaoMoedaEstrangeira
+                    ) VALUES (
+                        %(numeroControlePNCPCompra)s, %(numeroItem)s, %(sequencialResultado)s,
+                        %(niFornecedor)s, %(nomeRazaoSocialFornecedor)s, %(tipoPessoa)s,
+                        %(porteFornecedorId)s, %(porteFornecedorNome)s,
+                        %(valorUnitarioHomologado)s, %(quantidadeHomologada)s, %(valorTotalHomologado)s,
+                        %(percentualDesconto)s, %(situacaoCompraItemResultadoId)s, %(situacaoCompraItemResultadoNome)s,
+                        %(dataResultado)s, %(dataInclusao)s, %(dataAtualizacao)s,
+                        %(ordemClassificacaoSrp)s, %(indicadorSubcontratacao)s,
+                        %(aplicacaoMargemPreferencia)s, %(aplicacaoBeneficioMeEpp)s, %(aplicacaoCriterioDesempate)s,
+                        %(motivoCancelamento)s, %(dataCancelamento)s, %(codigoPais)s, %(paisOrigemProdutoServico)s,
+                        %(naturezaJuridicaId)s, %(naturezaJuridicaNome)s,
+                        %(amparoLegalMargemPreferencia)s, %(amparoLegalCriterioDesempate)s,
+                        %(moedaEstrangeira)s, %(valorNominalMoedaEstrangeira)s, %(dataCotacaoMoedaEstrangeira)s,
+                        %(timezoneCotacaoMoedaEstrangeira)s
+                    )
+                    ON CONFLICT (numeroControlePNCPCompra, numeroItem, sequencialResultado) 
+                    DO UPDATE SET
+                        nomeRazaoSocialFornecedor = EXCLUDED.nomeRazaoSocialFornecedor,
+                        valorUnitarioHomologado = EXCLUDED.valorUnitarioHomologado,
+                        valorTotalHomologado = EXCLUDED.valorTotalHomologado,
+                        dataAtualizacao = EXCLUDED.dataAtualizacao
+                ]
+[parameters: {'numeroControlePNCPCompra': '76105550000137-1-000100/2024-000001', 'numeroItem': 4, 'sequencialResultado': 1, 'niFornecedor': '42496258000170', 'nomeRazaoSocialFornecedor': 'METTA FARMACEUTICA LTDA', 'tipoPessoa': 'PJ', 'porteFornecedorId': 1, 'porteFornecedorNome': 'ME', 'valorUnitarioHomologado': 3.1799, 'quantidadeHomologada': 1800.0, 'valorTotalHomologado': 5723.82, 'percentualDesconto': 0.0, 'situacaoCompraItemResultadoId': 1, 'situacaoCompraItemResultadoNome': 'Informado', 'dataResultado': '2024-10-07', 'dataInclusao': '2024-10-07T10:49:10', 'dataAtualizacao': '2024-10-07T10:49:10', 'ordemClassificacaoSrp': 1, 'indicadorSubcontratacao': False, 'aplicacaoMargemPreferencia': False, 'aplicacaoBeneficioMeEpp': True, 'aplicacaoCriterioDesempate': True, 'motivoCancelamento': None, 'dataCancelamento': None, 'codigoPais': 'BRA', 'paisOrigemProdutoServico': None, 'naturezaJuridicaId': '2062', 'naturezaJuridicaNome': 'Sociedade Empresária Limitada', 'amparoLegalMargemPreferencia': None, 'amparoLegalCriterioDesempate': {'id': 148, 'nome': 'Lei 14.133/2021, art. 60, outros incisos', 'descricao': 'Critério de desempate: Utilizar esse código quando a justificativa de de ... (82 characters truncated) ... evistos nos Amparos Legais, códigos 145; 146; e 147, constantes no Manual de Integração do PNCP em seu item 5.15. Amparo Legal.', 'statusAtivo': True}, 'moedaEstrangeira': None, 'valorNominalMoedaEstrangeira': None, 'dataCotacaoMoedaEstrangeira': None, 'timezoneCotacaoMoedaEstrangeira': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+✅ Lote processado: 99 resultados inseridos
+📊 Total acumulado: 52429 resultados
+🔖 Checkpoint salvo: último ID = 72815
+
+Processando lote de 100 itens (ID 72816 a 72958)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52529 resultados
+🔖 Checkpoint salvo: último ID = 72958
+
+Processando lote de 100 itens (ID 72959 a 73058)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52629 resultados
+🔖 Checkpoint salvo: último ID = 73058
+
+Processando lote de 100 itens (ID 73059 a 73755)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52729 resultados
+🔖 Checkpoint salvo: último ID = 73755
+
+Processando lote de 100 itens (ID 73756 a 74068)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52829 resultados
+🔖 Checkpoint salvo: último ID = 74068
+
+Processando lote de 100 itens (ID 74069 a 74175)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 52929 resultados
+🔖 Checkpoint salvo: último ID = 74175
+
+Processando lote de 100 itens (ID 74176 a 74281)...
+✅ Lote processado: 101 resultados inseridos
+📊 Total acumulado: 53030 resultados
+🔖 Checkpoint salvo: último ID = 74281
+
+Processando lote de 100 itens (ID 74283 a 74428)...
+✅ Lote processado: 103 resultados inseridos
+📊 Total acumulado: 53133 resultados
+🔖 Checkpoint salvo: último ID = 74428
+
+Processando lote de 100 itens (ID 74431 a 74692)...
+✅ Lote processado: 104 resultados inseridos
+📊 Total acumulado: 53237 resultados
+🔖 Checkpoint salvo: último ID = 74692
+
+Processando lote de 100 itens (ID 74693 a 74829)...
+✅ Lote processado: 130 resultados inseridos
+📊 Total acumulado: 53367 resultados
+🔖 Checkpoint salvo: último ID = 74829
+
+Processando lote de 100 itens (ID 74830 a 75105)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 53467 resultados
+🔖 Checkpoint salvo: último ID = 75105
+
+Processando lote de 100 itens (ID 75106 a 75207)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 53567 resultados
+🔖 Checkpoint salvo: último ID = 75207
+
+Processando lote de 100 itens (ID 75208 a 75321)...
+✅ Lote processado: 101 resultados inseridos
+📊 Total acumulado: 53668 resultados
+🔖 Checkpoint salvo: último ID = 75321
+
+Processando lote de 100 itens (ID 75322 a 75448)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 53768 resultados
+🔖 Checkpoint salvo: último ID = 75448
+
+Processando lote de 100 itens (ID 75449 a 75582)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 53868 resultados
+🔖 Checkpoint salvo: último ID = 75582
+
+Processando lote de 100 itens (ID 75583 a 75695)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 53968 resultados
+🔖 Checkpoint salvo: último ID = 75695
+
+Processando lote de 100 itens (ID 75697 a 75827)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 54068 resultados
+🔖 Checkpoint salvo: último ID = 75827
+
+Processando lote de 100 itens (ID 75831 a 75995)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 54168 resultados
