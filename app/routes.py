@@ -14,7 +14,7 @@ def make_cache_key():
     from flask_login import current_user
     tier = getattr(current_user, 'tier', 'free')
     # Versioning to force refresh if logic changes
-    version = "v5" 
+    version = "v7" 
     # Use path and sorted query params to avoid duplicate cache entries for different param order
     args = sorted(request.args.items())
     args_str = "&".join(f"{k}={v}" for k, v in args)
@@ -163,44 +163,48 @@ def market_analysis_dashboard():
         is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
         
         if is_full_access:
-            # BigQuery Dashboard
-            units = bq_client.get_unit_distribution(query_term)
-            states = bq_client.get_states(query_term)
-            regions = bq_client.get_regions(query_term)
+            import concurrent.futures
             
+            # Base arguments
             selected_unit = request.args.get('unit')
             selected_state = request.args.get('state')
             selected_region = request.args.get('region')
             
-            if not selected_unit and units:
-                selected_unit = units[0]['name']
+            # Allow selected_unit to be empty for 'All'
+            if selected_unit == 'Todas':
+                 selected_unit = None
+            
+            # Execute queries in parallel
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                # Filter options (Basal)
+                future_units = executor.submit(bq_client.get_unit_distribution, query_term)
+                future_states = executor.submit(bq_client.get_states, query_term)
+                future_regions = executor.submit(bq_client.get_regions, query_term)
                 
-            stats = bq_client.get_price_stats(query_term, selected_unit, selected_state, selected_region)
-            
-            # Extract stats
-            avg_price = stats.get('avg_price') or 0
-            min_price = stats.get('min_price') or 0
-            max_price = stats.get('max_price') or 0
-            total_quantity = int(stats.get('total_qty') or 0)
-            
-            prices = bq_client.get_price_sample(query_term, selected_unit, selected_state, selected_region)
-            top_orgaos = bq_client.get_top_orgaos(query_term, selected_unit, selected_state, selected_region)
-            
-            # Buckets
-            if prices:
-                import numpy as np
-                counts, bins = np.histogram(prices, bins=10)
-                price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-                price_buckets_values = counts.tolist()
-            else:
-                 price_buckets_labels = []
-                 price_buckets_values = []
-
-            total_items_filtered = int(stats.get('count_rows') or 0)
-            if selected_unit or selected_state or selected_region:
-                 total_items_global = bq_client.count_items(query_term)
-            else:
-                 total_items_global = total_items_filtered
+                # Filtered Data
+                future_stats = executor.submit(bq_client.get_price_stats, query_term, selected_unit, selected_state, selected_region)
+                future_prices = executor.submit(bq_client.get_price_sample, query_term, selected_unit, selected_state, selected_region)
+                future_top_orgaos = executor.submit(bq_client.get_top_orgaos, query_term, selected_unit, selected_state, selected_region)
+                
+                # Global Count (conditional)
+                future_global_count = None
+                if selected_unit or selected_state or selected_region:
+                     future_global_count = executor.submit(bq_client.count_items, query_term)
+                
+                # Gather results
+                units = future_units.result()
+                states = future_states.result()
+                regions = future_regions.result()
+                stats = future_stats.result()
+                prices = future_prices.result()
+                top_orgaos = future_top_orgaos.result()
+                
+                total_items_filtered = int(stats.get('count_rows') or 0)
+                
+                if future_global_count:
+                    total_items_global = future_global_count.result()
+                else:
+                    total_items_global = total_items_filtered
 
             return render_template(
                 'dashboard.html',
@@ -371,11 +375,9 @@ def dashboard():
         is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
         
         if is_full_access:
-            # BigQuery Dashboard
-            units = bq_client.get_unit_distribution(query_term)
-            states = bq_client.get_states(query_term)
-            regions = bq_client.get_regions(query_term)
+            import concurrent.futures
             
+            # Prepare arguments
             selected_unit = request.args.get('unit')
             selected_state = request.args.get('state')
             selected_region = request.args.get('region')
@@ -383,17 +385,44 @@ def dashboard():
             # Allow selected_unit to be empty for 'All'
             if selected_unit == 'Todas':
                  selected_unit = None
+            
+            # Execute queries in parallel to reduce total latency
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                # Filter options (Basal)
+                future_units = executor.submit(bq_client.get_unit_distribution, query_term)
+                future_states = executor.submit(bq_client.get_states, query_term)
+                future_regions = executor.submit(bq_client.get_regions, query_term)
                 
-            stats = bq_client.get_price_stats(query_term, selected_unit, selected_state, selected_region)
+                # Filtered Data
+                future_stats = executor.submit(bq_client.get_price_stats, query_term, selected_unit, selected_state, selected_region)
+                future_prices = executor.submit(bq_client.get_price_sample, query_term, selected_unit, selected_state, selected_region)
+                future_top_orgaos = executor.submit(bq_client.get_top_orgaos, query_term, selected_unit, selected_state, selected_region)
+                
+                # Global Count (conditional)
+                future_global_count = None
+                if selected_unit or selected_state or selected_region:
+                     future_global_count = executor.submit(bq_client.count_items, query_term)
+
+                # Gather results (this will block until each is ready)
+                units = future_units.result()
+                states = future_states.result()
+                regions = future_regions.result()
+                stats = future_stats.result()
+                prices = future_prices.result()
+                top_orgaos = future_top_orgaos.result()
+                
+                total_items_filtered = int(stats.get('count_rows') or 0)
+                
+                if future_global_count:
+                    total_items_global = future_global_count.result()
+                else:
+                    total_items_global = total_items_filtered
             
             # Extract stats
             avg_price = stats.get('avg_price') or 0
             min_price = stats.get('min_price') or 0
             max_price = stats.get('max_price') or 0
             total_quantity = int(stats.get('total_qty') or 0)
-            
-            prices = bq_client.get_price_sample(query_term, selected_unit, selected_state, selected_region)
-            top_orgaos = bq_client.get_top_orgaos(query_term, selected_unit, selected_state, selected_region)
             
             # Buckets
             if prices:
@@ -404,13 +433,6 @@ def dashboard():
             else:
                  price_buckets_labels = []
                  price_buckets_values = []
-
-            total_items_filtered = int(stats.get('count_rows') or 0)
-            # If unit is selected, global count is different. If not, it's same.
-            if selected_unit or selected_state or selected_region:
-                 total_items_global = bq_client.count_items(query_term)
-            else:
-                 total_items_global = total_items_filtered
 
             return render_template(
                 'dashboard.html',

@@ -4057,3 +4057,113 @@ Erro ao inserir resultado: (psycopg2.ProgrammingError) can't adapt type 'dict'
                 ]
 [parameters: {'numeroControlePNCPCompra': '63606479000124-1-000661/2024-000003', 'numeroItem': 5, 'sequencialResultado': 1, 'niFornecedor': '06916063000179', 'nomeRazaoSocialFornecedor': 'JAQUELINE C. DE OLIVEIRA', 'tipoPessoa': 'PJ', 'porteFornecedorId': 1, 'porteFornecedorNome': 'ME', 'valorUnitarioHomologado': 58.0, 'quantidadeHomologada': 30.0, 'valorTotalHomologado': 1740.0, 'percentualDesconto': 0.0, 'situacaoCompraItemResultadoId': 1, 'situacaoCompraItemResultadoNome': 'Informado', 'dataResultado': '2024-11-26', 'dataInclusao': '2024-11-26T12:39:38', 'dataAtualizacao': '2024-11-26T12:39:38', 'ordemClassificacaoSrp': 1, 'indicadorSubcontratacao': False, 'aplicacaoMargemPreferencia': False, 'aplicacaoBeneficioMeEpp': False, 'aplicacaoCriterioDesempate': True, 'motivoCancelamento': None, 'dataCancelamento': None, 'codigoPais': 'BRA', 'paisOrigemProdutoServico': None, 'naturezaJuridicaId': '2135', 'naturezaJuridicaNome': 'Empresário (Individual)', 'amparoLegalMargemPreferencia': None, 'amparoLegalCriterioDesempate': {'id': 148, 'nome': 'Lei 14.133/2021, art. 60, outros incisos', 'descricao': 'Critério de desempate: Utilizar esse código quando a justificativa de de ... (82 characters truncated) ... evistos nos Amparos Legais, códigos 145; 146; e 147, constantes no Manual de Integração do PNCP em seu item 5.15. Amparo Legal.', 'statusAtivo': True}, 'moedaEstrangeira': None, 'valorNominalMoedaEstrangeira': None, 'dataCotacaoMoedaEstrangeira': None, 'timezoneCotacaoMoedaEstrangeira': None}]
 (Background on this error at: https://sqlalche.me/e/20/f405)
+✅ Lote processado: 99 resultados inseridos
+📊 Total acumulado: 51526 resultados
+🔖 Checkpoint salvo: último ID = 71650
+
+Processando lote de 100 itens (ID 71651 a 71753)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 51626 resultados
+🔖 Checkpoint salvo: último ID = 71753
+
+Processando lote de 100 itens (ID 71754 a 71922)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 51726 resultados
+🔖 Checkpoint salvo: último ID = 71922
+
+Processando lote de 100 itens (ID 71923 a 72091)...
+✅ Lote processado: 100 resultados inseridos
+📊 Total acumulado: 51826 resultados
+🔖 Checkpoint salvo: último ID = 72091
+
+Processando lote de 100 itens (ID 72092 a 72210)...
+✅ Lote processado: 103 resultados inseridos
+📊 Total acumulado: 51929 resultados
+🔖 Checkpoint salvo: último ID = 72210
+
+Processando lote de 100 itens (ID 72213 a 72343)...
+✅ Lote processado: 103 resultados inseridos
+📊 Total acumulado: 52032 resultados
+🔖 Checkpoint salvo: último ID = 72343
+
+Processando lote de 100 itens (ID 72344 a 72454)...
+Erro ao inserir resultado: (psycopg2.ProgrammingError) can't adapt type 'dict'
+[SQL: 
+                    INSERT INTO resultados (
+                        numeroControlePNCPCompra, numeroItem, sequencialResultado,
+                        niFornecedor, nomeRazaoSocialFornecedor, tipoPessoa,
+                        porteFornecedorId, porteFornecedorNome,
+                        valorUnitarioHomologado, quantidadeHomologada, valorTotalHomologado,
+                        percentualDesconto, situacaoCompraItemResultadoId, situacaoCompraItemResultadoNome,
+                        dataResultado, dataInclusao, dataAtualizacao,
+                        ordemClassificacaoSrp, indicadorSubcontratacao,
+                        aplicacaoMargemPreferencia, aplicacaoBeneficioMeEpp, aplicacaoCriterioDesempate,
+                        motivoCancelamento, dataCancelamento, codigoPais, paisOrigemProdutoServico,
+                        naturezaJuridicaId, naturezaJuridicaNome,
+                        amparoLegalMargemPreferencia, amparoLegalCriterioDesempate,
+                        moedaEstrangeira, valorNominalMoedaEstrangeira, dataCotacaoMoedaEstrangeira,
+                        timezoneCotacaoMoedaEstrangeira
+                    ) VALUES (
+                        %(numeroControlePNCPCompra)s, %(numeroItem)s, %(sequencialResultado)s,
+                        %(niFornecedor)s, %(nomeRazaoSocialFornecedor)s, %(tipoPessoa)s,
+                        %(porteFornecedorId)s, %(porteFornecedorNome)s,
+                        %(valorUnitarioHomologado)s, %(quantidadeHomologada)s, %(valorTotalHomologado)s,
+                        %(percentualDesconto)s, %(situacaoCompraItemResultadoId)s, %(situacaoCompraItemResultadoNome)s,
+                        %(dataResultado)s, %(dataInclusao)s, %(dataAtualizacao)s,
+                        %(ordemClassificacaoSrp)s, %(indicadorSubcontratacao)s,
+                        %(aplicacaoMargemPreferencia)s, %(aplicacaoBeneficioMeEpp)s, %(aplicacaoCriterioDesempate)s,
+                        %(motivoCancelamento)s, %(dataCancelamento)s, %(codigoPais)s, %(paisOrigemProdutoServico)s,
+                        %(naturezaJuridicaId)s, %(naturezaJuridicaNome)s,
+                        %(amparoLegalMargemPreferencia)s, %(amparoLegalCriterioDesempate)s,
+                        %(moedaEstrangeira)s, %(valorNominalMoedaEstrangeira)s, %(dataCotacaoMoedaEstrangeira)s,
+                        %(timezoneCotacaoMoedaEstrangeira)s
+                    )
+                    ON CONFLICT (numeroControlePNCPCompra, numeroItem, sequencialResultado) 
+                    DO UPDATE SET
+                        nomeRazaoSocialFornecedor = EXCLUDED.nomeRazaoSocialFornecedor,
+                        valorUnitarioHomologado = EXCLUDED.valorUnitarioHomologado,
+                        valorTotalHomologado = EXCLUDED.valorTotalHomologado,
+                        dataAtualizacao = EXCLUDED.dataAtualizacao
+                ]
+[parameters: {'numeroControlePNCPCompra': '60448040000122-1-000330/2024-000001', 'numeroItem': 1, 'sequencialResultado': 1, 'niFornecedor': '11667036000140', 'nomeRazaoSocialFornecedor': 'COTTON MED PRODUTOS HOSPITALARES IMPORTACAO E EXPORTACAO LTDA', 'tipoPessoa': 'PJ', 'porteFornecedorId': 1, 'porteFornecedorNome': 'ME', 'valorUnitarioHomologado': 3.9, 'quantidadeHomologada': 1044358.0, 'valorTotalHomologado': 4072996.2, 'percentualDesconto': 0.0, 'situacaoCompraItemResultadoId': 1, 'situacaoCompraItemResultadoNome': 'Informado', 'dataResultado': '2024-11-19', 'dataInclusao': '2024-11-19T10:56:53', 'dataAtualizacao': '2024-11-19T10:56:53', 'ordemClassificacaoSrp': 1, 'indicadorSubcontratacao': False, 'aplicacaoMargemPreferencia': False, 'aplicacaoBeneficioMeEpp': True, 'aplicacaoCriterioDesempate': True, 'motivoCancelamento': None, 'dataCancelamento': None, 'codigoPais': 'BRA', 'paisOrigemProdutoServico': None, 'naturezaJuridicaId': '2062', 'naturezaJuridicaNome': 'Sociedade Empresária Limitada', 'amparoLegalMargemPreferencia': None, 'amparoLegalCriterioDesempate': {'id': 148, 'nome': 'Lei 14.133/2021, art. 60, outros incisos', 'descricao': 'Critério de desempate: Utilizar esse código quando a justificativa de de ... (82 characters truncated) ... evistos nos Amparos Legais, códigos 145; 146; e 147, constantes no Manual de Integração do PNCP em seu item 5.15. Amparo Legal.', 'statusAtivo': True}, 'moedaEstrangeira': None, 'valorNominalMoedaEstrangeira': None, 'dataCotacaoMoedaEstrangeira': None, 'timezoneCotacaoMoedaEstrangeira': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Erro ao inserir resultado: (psycopg2.ProgrammingError) can't adapt type 'dict'
+[SQL: 
+                    INSERT INTO resultados (
+                        numeroControlePNCPCompra, numeroItem, sequencialResultado,
+                        niFornecedor, nomeRazaoSocialFornecedor, tipoPessoa,
+                        porteFornecedorId, porteFornecedorNome,
+                        valorUnitarioHomologado, quantidadeHomologada, valorTotalHomologado,
+                        percentualDesconto, situacaoCompraItemResultadoId, situacaoCompraItemResultadoNome,
+                        dataResultado, dataInclusao, dataAtualizacao,
+                        ordemClassificacaoSrp, indicadorSubcontratacao,
+                        aplicacaoMargemPreferencia, aplicacaoBeneficioMeEpp, aplicacaoCriterioDesempate,
+                        motivoCancelamento, dataCancelamento, codigoPais, paisOrigemProdutoServico,
+                        naturezaJuridicaId, naturezaJuridicaNome,
+                        amparoLegalMargemPreferencia, amparoLegalCriterioDesempate,
+                        moedaEstrangeira, valorNominalMoedaEstrangeira, dataCotacaoMoedaEstrangeira,
+                        timezoneCotacaoMoedaEstrangeira
+                    ) VALUES (
+                        %(numeroControlePNCPCompra)s, %(numeroItem)s, %(sequencialResultado)s,
+                        %(niFornecedor)s, %(nomeRazaoSocialFornecedor)s, %(tipoPessoa)s,
+                        %(porteFornecedorId)s, %(porteFornecedorNome)s,
+                        %(valorUnitarioHomologado)s, %(quantidadeHomologada)s, %(valorTotalHomologado)s,
+                        %(percentualDesconto)s, %(situacaoCompraItemResultadoId)s, %(situacaoCompraItemResultadoNome)s,
+                        %(dataResultado)s, %(dataInclusao)s, %(dataAtualizacao)s,
+                        %(ordemClassificacaoSrp)s, %(indicadorSubcontratacao)s,
+                        %(aplicacaoMargemPreferencia)s, %(aplicacaoBeneficioMeEpp)s, %(aplicacaoCriterioDesempate)s,
+                        %(motivoCancelamento)s, %(dataCancelamento)s, %(codigoPais)s, %(paisOrigemProdutoServico)s,
+                        %(naturezaJuridicaId)s, %(naturezaJuridicaNome)s,
+                        %(amparoLegalMargemPreferencia)s, %(amparoLegalCriterioDesempate)s,
+                        %(moedaEstrangeira)s, %(valorNominalMoedaEstrangeira)s, %(dataCotacaoMoedaEstrangeira)s,
+                        %(timezoneCotacaoMoedaEstrangeira)s
+                    )
+                    ON CONFLICT (numeroControlePNCPCompra, numeroItem, sequencialResultado) 
+                    DO UPDATE SET
+                        nomeRazaoSocialFornecedor = EXCLUDED.nomeRazaoSocialFornecedor,
+                        valorUnitarioHomologado = EXCLUDED.valorUnitarioHomologado,
+                        valorTotalHomologado = EXCLUDED.valorTotalHomologado,
+                        dataAtualizacao = EXCLUDED.dataAtualizacao
+                ]
+[parameters: {'numeroControlePNCPCompra': '76105550000137-1-000098/2024-000003', 'numeroItem': 18, 'sequencialResultado': 1, 'niFornecedor': '32282308000163', 'nomeRazaoSocialFornecedor': 'J DE BRITO - DISTRIBUIDORA DE MEDICAMENTOS E CORRELATOS LTDA', 'tipoPessoa': 'PJ', 'porteFornecedorId': 1, 'porteFornecedorNome': 'ME', 'valorUnitarioHomologado': 4.58, 'quantidadeHomologada': 960.0, 'valorTotalHomologado': 4396.8, 'percentualDesconto': 0.0, 'situacaoCompraItemResultadoId': 1, 'situacaoCompraItemResultadoNome': 'Informado', 'dataResultado': '2024-10-10', 'dataInclusao': '2024-10-10T16:32:46', 'dataAtualizacao': '2024-10-10T16:32:46', 'ordemClassificacaoSrp': 1, 'indicadorSubcontratacao': False, 'aplicacaoMargemPreferencia': False, 'aplicacaoBeneficioMeEpp': True, 'aplicacaoCriterioDesempate': True, 'motivoCancelamento': None, 'dataCancelamento': None, 'codigoPais': 'BRA', 'paisOrigemProdutoServico': None, 'naturezaJuridicaId': '2062', 'naturezaJuridicaNome': 'Sociedade Empresária Limitada', 'amparoLegalMargemPreferencia': None, 'amparoLegalCriterioDesempate': {'id': 148, 'nome': 'Lei 14.133/2021, art. 60, outros incisos', 'descricao': 'Critério de desempate: Utilizar esse código quando a justificativa de de ... (82 characters truncated) ... evistos nos Amparos Legais, códigos 145; 146; e 147, constantes no Manual de Integração do PNCP em seu item 5.15. Amparo Legal.', 'statusAtivo': True}, 'moedaEstrangeira': None, 'valorNominalMoedaEstrangeira': None, 'dataCotacaoMoedaEstrangeira': None, 'timezoneCotacaoMoedaEstrangeira': None}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
