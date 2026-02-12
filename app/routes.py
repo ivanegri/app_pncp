@@ -996,37 +996,70 @@ def export_excel():
         if search_type == 'itens':
             is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
             if is_full_access:
-                # BigQuery Export with JOIN to resultados table
+                # BigQuery Export - try with resultados table, fallback without
                 client = bq_client.get_client()
-                sql = f"""
-                    SELECT 
-                        i.descricao,
-                        i.valorUnitarioEstimado,
-                        i.quantidade,
-                        i.unidadeMedida,
-                        i.situacaoCompraItemNome,
-                        i.dataAtualizacao,
-                        o.razaoSocial as orgaoNome,
-                        r.nomeRazaoSocialFornecedor as fornecedor,
-                        r.valorUnitarioHomologado as valorVencedor
-                    FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens` i
-                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` o
-                        ON i.parent_cnpj = o.cnpj
-                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.resultados` r
-                        ON i.parent_numeroControlePNCPAta = r.numeroControlePNCPCompra
-                        AND i.numeroItem = r.numeroItem
-                    WHERE SEARCH(i.descricao, @query_term)
-                    LIMIT @limit
-                """
                 from google.cloud import bigquery
-                job_config = bigquery.QueryJobConfig(
-                    query_parameters=[
-                        bigquery.ScalarQueryParameter("query_term", "STRING", query_term),
-                        bigquery.ScalarQueryParameter("limit", "INT64", limit),
-                    ]
-                )
-                query_job = client.query(sql, job_config=job_config)
-                results = [dict(row) for row in query_job.result()]
+                
+                # First try with resultados JOIN
+                try:
+                    sql = f"""
+                        SELECT 
+                            i.descricao,
+                            i.valorUnitarioEstimado,
+                            i.quantidade,
+                            i.unidadeMedida,
+                            i.situacaoCompraItemNome,
+                            i.dataAtualizacao,
+                            o.razaoSocial as orgaoNome,
+                            o.State as estado,
+                            o.regiao,
+                            r.nomeRazaoSocialFornecedor as fornecedor,
+                            r.valorUnitarioHomologado as valorVencedor
+                        FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens` i
+                        LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` o
+                            ON i.parent_cnpj = o.cnpj
+                        LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.resultados` r
+                            ON i.parent_numeroControlePNCPAta = r.numeroControlePNCPCompra
+                            AND i.numeroItem = r.numeroItem
+                        WHERE SEARCH(i.descricao, @query_term)
+                        LIMIT @limit
+                    """
+                    job_config = bigquery.QueryJobConfig(
+                        query_parameters=[
+                            bigquery.ScalarQueryParameter("query_term", "STRING", query_term),
+                            bigquery.ScalarQueryParameter("limit", "INT64", limit),
+                        ]
+                    )
+                    query_job = client.query(sql, job_config=job_config)
+                    results = [dict(row) for row in query_job.result()]
+                except Exception as e_resultados:
+                    print(f"Export: resultados table not available ({e_resultados}), falling back without it")
+                    sql = f"""
+                        SELECT 
+                            i.descricao,
+                            i.valorUnitarioEstimado,
+                            i.quantidade,
+                            i.unidadeMedida,
+                            i.situacaoCompraItemNome,
+                            i.dataAtualizacao,
+                            o.razaoSocial as orgaoNome,
+                            o.State as estado,
+                            o.regiao
+                        FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens` i
+                        LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` o
+                            ON i.parent_cnpj = o.cnpj
+                        WHERE SEARCH(i.descricao, @query_term)
+                        LIMIT @limit
+                    """
+                    job_config = bigquery.QueryJobConfig(
+                        query_parameters=[
+                            bigquery.ScalarQueryParameter("query_term", "STRING", query_term),
+                            bigquery.ScalarQueryParameter("limit", "INT64", limit),
+                        ]
+                    )
+                    query_job = client.query(sql, job_config=job_config)
+                    results = [dict(row) for row in query_job.result()]
+
             else:
                 Itens = Base.classes.itens
                 Orgaos = Base.classes.orgaos
