@@ -205,6 +205,22 @@ def market_analysis_dashboard():
                     total_items_global = future_global_count.result()
                 else:
                     total_items_global = total_items_filtered
+            
+            # Extract stats
+            avg_price = stats.get('avg_price') or 0
+            min_price = stats.get('min_price') or 0
+            max_price = stats.get('max_price') or 0
+            total_quantity = int(stats.get('total_qty') or 0)
+            
+            # Buckets
+            if prices:
+                import numpy as np
+                counts, bins = np.histogram(prices, bins=10)
+                price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
+                price_buckets_values = counts.tolist()
+            else:
+                 price_buckets_labels = []
+                 price_buckets_values = []
 
             return render_template(
                 'dashboard.html',
@@ -360,7 +376,7 @@ def market_analysis_dashboard():
         print(f"Dashboard error: {e}")
         import traceback
         traceback.print_exc()
-        return render_template('results.html', query=query_term, results=[], error="Erro ao gerar dashboard")
+        return render_template('results.html', query=query_term, results=[], error=f"Erro ao gerar dashboard: {e}")
 
 @main_bp.route('/dashboard')
 @login_required
@@ -588,7 +604,7 @@ def dashboard():
         print(f"Dashboard error: {e}")
         import traceback
         traceback.print_exc()
-        return render_template('results.html', query=query_term, results=[], error="Erro ao gerar dashboard")
+        return render_template('results.html', query=query_term, results=[], error=f"Erro ao gerar dashboard: {e}")
 
 @main_bp.route('/item/<string:numero_controle_encoded>/<int:numero_item>')
 @login_required
