@@ -14,7 +14,7 @@ services:
       - .:/app
       - /app/venv
       - /app/__pycache__
-      - /home/ivan/.config/gcloud/application_default_credentials.json:/app/credentials.json:ro
+      - ./credentials.json:/app/credentials.json:ro
   # Local DB service (Commented out for Remote DB usage)
   # db:
   #   image: postgres:15-alpine
