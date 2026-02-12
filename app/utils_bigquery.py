@@ -1,6 +1,8 @@
 from google.cloud import bigquery
 from flask import current_app
 import os
+import json
+import base64
 
 class BigQueryClient:
     def __init__(self):
@@ -10,7 +12,30 @@ class BigQueryClient:
 
     def get_client(self):
         if not self.client:
-            self.client = bigquery.Client(project=self.project_id)
+            # Try loading credentials from env var (base64-encoded JSON)
+            creds_b64 = os.environ.get('GOOGLE_CREDENTIALS_JSON')
+            if creds_b64:
+                try:
+                    creds_json = json.loads(base64.b64decode(creds_b64).decode('utf-8'))
+                    if creds_json.get('type') == 'authorized_user':
+                        from google.oauth2.credentials import Credentials
+                        credentials = Credentials(
+                            token=None,
+                            refresh_token=creds_json['refresh_token'],
+                            client_id=creds_json['client_id'],
+                            client_secret=creds_json['client_secret'],
+                            token_uri='https://oauth2.googleapis.com/token'
+                        )
+                    else:
+                        from google.oauth2 import service_account
+                        credentials = service_account.Credentials.from_service_account_info(creds_json)
+                    self.client = bigquery.Client(project=self.project_id, credentials=credentials)
+                except Exception as e:
+                    print(f"Warning: Failed to load credentials from env var: {e}")
+                    self.client = bigquery.Client(project=self.project_id)
+            else:
+                # Fallback to Application Default Credentials (local dev or GOOGLE_APPLICATION_CREDENTIALS)
+                self.client = bigquery.Client(project=self.project_id)
         return self.client
 
     def search_items(self, query_term, limit=20, offset=0):
