@@ -4,17 +4,17 @@ services:
     ports:
       - "18123:5000"
     environment:
-      - DB_USER=admin
-      - DB_PASS=admin123
-      - DB_HOST=216.22.5.204
-      - DB_PORT=5432
-      - DB_NAME=jupiter
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
     volumes:
       - .:/app
       - /app/venv
       - /app/__pycache__
-      - ./credentials.json:/app/credentials.json:ro
+      - ${GOOGLE_CREDENTIALS_PATH}:/app/credentials.json:ro
   # Local DB service (Commented out for Remote DB usage)
   # db:
   #   image: postgres:15-alpine
