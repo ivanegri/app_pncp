@@ -2,7 +2,7 @@
 <div class="result-card">
     <div class="card-header">
         {% if type == 'atas' %}
-        <span class="badge-type">Ata {{ item.anoAta }}</span>
+        <span class="badge-type">Ata Nº {{ item.numeroAtaRegistroPreco }} / {{ item.anoAta }}</span>
         {% elif type == 'orgaos' %}
         <span class="badge-type">CNPJ: {{ item.cnpj }}</span>
         {% else %}
@@ -12,10 +12,15 @@
 
     <div class="card-body">
         {% if type == 'atas' %}
-        <h3>{{ item.numeroAtaRegistroPreco }} - {{ item.numeroControlePNCPAta }}</h3>
-        <p class="details">
-            Vigência: {{ item.vigenciaInicio }} a {{ item.vigenciaFim }}
+        <h3>{{ item.nomeOrgao or item.nomeUnidadeOrgao or 'Órgão não informado' }}</h3>
+        <p class="details"
+            style="margin-top: 8px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ item.objetoContratacao or 'Objeto não informado' }}
         </p>
+        <p class="details" style="margin-top: 8px;">
+            <i class="fa-regular fa-calendar"></i> Vigência: {{ item.vigenciaInicio }} a {{ item.vigenciaFim }}
+        </p>
+
         {% elif type == 'orgaos' %}
         <h3>{{ item.razaoSocial }}</h3>
         <p class="details">
