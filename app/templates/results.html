@@ -6,7 +6,11 @@
         <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar para Busca</a>
         <h2>Resultados para <span class="highlight">"{{ query }}"</span></h2>
         <div class="meta" style="margin-top: 5px; font-size: 0.9rem;">
+            {% if total_results and total_results > 0 %}
             Encontrados {{ total_results }} resultados em
+            {% else %}
+            Resultados em
+            {% endif %}
             {% if type == 'atas' %}Atas de Registro de Preço{% elif type == 'orgaos' %}Órgãos Públicos{% else %}Itens{%
             endif %}
         </div>

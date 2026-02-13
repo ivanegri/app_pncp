@@ -24,7 +24,8 @@
                 style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); color: var(--primary); cursor: pointer;">
                 <i class="fa-solid fa-folder-open" style="margin-right: 5px;"></i> Arquivos
             </button>
-            <a href="/ata/{{ ata.id }}/itens" class="btn-details"
+            {% set encoded_ata = ata.numeroControlePNCPAta|b64encode %}
+            <a href="/ata/{{ encoded_ata }}/itens" class="btn-details"
                 style="display: flex; align-items: center; justify-content: center; text-decoration: none; background: var(--primary); color: white; border: none;">
                 <i class="fa-solid fa-list" style="margin-right: 5px;"></i> Itens
             </a>

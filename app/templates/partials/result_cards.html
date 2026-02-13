@@ -13,6 +13,12 @@
     <div class="card-body">
         {% if type == 'atas' %}
         <h3>{{ item.nomeOrgao or item.nomeUnidadeOrgao or 'Órgão não informado' }}</h3>
+        {% if item.city or item.state %}
+        <p class="details" style="margin-top: 4px; font-size: 0.85rem;">
+            <i class="fa-solid fa-location-dot"></i> {{ item.city or '' }}{% if item.city and item.state %} - {% endif
+            %}{{ item.state or '' }}
+        </p>
+        {% endif %}
         <p class="details"
             style="margin-top: 8px; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
             {{ item.objetoContratacao or 'Objeto não informado' }}
@@ -45,7 +51,8 @@
             Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
         </a>
         {% elif type == 'atas' %}
-        <a href="/ata/{{ item.id }}/itens" class="btn-details"
+        {% set encoded_ata = item.numeroControlePNCPAta|b64encode %}
+        <a href="/ata/{{ encoded_ata }}/itens" class="btn-details"
             style="display: block; text-align: center; text-decoration: none;">
             Ver Itens <i class="fa-solid fa-arrow-right"></i>
         </a>

@@ -72,21 +72,50 @@ def search():
                     results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
                 
             elif search_type == 'atas':
-                Atas = Base.classes.atas
-                # FTS Search against 'busca_objeto_idx'
-                fts_condition = text("busca_objeto_idx @@ websearch_to_tsquery('portuguese', :q)")
-                query = db.session.query(Atas).filter(fts_condition)
+                # BigQuery search for atas
+                from google.cloud import bigquery as bq_module
+                client = bq_client.get_client()
                 
-                count_query = query.params(q=query_term)
-                total_results = count_query.count()
+                # Data query with orgaos JOIN for city/state (skip count for performance)
+                sql = f"""
+                    SELECT 
+                        a.numeroControlePNCPAta,
+                        a.numeroAtaRegistroPreco,
+                        a.anoAta,
+                        a.numeroControlePNCPCompra,
+                        a.objetoContratacao,
+                        a.cnpjOrgao,
+                        a.nomeOrgao,
+                        a.nomeUnidadeOrgao,
+                        a.vigenciaInicio,
+                        a.vigenciaFim,
+                        a.cancelado,
+                        o.City as city,
+                        o.State as state
+                    FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas` a
+                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` o
+                        ON a.cnpjOrgao = o.cnpj
+                    WHERE CONTAINS_SUBSTR(a.objetoContratacao, @query_term)
+                    LIMIT @limit OFFSET @offset
+                """
+                job_config = bq_module.QueryJobConfig(
+                    query_parameters=[
+                        bq_module.ScalarQueryParameter("query_term", "STRING", query_term),
+                        bq_module.ScalarQueryParameter("limit", "INT64", per_page + 1),
+                        bq_module.ScalarQueryParameter("offset", "INT64", offset),
+                    ]
+                )
+                query_job = client.query(sql, job_config=job_config)
+                db_results = [dict(row) for row in query_job.result()]
                 
-                db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
-                
+                total_results = -1  # Skip count for performance
                 if len(db_results) > per_page:
                     has_next = True
                     db_results = db_results[:-1]
 
-                results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+                results = db_results
+
+
                 
             elif search_type == 'orgaos':
                 Orgaos = Base.classes.orgaos
@@ -835,27 +864,55 @@ def orgao_details(cnpj):
              return jsonify({'error': str(e)}), 500
         return render_template('results.html', query="", results=[], error="Erro ao carregar detalhes do órgão")
 
-@main_bp.route('/ata/<int:ata_id>/itens')
+@main_bp.route('/ata/<path:numero_controle_encoded>/itens')
 @login_required
 @cache.cached(timeout=600, key_prefix=make_cache_key)
-def ata_items(ata_id):
+def ata_items(numero_controle_encoded):
     try:
-        Atas = Base.classes.atas
-        Itens = Base.classes.itens
+        import base64
+        from google.cloud import bigquery as bq_module
+        client = bq_client.get_client()
         
-        ata = db.session.query(Atas).get(ata_id)
-        if not ata:
-             return render_template('results.html', query="", results=[], error="Ata não encontrada")
-             
+        numero_controle = base64.b64decode(numero_controle_encoded).decode('utf-8')
+        
+        # Fetch Ata by numeroControlePNCPAta
+        ata_sql = f"""
+            SELECT *
+            FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas`
+            WHERE numeroControlePNCPAta = @numero_controle
+            LIMIT 1
+        """
+        ata_config = bq_module.QueryJobConfig(
+            query_parameters=[bq_module.ScalarQueryParameter("numero_controle", "STRING", numero_controle)]
+        )
+        ata_job = client.query(ata_sql, job_config=ata_config)
+        ata_results = [dict(row) for row in ata_job.result()]
+        
+        if not ata_results:
+            return render_template('results.html', query="", results=[], error="Ata não encontrada")
+        
+        ata = type('Ata', (), ata_results[0])()  # Convert dict to object for template compatibility
+        
         # Fetch Items linked to this Ata via numeroControlePNCPAta
-        # Itens table uses 'parent_numeroControlePNCPAta'
-        items = db.session.query(Itens).filter_by(parent_numeroControlePNCPAta=ata.numeroControlePNCPAta).all()
+        items_sql = f"""
+            SELECT *
+            FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens`
+            WHERE parent_numeroControlePNCPAta = @numero_controle
+            ORDER BY numeroItem
+        """
+        items_config = bq_module.QueryJobConfig(
+            query_parameters=[bq_module.ScalarQueryParameter("numero_controle", "STRING", numero_controle)]
+        )
+        items_job = client.query(items_sql, job_config=items_config)
+        items = [type('Item', (), dict(row))() for row in items_job.result()]
         
         return render_template('ata_items.html', ata=ata, items=items)
         
     except Exception as e:
         print(f"Ata items error: {e}")
-        return render_template('results.html', query="", results=[], error="Erro ao carregar itens da ata")
+        import traceback
+        traceback.print_exc()
+        return render_template('results.html', query="", results=[], error=f"Erro ao carregar itens da ata: {e}")
 
 @main_bp.route('/api/proxy/arquivos/<path:numero_controle_compra>')
 @login_required

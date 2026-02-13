@@ -49,7 +49,8 @@
             </div>
 
             <div class="card-footer">
-                <a href="/item/{{ item.id }}" class="btn-details"
+                {% set encoded_numero = item.parent_numeroControlePNCPAta|b64encode %}
+                <a href="/item/{{ encoded_numero }}/{{ item.numeroItem }}" class="btn-details"
                     style="display: block; text-align: center; text-decoration: none;">
                     Ver Detalhes <i class="fa-solid fa-arrow-right"></i>
                 </a>
