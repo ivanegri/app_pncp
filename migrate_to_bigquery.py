@@ -10,8 +10,8 @@ CSV_DIR = 'CSVs'
 
 # File mappings: Table Name -> List of Files
 FILES_TO_MIGRATE = {
-    # 'atas': [
-    #     'atas_2024_full.csv',
+    'atas': [
+         'atas_2026_full.csv',]
     #     'atas_2025_full.csv'
     # ],
     #'itens': [
@@ -23,9 +23,12 @@ FILES_TO_MIGRATE = {
     #'orgaos': [
     #   'orgaos_full_regiao.csv'
     #]
-    'compras_futuras':[
-        'compras_2026_abertas_processed.csv'
-    ]
+    #'compras_futuras':[
+    #    'compras_2026_abertas_processed.csv'
+    #]
+    #'resultados':[
+    #    'resultados.csv'
+    #]
 }
 
 CHUNK_SIZE = 50000  # Adjust based on memory
@@ -98,8 +101,8 @@ def main():
             if os.path.exists(file_path):
                 # Disable autodetect for 'itens' to avoid schema conflicts on append
                 # Enable for others (users, orgaos)
-                do_autodetect = False if table == 'itens' else True
-                upload_csv_to_bigquery(client, table, file_path, autodetect=do_autodetect)
+                #do_autodetect = False if table == 'itens' else True
+                upload_csv_to_bigquery(client, table, file_path, autodetect=False)
             else:
                 print(f"File not found: {file_path}")
 
