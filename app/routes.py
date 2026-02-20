@@ -235,18 +235,35 @@ def market_analysis_dashboard():
                 else:
                     total_items_global = total_items_filtered
             
-            # Extract stats
+            total_quantity = int(stats.get('total_qty') or 0)
+            
+            # Default stats (fallback)
             avg_price = stats.get('avg_price') or 0
             min_price = stats.get('min_price') or 0
             max_price = stats.get('max_price') or 0
-            total_quantity = int(stats.get('total_qty') or 0)
             
-            # Buckets
+            # Buckets and Filtered Stats
             if prices:
                 import numpy as np
-                counts, bins = np.histogram(prices, bins=10)
-                price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-                price_buckets_values = counts.tolist()
+                prices_raw = [p for p in prices if p > 0]
+                if prices_raw:
+                    p05 = np.percentile(prices_raw, 5)
+                    p95 = np.percentile(prices_raw, 95)
+                    prices_filtered = [p for p in prices_raw if p >= p05 and p <= p95]
+                    if not prices_filtered:
+                        prices_filtered = prices_raw
+                        
+                    counts, bins = np.histogram(prices_filtered, bins=10)
+                    price_buckets_labels = [f"R$ {b:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') for b in bins[:-1]]
+                    price_buckets_values = counts.tolist()
+                    
+                    # Update stats using sample (excludes high outliers)
+                    avg_price = float(np.mean(prices_filtered))
+                    min_price = float(np.min(prices_filtered))
+                    max_price = float(np.max(prices_filtered))
+                else:
+                    price_buckets_labels = []
+                    price_buckets_values = []
             else:
                  price_buckets_labels = []
                  price_buckets_values = []
@@ -332,12 +349,31 @@ def market_analysis_dashboard():
 
         prices = [r[0] for r in prices_query if r[0] is not None]
         
-        # Create buckets
+        avg_price_val = stats.avg_price or 0
+        min_price_val = stats.min_price or 0
+        max_price_val = stats.max_price or 0
+        
+        # Create buckets and filtered stats
         if prices:
             import numpy as np
-            counts, bins = np.histogram(prices, bins=10)
-            price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-            price_buckets_values = counts.tolist()
+            prices_raw = [p for p in prices if p > 0]
+            if prices_raw:
+                p05 = np.percentile(prices_raw, 5)
+                p95 = np.percentile(prices_raw, 95)
+                prices_filtered = [p for p in prices_raw if p >= p05 and p <= p95]
+                if not prices_filtered:
+                    prices_filtered = prices_raw
+                    
+                counts, bins = np.histogram(prices_filtered, bins=10)
+                price_buckets_labels = [f"R$ {b:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') for b in bins[:-1]]
+                price_buckets_values = counts.tolist()
+                
+                avg_price_val = float(np.mean(prices_filtered))
+                min_price_val = float(np.min(prices_filtered))
+                max_price_val = float(np.max(prices_filtered))
+            else:
+                price_buckets_labels = []
+                price_buckets_values = []
         else:
             price_buckets_labels = []
             price_buckets_values = []
@@ -392,9 +428,9 @@ def market_analysis_dashboard():
             total_items_global=total_items_global,
             units=units,
             selected_unit=selected_unit,
-            avg_price=stats.avg_price or 0,
-            min_price=stats.min_price or 0,
-            max_price=stats.max_price or 0,
+            avg_price=avg_price_val,
+            min_price=min_price_val,
+            max_price=max_price_val,
             total_quantity=int(stats.total_qty or 0),
             price_buckets_labels=price_buckets_labels,
             price_buckets_values=price_buckets_values,
@@ -463,18 +499,35 @@ def dashboard():
                 else:
                     total_items_global = total_items_filtered
             
-            # Extract stats
+            total_quantity = int(stats.get('total_qty') or 0)
+            
+            # Default stats (fallback)
             avg_price = stats.get('avg_price') or 0
             min_price = stats.get('min_price') or 0
             max_price = stats.get('max_price') or 0
-            total_quantity = int(stats.get('total_qty') or 0)
             
-            # Buckets
+            # Buckets and Filtered Stats
             if prices:
                 import numpy as np
-                counts, bins = np.histogram(prices, bins=10)
-                price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-                price_buckets_values = counts.tolist()
+                prices_raw = [p for p in prices if p > 0]
+                if prices_raw:
+                    p05 = np.percentile(prices_raw, 5)
+                    p95 = np.percentile(prices_raw, 95)
+                    prices_filtered = [p for p in prices_raw if p >= p05 and p <= p95]
+                    if not prices_filtered:
+                        prices_filtered = prices_raw
+                        
+                    counts, bins = np.histogram(prices_filtered, bins=10)
+                    price_buckets_labels = [f"R$ {b:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') for b in bins[:-1]]
+                    price_buckets_values = counts.tolist()
+                    
+                    # Update stats using sample (excludes high outliers)
+                    avg_price = float(np.mean(prices_filtered))
+                    min_price = float(np.min(prices_filtered))
+                    max_price = float(np.max(prices_filtered))
+                else:
+                    price_buckets_labels = []
+                    price_buckets_values = []
             else:
                  price_buckets_labels = []
                  price_buckets_values = []
@@ -560,12 +613,30 @@ def dashboard():
              
         prices = [r[0] for r in prices_query if r[0] is not None]
         
-        # Create buckets
+        # Create buckets and filtered stats
+        avg_price_val = stats.avg_price or 0
+        min_price_val = stats.min_price or 0
+        max_price_val = stats.max_price or 0
+        
         if prices:
             import numpy as np
-            counts, bins = np.histogram(prices, bins=10)
-            price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-            price_buckets_values = counts.tolist()
+            prices_raw = [p for p in prices if p > 0]
+            if prices_raw:
+                p95 = np.percentile(prices_raw, 95)
+                prices_filtered = [p for p in prices_raw if p <= p95]
+                if not prices_filtered:
+                    prices_filtered = prices_raw
+                    
+                counts, bins = np.histogram(prices_filtered, bins=10)
+                price_buckets_labels = [f"R$ {b:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') for b in bins[:-1]]
+                price_buckets_values = counts.tolist()
+                
+                avg_price_val = float(np.mean(prices_filtered))
+                min_price_val = float(np.min(prices_filtered))
+                max_price_val = float(np.max(prices_filtered))
+            else:
+                price_buckets_labels = []
+                price_buckets_values = []
         else:
             price_buckets_labels = []
             price_buckets_values = []
@@ -620,9 +691,9 @@ def dashboard():
             total_items_global=total_items_global,
             units=units,
             selected_unit=selected_unit,
-            avg_price=stats.avg_price or 0,
-            min_price=stats.min_price or 0,
-            max_price=stats.max_price or 0,
+            avg_price=avg_price_val,
+            min_price=min_price_val,
+            max_price=max_price_val,
             total_quantity=int(stats.total_qty or 0),
             price_buckets_labels=price_buckets_labels,
             price_buckets_values=price_buckets_values,

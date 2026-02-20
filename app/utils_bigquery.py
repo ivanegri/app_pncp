@@ -203,7 +203,7 @@ class BigQueryClient:
                 COUNT(*) as count_rows
             FROM `{self.project_id}.{self.dataset_id}.itens` i
             JOIN `{self.project_id}.{self.dataset_id}.orgaos` o ON i.parent_cnpj = o.cnpj
-            WHERE {where_clause}
+            WHERE {where_clause} AND i.valorUnitarioEstimado > 0
         """
         job_config = bigquery.QueryJobConfig(query_parameters=params)
         query_job = client.query(sql, job_config=job_config)
@@ -232,7 +232,7 @@ class BigQueryClient:
             FROM `{self.project_id}.{self.dataset_id}.itens` i
             JOIN `{self.project_id}.{self.dataset_id}.orgaos` o ON i.parent_cnpj = o.cnpj
             WHERE {where_clause}
-            AND i.valorUnitarioEstimado IS NOT NULL
+            AND i.valorUnitarioEstimado > 0
             LIMIT @limit
         """
         params.append(bigquery.ScalarQueryParameter("limit", "INT64", limit))
