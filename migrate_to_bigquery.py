@@ -10,16 +10,16 @@ CSV_DIR = 'CSVs'
 
 # File mappings: Table Name -> List of Files
 FILES_TO_MIGRATE = {
-    'atas': [
-         'atas_2026_full.csv',]
+    #'atas': [
+    #     'atas_2026_full.csv',]
     #     'atas_2025_full.csv'
     # ],
     #'itens': [
     #     'itens_consolidado_2024_padronizado.csv',
     #     'itens_consolidado_2025_padronizado.csv'
-    #'users': [
-    #     'users.csv'
-    # ],
+    'users': [
+         'users.csv'
+    ],
     #'orgaos': [
     #   'orgaos_full_regiao.csv'
     #]
