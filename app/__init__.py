@@ -2,7 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_caching import Cache
 from .config import Config
-from .models import db, init_db, User
+from .models import init_db, User
 
 # Initialize cache
 cache = Cache()
@@ -29,7 +29,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return User.get(int(user_id))
 
     # Register Blueprints / Routes
     from .routes import main_bp

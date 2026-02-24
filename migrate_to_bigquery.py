@@ -26,9 +26,9 @@ FILES_TO_MIGRATE = {
     #'compras_futuras':[
     #    'compras_2026_abertas_processed.csv'
     #]
-    #'resultados':[
-    #    'resultados.csv'
-    #]
+    'resultados':[
+        'resultados_2.csv'
+    ]
 }
 
 CHUNK_SIZE = 50000  # Adjust based on memory

@@ -3,14 +3,15 @@
     <div class="card-header">
         <span class="badge-type">Ata {{ ata.numeroAtaRegistroPreco }}/{{ ata.anoAta }}</span>
         {% if ata.dataAssinatura %}
-        <span class="date">{{ ata.dataAssinatura[:10] }}</span>
+        <span class="date">{{ ata.dataAssinatura|string|truncate(10, True, '') }}</span>
         {% endif %}
     </div>
 
     <div class="card-body">
         <h3>{{ ata.objetoContratacao|truncate(100) }}</h3>
         <p class="details">
-            <strong>Vigência:</strong> {{ ata.vigenciaInicio[:10] }} a {{ ata.vigenciaFim[:10] }}<br>
+            <strong>Vigência:</strong> {{ ata.vigenciaInicio|string|truncate(10, True, '') }} a {{
+            ata.vigenciaFim|string|truncate(10, True, '') }}<br>
             <strong>Unidade:</strong> {{ ata.nomeUnidadeOrgao }}
         </p>
         <div class="meta" style="font-size: 0.8rem; margin-top: 5px;">
