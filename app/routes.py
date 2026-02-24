@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for, abort
-from .models import Base, db, User
+from .models import User
 from .utils_tiers import check_tier_access, requires_tier
-from sqlalchemy import or_, text
 from flask_login import login_required, current_user
 from .utils_bigquery import bq_client
 from . import cache
@@ -43,33 +42,13 @@ def search():
             offset = (page - 1) * per_page
             
             if search_type == 'itens':
-                is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
-                if is_full_access:
-                    # BigQuery Search
-                    results = bq_client.search_items(query_term, limit=per_page+1, offset=offset)
-                    total_results = bq_client.count_items(query_term)
-                    
-                    if len(results) > per_page:
-                        has_next = True
-                        results = results[:-1]
-                else:
-                    # Postgres Search
-                    Itens = Base.classes.itens
-                    # FTS Search against 'busca_descricao_idx'
-                    fts_condition = text("busca_descricao_idx @@ websearch_to_tsquery('portuguese', :q)")
-                    query = db.session.query(Itens).filter(fts_condition)
-                    
-                    # Use params safely
-                    count_query = query.params(q=query_term)
-                    total_results = count_query.count()
-                    
-                    db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
-                    
-                    if len(db_results) > per_page:
-                        has_next = True
-                        db_results = db_results[:-1]
-                        
-                    results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+                # BigQuery Search
+                results = bq_client.search_items(query_term, limit=per_page+1, offset=offset)
+                total_results = bq_client.count_items(query_term)
+                
+                if len(results) > per_page:
+                    has_next = True
+                    results = results[:-1]
                 
             elif search_type == 'atas':
                 # BigQuery search for atas
@@ -118,21 +97,29 @@ def search():
 
                 
             elif search_type == 'orgaos':
-                Orgaos = Base.classes.orgaos
-                # FTS Search against 'busca_orgao_idx'
-                fts_condition = text("busca_orgao_idx @@ websearch_to_tsquery('portuguese', :q)")
-                query = db.session.query(Orgaos).filter(fts_condition)
+                from google.cloud import bigquery as bq_module
+                client = bq_client.get_client()
+                sql = f"""
+                    SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.orgaos`
+                    WHERE SEARCH(razaoSocial, @query_term) OR SEARCH(nomeFantasia, @query_term)
+                    LIMIT @limit OFFSET @offset
+                """
+                job_config = bq_module.QueryJobConfig(
+                    query_parameters=[
+                        bq_module.ScalarQueryParameter("query_term", "STRING", query_term),
+                        bq_module.ScalarQueryParameter("limit", "INT64", per_page + 1),
+                        bq_module.ScalarQueryParameter("offset", "INT64", offset),
+                    ]
+                )
+                query_job = client.query(sql, job_config=job_config)
+                db_results = [dict(row) for row in query_job.result()]
                 
-                count_query = query.params(q=query_term)
-                total_results = count_query.count()
-                
-                db_results = query.params(q=query_term).offset(offset).limit(per_page + 1).all()
-                
+                total_results = -1
                 if len(db_results) > per_page:
                     has_next = True
                     db_results = db_results[:-1]
                 
-                results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+                results = db_results
 
         except Exception as e:
             print(f"Search error: {e}")
@@ -169,11 +156,9 @@ def select_plan(tier):
     current_user.tier = tier
     # Logic to handle payment would go here
     try:
-        from .models import db
-        db.session.commit()
+        current_user.save()
         flash(f'Plano {tier.upper()} selecionado com sucesso! Bem-vindo.', 'success')
     except Exception as e:
-        db.session.rollback()
         flash('Erro ao atualizar plano.', 'danger')
         
     return redirect(url_for('main.dashboard'))
@@ -189,7 +174,7 @@ def market_analysis_dashboard():
     
     try:
         # Check if we should use BigQuery (Full tier or Admin)
-        is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+        is_full_access = True
         
         if is_full_access:
             import concurrent.futures
@@ -271,135 +256,7 @@ def market_analysis_dashboard():
                 top_orgaos=top_orgaos
             )
 
-        # Postgres Dashboard (Existing Logic)
-        Itens = Base.classes.itens
-        # Filter items by description
-        items_query_base = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
-        total_items_global = items_query_base.count() 
-        
-        if total_items_global == 0:
-             return render_template('results.html', query=query_term, results=[], error="Sem dados para análise")
 
-        # 1. Get Units Distribution
-        from sqlalchemy import func, desc
-        units_query = db.session.query(
-            Itens.unidadeMedida,
-            func.count(Itens.id).label('count')
-        ).filter(
-            Itens.descricao.ilike(f'%{query_term}%')
-        ).group_by(
-            Itens.unidadeMedida
-        ).order_by(
-            desc('count')
-        ).all()
-
-        units = [{'name': u[0], 'count': u[1]} for u in units_query if u[0]]
-        
-        # 2. Determine Selected Unit
-        selected_unit = request.args.get('unit')
-        
-        # Default to first unit if none selected, or if selected is invalid (though we won't validate strictly for now)
-        if not selected_unit and units:
-            selected_unit = units[0]['name']
-
-        # 3. Filter for Stats
-        if selected_unit:
-            # Case-insensitive comparison just in case, though usually exact match from DB group by is fine
-            items_query = items_query_base.filter(Itens.unidadeMedida == selected_unit)
-        else:
-            items_query = items_query_base 
-
-        total_items_filtered = items_query.count()
-
-        # Basic Stats
-        stats = items_query.with_entities(
-            func.avg(Itens.valorUnitarioEstimado).label('avg_price'),
-            func.min(Itens.valorUnitarioEstimado).label('min_price'),
-            func.max(Itens.valorUnitarioEstimado).label('max_price'),
-            func.sum(Itens.quantidade).label('total_qty')
-        ).first()
-        
-        # Price Distribution (Histogram-like) using Python
-        # OPTIMIZATION: Use a sample for histogram if dataset is large to improve performance
-        
-        # Check if we have too many items to fetch all prices
-        if total_items_filtered > 10000:
-             # Fetch a random sample of prices
-             # PostgreSQL RANDOM() is fast enough for sampling 10k out of millions
-             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).order_by(func.random()).limit(10000).all()
-        else:
-             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).all()
-
-        prices = [r[0] for r in prices_query if r[0] is not None]
-        
-        # Create buckets
-        if prices:
-            import numpy as np
-            counts, bins = np.histogram(prices, bins=10)
-            price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-            price_buckets_values = counts.tolist()
-        else:
-            price_buckets_labels = []
-            price_buckets_values = []
-            
-        # Top Orgaos (by qty) - This requires linking to Orgaos or using cnpj from item which is 'parent_cnpj' possibly?
-        # In migration script step 19 output: 'parent_cnpj' column existed in itens csv.
-        # Let's check Itens model attributes in a separate step if needed, but 'parent_cnpj' is likely the FK.
-        # We can group by parent_cnpj.
-        
-        Orgaos = Base.classes.orgaos
-        
-        # Join Itens and Orgaos on parent_cnpj == cnpj
-        # Join Itens and Orgaos on parent_cnpj == cnpj
-        # Join Itens and Orgaos on parent_cnpj == cnpj
-        top_orgaos_query = db.session.query(
-            Orgaos.razaoSocial,
-            Orgaos.cnpj,
-            func.count(Itens.id).label('count'),
-            func.sum(Itens.quantidade).label('total_qty'),
-            func.avg(Itens.valorUnitarioEstimado).label('avg_price')
-        ).join(
-            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
-        ).filter(
-            Itens.descricao.ilike(f'%{query_term}%')
-        ).filter(
-            Itens.unidadeMedida == selected_unit if selected_unit else text('1=1')
-        ).group_by(
-            Orgaos.razaoSocial,
-            Orgaos.cnpj
-        ).order_by(
-            desc('count')
-        ).limit(20).all()
-        
-        # Pass full objects to template for table
-        top_orgaos = [{
-            'name': r[0], 
-            'cnpj': r[1], 
-            'count': r[2], 
-            'total_qty': int(r[3] or 0), 
-            'avg_price': float(r[4] or 0)
-        } for r in top_orgaos_query]
-        
-        # Keep labels/values for chart if we still wanted it, but user asked for table. 
-        # We can remove chart data prep if we are fully replacing.
-        # But let's leave it compatible if template needs it (unlikely).
-        # We'll just pass 'top_orgaos' list.
-
-        return render_template(
-            'dashboard.html',
-            query=query_term,
-            total_items=total_items_filtered,
-            total_items_global=total_items_global,
-            units=units,
-            selected_unit=selected_unit,
-            avg_price=stats.avg_price or 0,
-            min_price=stats.min_price or 0,
-            max_price=stats.max_price or 0,
-            total_quantity=int(stats.total_qty or 0),
-            price_buckets_labels=price_buckets_labels,
-            price_buckets_values=price_buckets_values,
-            top_orgaos=top_orgaos
-        )
 
     except Exception as e:
         print(f"Dashboard error: {e}")
@@ -417,7 +274,7 @@ def dashboard():
     
     try:
         # Check if we should use BigQuery (Full tier or Admin)
-        is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+        is_full_access = True
         
         if is_full_access:
             import concurrent.futures
@@ -499,135 +356,7 @@ def dashboard():
                 top_orgaos=top_orgaos
             )
 
-        # Postgres Dashboard
-        Itens = Base.classes.itens
-        # Filter items by description
-        items_query_base = db.session.query(Itens).filter(Itens.descricao.ilike(f'%{query_term}%'))
-        total_items_global = items_query_base.count() 
-        
-        if total_items_global == 0:
-             return render_template('results.html', query=query_term, results=[], error="Sem dados para análise")
 
-        # 1. Get Units Distribution
-        from sqlalchemy import func, desc
-        units_query = db.session.query(
-            Itens.unidadeMedida,
-            func.count(Itens.id).label('count')
-        ).filter(
-            Itens.descricao.ilike(f'%{query_term}%')
-        ).group_by(
-            Itens.unidadeMedida
-        ).order_by(
-            desc('count')
-        ).all()
-
-        units = [{'name': u[0], 'count': u[1]} for u in units_query if u[0]]
-        
-        # 2. Determine Selected Unit
-        selected_unit = request.args.get('unit')
-        
-        # Default to first unit if none selected, or if selected is invalid (though we won't validate strictly for now)
-        if not selected_unit and units:
-            selected_unit = units[0]['name']
-
-        # 3. Filter for Stats
-        if selected_unit:
-            # Case-insensitive comparison just in case, though usually exact match from DB group by is fine
-            items_query = items_query_base.filter(Itens.unidadeMedida == selected_unit)
-        else:
-            items_query = items_query_base 
-
-        total_items_filtered = items_query.count()
-
-        # Basic Stats
-        stats = items_query.with_entities(
-            func.avg(Itens.valorUnitarioEstimado).label('avg_price'),
-            func.min(Itens.valorUnitarioEstimado).label('min_price'),
-            func.max(Itens.valorUnitarioEstimado).label('max_price'),
-            func.sum(Itens.quantidade).label('total_qty')
-        ).first()
-        
-        # Price Distribution (Histogram-like) using Python
-        # OPTIMIZATION: Use a sample for histogram if dataset is large to improve performance
-        
-        # Check if we have too many items to fetch all prices
-        if total_items_filtered > 10000:
-             # Fetch a random sample of prices
-             # PostgreSQL RANDOM() is fast enough for sampling 10k out of millions
-             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).order_by(func.random()).limit(10000).all()
-        else:
-             prices_query = items_query.with_entities(Itens.valorUnitarioEstimado).all()
-             
-        prices = [r[0] for r in prices_query if r[0] is not None]
-        
-        # Create buckets
-        if prices:
-            import numpy as np
-            counts, bins = np.histogram(prices, bins=10)
-            price_buckets_labels = [f"R$ {int(b)}" for b in bins[:-1]]
-            price_buckets_values = counts.tolist()
-        else:
-            price_buckets_labels = []
-            price_buckets_values = []
-            
-        # Top Orgaos (by qty) - This requires linking to Orgaos or using cnpj from item which is 'parent_cnpj' possibly?
-        # In migration script step 19 output: 'parent_cnpj' column existed in itens csv.
-        # Let's check Itens model attributes in a separate step if needed, but 'parent_cnpj' is likely the FK.
-        # We can group by parent_cnpj.
-        
-        Orgaos = Base.classes.orgaos
-        
-        # Join Itens and Orgaos on parent_cnpj == cnpj
-        # Join Itens and Orgaos on parent_cnpj == cnpj
-        # Join Itens and Orgaos on parent_cnpj == cnpj
-        top_orgaos_query = db.session.query(
-            Orgaos.razaoSocial,
-            Orgaos.cnpj,
-            func.count(Itens.id).label('count'),
-            func.sum(Itens.quantidade).label('total_qty'),
-            func.avg(Itens.valorUnitarioEstimado).label('avg_price')
-        ).join(
-            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
-        ).filter(
-            Itens.descricao.ilike(f'%{query_term}%')
-        ).filter(
-            Itens.unidadeMedida == selected_unit if selected_unit else text('1=1')
-        ).group_by(
-            Orgaos.razaoSocial,
-            Orgaos.cnpj
-        ).order_by(
-            desc('count')
-        ).limit(20).all()
-        
-        # Pass full objects to template for table
-        top_orgaos = [{
-            'name': r[0], 
-            'cnpj': r[1], 
-            'count': r[2], 
-            'total_qty': int(r[3] or 0), 
-            'avg_price': float(r[4] or 0)
-        } for r in top_orgaos_query]
-        
-        # Keep labels/values for chart if we still wanted it, but user asked for table. 
-        # We can remove chart data prep if we are fully replacing.
-        # But let's leave it compatible if template needs it (unlikely).
-        # We'll just pass 'top_orgaos' list.
-
-        return render_template(
-            'dashboard.html',
-            query=query_term,
-            total_items=total_items_filtered,
-            total_items_global=total_items_global,
-            units=units,
-            selected_unit=selected_unit,
-            avg_price=stats.avg_price or 0,
-            min_price=stats.min_price or 0,
-            max_price=stats.max_price or 0,
-            total_quantity=int(stats.total_qty or 0),
-            price_buckets_labels=price_buckets_labels,
-            price_buckets_values=price_buckets_values,
-            top_orgaos=top_orgaos
-        )
 
     except Exception as e:
         print(f"Dashboard error: {e}")
@@ -644,7 +373,7 @@ def item_details(numero_controle_encoded, numero_item):
         import base64
         numero_controle = base64.b64decode(numero_controle_encoded).decode('utf-8')
         
-        is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+        is_full_access = True
         
         # Query based on user tier
         if is_full_access:
@@ -709,38 +438,7 @@ def item_details(numero_controle_encoded, numero_item):
                 ata_results = list(query_job_ata.result())
                 if ata_results:
                     ata = dict(ata_results[0])
-        else:
-            # PostgreSQL query
-            Itens = Base.classes.itens
-            Atas = Base.classes.atas
-            Orgaos = Base.classes.orgaos
-            
-            # Get Item
-            item = db.session.query(Itens).filter_by(
-                parent_numeroControlePNCPAta=numero_controle,
-                numeroItem=numero_item
-            ).first()
-            
-            if not item:
-                return render_template('results.html', query="", results=[], error="Item não encontrado")
-            
-            # Convert to dict for consistent template usage
-            item = {k: v for k, v in item.__dict__.items() if not k.startswith('_')}
-                
-            # Get Orgao
-            orgao = None
-            if item.get('parent_cnpj'):
-                orgao_obj = db.session.query(Orgaos).filter_by(cnpj=item['parent_cnpj']).first()
-                if orgao_obj:
-                    orgao = {k: v for k, v in orgao_obj.__dict__.items() if not k.startswith('_')}
-                
-            # Get Ata
-            ata = None
-            if item.get('parent_numeroControlePNCPAta'):
-                ata_obj = db.session.query(Atas).filter_by(numeroControlePNCPAta=item['parent_numeroControlePNCPAta']).first()
-                if ata_obj:
-                    ata = {k: v for k, v in ata_obj.__dict__.items() if not k.startswith('_')}
-            
+
         # Pega resultados (Vencedor) via API PNCP ou tabela resultados
         item_results = []
         item_files = []
@@ -802,8 +500,8 @@ def item_details(numero_controle_encoded, numero_item):
 @cache.cached(timeout=600, key_prefix=make_cache_key)
 def orgao_details(cnpj):
     try:
-        Orgaos = Base.classes.orgaos
-        Atas = Base.classes.atas
+        from google.cloud import bigquery as bq_module
+        client = bq_client.get_client()
 
         query_ata = request.args.get('q', '')
         vigencia_inicio = request.args.get('vigencia_inicio', '')
@@ -812,46 +510,63 @@ def orgao_details(cnpj):
         per_page = 20
         is_partial = request.args.get('partial', 'false') == 'true'
         
-        # Determine the correct primary key or unique field. 
-        # Cnpj is unique but 'id' is pk. Route parameter gives cnpj.
-        orgao = db.session.query(Orgaos).filter_by(cnpj=cnpj).first()
+        # cnpj column is INT64 in BigQuery, cast from URL string
+        try:
+            cnpj_int = int(cnpj)
+        except (ValueError, TypeError):
+            cnpj_int = 0
         
-        if not orgao:
+        # Get Orgao
+        orgao_sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` WHERE cnpj = @cnpj LIMIT 1"
+        orgao_job = client.query(orgao_sql, job_config=bq_module.QueryJobConfig(query_parameters=[bq_module.ScalarQueryParameter("cnpj", "INT64", cnpj_int)]))
+        orgao_results = list(orgao_job.result())
+        
+        if not orgao_results:
              return render_template('results.html', query="", results=[], error="Órgão não encontrado")
-             
-        # Fetch Distinct Units for Dropdown
-        distinct_units = db.session.query(Atas.nomeUnidadeOrgao).filter_by(cnpjOrgao=cnpj).distinct().order_by(Atas.nomeUnidadeOrgao).all()
-        # Flatten list of tuples
-        units = [u[0] for u in distinct_units if u[0]]
+        orgao = type('Orgao', (), dict(orgao_results[0]))()
+
+        # Get Distinct Units — use CAST for type safety
+        units_sql = f"SELECT DISTINCT nomeUnidadeOrgao FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas` WHERE CAST(cnpjOrgao AS STRING) = @cnpj AND nomeUnidadeOrgao IS NOT NULL ORDER BY nomeUnidadeOrgao"
+        units_job = client.query(units_sql, job_config=bq_module.QueryJobConfig(query_parameters=[bq_module.ScalarQueryParameter("cnpj", "STRING", cnpj)]))
+        units = [row['nomeUnidadeOrgao'] for row in units_job.result()]
         
-        # Filter params
-        query_ata = request.args.get('q', '')
-        vigencia_inicio = request.args.get('vigencia_inicio', '')
-        vigencia_fim = request.args.get('vigencia_fim', '')
-        selected_unit = request.args.get('unidade', '')
-        
-        # Fetch Atas linked to this Orgao
-        atas_query = db.session.query(Atas).filter_by(cnpjOrgao=cnpj)
+        # Build Atas Query — use CAST for type safety
+        atas_sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas` WHERE CAST(cnpjOrgao AS STRING) = @cnpj"
+        query_parameters = [bq_module.ScalarQueryParameter("cnpj", "STRING", cnpj)]
         
         if query_ata:
-            atas_query = atas_query.filter(Atas.objetoContratacao.ilike(f'%{query_ata}%'))
+            atas_sql += " AND CONTAINS_SUBSTR(objetoContratacao, @query_ata)"
+            query_parameters.append(bq_module.ScalarQueryParameter("query_ata", "STRING", query_ata))
             
         if vigencia_inicio:
-            atas_query = atas_query.filter(Atas.vigenciaInicio >= vigencia_inicio)
+            atas_sql += " AND vigenciaInicio >= @inicio"
+            query_parameters.append(bq_module.ScalarQueryParameter("inicio", "STRING", vigencia_inicio))
             
         if vigencia_fim:
-            atas_query = atas_query.filter(Atas.vigenciaFim <= vigencia_fim)
+            atas_sql += " AND vigenciaFim <= @fim"
+            query_parameters.append(bq_module.ScalarQueryParameter("fim", "STRING", vigencia_fim))
             
+        selected_unit = request.args.get('unidade', '')
         if selected_unit:
-            atas_query = atas_query.filter(Atas.nomeUnidadeOrgao == selected_unit)
+            atas_sql += " AND nomeUnidadeOrgao = @unidade"
+            query_parameters.append(bq_module.ScalarQueryParameter("unidade", "STRING", selected_unit))
             
         offset = (page - 1) * per_page
-        atas = atas_query.offset(offset).limit(per_page + 1).all()
+        atas_sql += " LIMIT @limit OFFSET @offset"
+        query_parameters.extend([
+            bq_module.ScalarQueryParameter("limit", "INT64", per_page + 1),
+            bq_module.ScalarQueryParameter("offset", "INT64", offset)
+        ])
+        
+        atas_job = client.query(atas_sql, job_config=bq_module.QueryJobConfig(query_parameters=query_parameters))
+        atas_results = list(atas_job.result())
         
         has_next = False
-        if len(atas) > per_page:
+        if len(atas_results) > per_page:
             has_next = True
-            atas = atas[:-1] # Remove the extra item used for checking next page
+            atas_results = atas_results[:-1]
+            
+        atas = [type('Ata', (), dict(row))() for row in atas_results]
 
         if is_partial:
             return render_template('partials/ata_cards.html', atas=atas)
@@ -1051,7 +766,7 @@ def export_excel():
         limit = 5000 # Hard limit to prevent server overload
         
         if search_type == 'itens':
-            is_full_access = current_user.tier == 'full' or current_user.role == 'admin'
+            is_full_access = True
             if is_full_access:
                 # BigQuery Export - try with resultados table, fallback without
                 client = bq_client.get_client()
@@ -1117,120 +832,44 @@ def export_excel():
                     query_job = client.query(sql, job_config=job_config)
                     results = [dict(row) for row in query_job.result()]
 
-            else:
-                Itens = Base.classes.itens
-                Orgaos = Base.classes.orgaos
-                
-                # Check if resultados table exists
-                try:
-                    Resultados = Base.classes.resultados
-                    has_resultados = True
-                except:
-                    has_resultados = False
-                
-                # Join query with specific columns
-                if query_term:
-                    search_query = func.websearch_to_tsquery('portuguese', query_term)
-                    
-                    if has_resultados:
-                        query = db.session.query(
-                            Itens.descricao,
-                            Itens.valorUnitarioEstimado,
-                            Itens.quantidade,
-                            Itens.unidadeMedida,
-                            Itens.situacaoCompraItemNome,
-                            Itens.dataAtualizacao,
-                            Orgaos.razaoSocial.label('orgaoNome'),
-                            Resultados.nomerazaosocialfornecedor.label('fornecedor'),
-                            Resultados.valorunitariohomologado.label('valorVencedor')
-                        ).outerjoin(
-                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
-                        ).outerjoin(
-                            Resultados, 
-                            db.and_(
-                                Itens.parent_numeroControlePNCPAta == Resultados.numerocontrolepncpcompra,
-                                Itens.numeroItem == Resultados.numeroitem
-                            )
-                        ).filter(
-                            Itens.busca_descricao_idx.op('@@')(search_query)
-                        )
-                    else:
-                        query = db.session.query(
-                            Itens.descricao,
-                            Itens.valorUnitarioEstimado,
-                            Itens.quantidade,
-                            Itens.unidadeMedida,
-                            Itens.situacaoCompraItemNome,
-                            Itens.dataAtualizacao,
-                            Orgaos.razaoSocial.label('orgaoNome')
-                        ).outerjoin(
-                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
-                        ).filter(
-                            Itens.busca_descricao_idx.op('@@')(search_query)
-                        )
-                else:
-                    if has_resultados:
-                        query = db.session.query(
-                            Itens.descricao,
-                            Itens.valorUnitarioEstimado,
-                            Itens.quantidade,
-                            Itens.unidadeMedida,
-                            Itens.situacaoCompraItemNome,
-                            Itens.dataAtualizacao,
-                            Orgaos.razaoSocial.label('orgaoNome'),
-                            Resultados.nomerazaosocialfornecedor.label('fornecedor'),
-                            Resultados.valorunitariohomologado.label('valorVencedor')
-                        ).outerjoin(
-                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
-                        ).outerjoin(
-                            Resultados, 
-                            db.and_(
-                                Itens.parent_numeroControlePNCPAta == Resultados.numerocontrolepncpcompra,
-                                Itens.numeroItem == Resultados.numeroitem
-                            )
-                        )
-                    else:
-                        query = db.session.query(
-                            Itens.descricao,
-                            Itens.valorUnitarioEstimado,
-                            Itens.quantidade,
-                            Itens.unidadeMedida,
-                            Itens.situacaoCompraItemNome,
-                            Itens.dataAtualizacao,
-                            Orgaos.razaoSocial.label('orgaoNome')
-                        ).outerjoin(
-                            Orgaos, Itens.parent_cnpj == Orgaos.cnpj
-                        )
-                     
-                db_results = query.limit(limit).all()
-                results = [dict(row._mapping) for row in db_results]
-                
-                # Add empty columns if resultados table doesn't exist
-                if not has_resultados:
-                    for r in results:
-                        r['fornecedor'] = None
-                        r['valorVencedor'] = None
+
             
             filename = f"itens_pncp_{query_term}.xlsx"
             
         elif search_type == 'atas':
-            Atas = Base.classes.atas
-            query = db.session.query(Atas).filter(Atas.objetoContratacao.ilike(f'%{query_term}%')) if query_term else db.session.query(Atas)
-            db_results = query.limit(limit).all()
-            results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+            from google.cloud import bigquery as bq_module
+            client = bq_client.get_client()
+            sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas`"
+            job_config = None
+            if query_term:
+                sql += " WHERE CONTAINS_SUBSTR(objetoContratacao, @query_term)"
+            sql += " LIMIT @limit"
+            job_config = bq_module.QueryJobConfig(
+                query_parameters=[
+                    bq_module.ScalarQueryParameter("query_term", "STRING", query_term or ""),
+                    bq_module.ScalarQueryParameter("limit", "INT64", limit),
+                ]
+            )
+            query_job = client.query(sql, job_config=job_config)
+            results = [dict(row) for row in query_job.result()]
             filename = f"atas_pncp_{query_term}.xlsx"
             
         elif search_type == 'orgaos':
-            Orgaos = Base.classes.orgaos
-            # Keep ILIKE for Orgaos as we might not have FTS there yet, and volume is smaller
-            query = db.session.query(Orgaos).filter(
-                or_(
-                    Orgaos.razaoSocial.ilike(f'%{query_term}%'),
-                    Orgaos.nomeFantasia.ilike(f'%{query_term}%')
-                )
-            ) if query_term else db.session.query(Orgaos)
-            db_results = query.limit(limit).all()
-            results = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in db_results]
+            from google.cloud import bigquery as bq_module
+            client = bq_client.get_client()
+            sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.orgaos`"
+            job_config = None
+            if query_term:
+                sql += " WHERE SEARCH(razaoSocial, @query_term) OR SEARCH(nomeFantasia, @query_term)"
+            sql += " LIMIT @limit"
+            job_config = bq_module.QueryJobConfig(
+                query_parameters=[
+                    bq_module.ScalarQueryParameter("query_term", "STRING", query_term or ""),
+                    bq_module.ScalarQueryParameter("limit", "INT64", limit),
+                ]
+            )
+            query_job = client.query(sql, job_config=job_config)
+            results = [dict(row) for row in query_job.result()]
             filename = f"orgaos_pncp_{query_term}.xlsx"
             
         else:
@@ -1271,45 +910,38 @@ def status():
     return jsonify({
         "status": "online",
         "message": "API de Análise do Jupiter PNCP",
-        "tables": list(Base.classes.keys())
+        "backend": "BigQuery"
     })
 
 @main_bp.route('/old_api/atas')
 def list_atas():
-    # Access the reflected class
     try:
-        Atas = Base.classes.atas
-        # Query first 5 records
-        results = db.session.query(Atas).limit(5).all()
-        
-        # Convert to dict (simple serialization)
-        data = []
-        for row in results:
-            # Automap doesn't provide to_dict automatically, so we'll do a basic one
-            # relying on __dict__ but filtering out internal state
-            row_dict = {k: v for k, v in row.__dict__.items() if not k.startswith('_')}
-            data.append(row_dict)
-            
-        return jsonify(data)
+        from google.cloud import bigquery as bq_module
+        client = bq_client.get_client()
+        sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.atas` LIMIT 5"
+        query_job = client.query(sql)
+        return jsonify([dict(row) for row in query_job.result()])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @main_bp.route('/old_api/orgaos')
 def list_orgaos():
     try:
-        Orgaos = Base.classes.orgaos
-        results = db.session.query(Orgaos).limit(5).all()
-        data = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in results]
-        return jsonify(data)
+        from google.cloud import bigquery as bq_module
+        client = bq_client.get_client()
+        sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` LIMIT 5"
+        query_job = client.query(sql)
+        return jsonify([dict(row) for row in query_job.result()])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @main_bp.route('/old_api/itens')
 def list_itens():
     try:
-        Itens = Base.classes.itens
-        results = db.session.query(Itens).limit(5).all()
-        data = [{k: v for k, v in row.__dict__.items() if not k.startswith('_')} for row in results]
-        return jsonify(data)
+        from google.cloud import bigquery as bq_module
+        client = bq_client.get_client()
+        sql = f"SELECT * FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens` LIMIT 5"
+        query_job = client.query(sql)
+        return jsonify([dict(row) for row in query_job.result()])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
