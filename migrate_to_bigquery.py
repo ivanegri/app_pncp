@@ -4,7 +4,8 @@ from google.cloud import bigquery
 from google.api_core.exceptions import Conflict
 
 # Configuration
-PROJECT_ID = 'pncp-466018'
+import os
+PROJECT_ID = os.environ.get('GCP_PROJECT_ID', 'pncp-466018')
 DATASET_ID = 'pncp_data'
 CSV_DIR = 'CSVs'
 

@@ -10,6 +10,7 @@ services:
       - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
       - GOOGLE_CREDENTIALS_JSON=${GOOGLE_CREDENTIALS_JSON}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
     volumes:
       - .:/app
       - /app/venv

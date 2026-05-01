@@ -25,6 +25,12 @@ def make_cache_key():
 def index():
     return render_template('index.html')
 
+@main_bp.route('/pesquisa')
+@login_required
+def pesquisa():
+    """Tela de busca histórica (campo de pesquisa)."""
+    return render_template('pesquisa.html')
+
 @main_bp.route('/search')
 @login_required
 @cache.cached(timeout=300, key_prefix=make_cache_key)
@@ -34,10 +40,14 @@ def search():
     page = request.args.get('page', 1, type=int)
     per_page = 20
     is_partial = request.args.get('partial', 'false') == 'true'
-    
+
+    # Sem termo de busca → redireciona para a tela de pesquisa
+    if not query_term and not is_partial:
+        return redirect(url_for('main.pesquisa'))
+
     results = []
     has_next = False
-    
+
     if query_term:
         try:
             offset = (page - 1) * per_page

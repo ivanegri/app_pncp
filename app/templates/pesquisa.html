@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pesquisa-page">
+
+    <div class="pesquisa-hero">
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar ao Início</a>
+        <div class="pesquisa-hero__icon">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+        </div>
+        <h1>Pesquisa <span class="gradient-text">Histórica</span></h1>
+        <p class="pesquisa-subtitle">Consulte mais de 6,5 milhões de itens adjudicados em atas do PNCP</p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="pesquisa-box">
+        <form method="GET" action="/search" id="search-form">
+            <div class="search-type-tabs">
+                <label class="type-tab">
+                    <input type="radio" name="type" value="itens" checked>
+                    <span><i class="fa-solid fa-box"></i> Itens</span>
+                </label>
+                <label class="type-tab">
+                    <input type="radio" name="type" value="atas">
+                    <span><i class="fa-solid fa-file-contract"></i> Atas</span>
+                </label>
+                <label class="type-tab">
+                    <input type="radio" name="type" value="orgaos">
+                    <span><i class="fa-solid fa-building-columns"></i> Órgãos</span>
+                </label>
+            </div>
+
+            <div class="search-input-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input
+                    type="text"
+                    name="q"
+                    id="q"
+                    class="search-input-main"
+                    placeholder="Ex: papel A4, notebook, serviços de TI..."
+                    autocomplete="off"
+                    autofocus
+                    required
+                >
+                <button type="submit" class="search-submit-btn">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+
+        <!-- Quick Suggestions -->
+        <div class="quick-searches">
+            <span class="quick-label">Buscas populares:</span>
+            <button class="quick-chip" onclick="fillSearch('Papel A4')">Papel A4</button>
+            <button class="quick-chip" onclick="fillSearch('Notebook')">Notebook</button>
+            <button class="quick-chip" onclick="fillSearch('Combustível')">Combustível</button>
+            <button class="quick-chip" onclick="fillSearch('Material de limpeza')">Material de limpeza</button>
+            <button class="quick-chip" onclick="fillSearch('Caneta')">Caneta</button>
+        </div>
+    </div>
+
+    <!-- Feature Info -->
+    <div class="pesquisa-features">
+        <div class="feat-card">
+            <i class="fa-solid fa-box feat-icon"></i>
+            <h3>Itens Adjudicados</h3>
+            <p>Preços unitários reais praticados em licitações homologadas por todo o Brasil.</p>
+        </div>
+        <div class="feat-card">
+            <i class="fa-solid fa-file-contract feat-icon"></i>
+            <h3>Atas de Registro</h3>
+            <p>Atas vigentes e encerradas com objetos, órgãos e datas de vigência.</p>
+        </div>
+        <div class="feat-card">
+            <i class="fa-solid fa-chart-bar feat-icon"></i>
+            <h3>Dashboard de Mercado</h3>
+            <p>Visualize distribuição de preços, regiões e principais fornecedores. (Plano Full)</p>
+        </div>
+        <div class="feat-card">
+            <i class="fa-solid fa-robot feat-icon"></i>
+            <h3>Agente IA</h3>
+            <p>Análise inteligente dos resultados com insights estratégicos sobre preços.</p>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.pesquisa-page {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+    gap: 2.5rem;
+}
+
+.pesquisa-hero {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 600px;
+}
+
+.pesquisa-hero .back-link {
+    align-self: flex-start;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.pesquisa-hero .back-link:hover { color: var(--text-main); }
+
+.pesquisa-hero__icon {
+    width: 72px;
+    height: 72px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-top: 1rem;
+}
+
+.pesquisa-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.pesquisa-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Search Box */
+.pesquisa-box {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.search-type-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.type-tab {
+    cursor: pointer;
+}
+
+.type-tab input[type="radio"] {
+    display: none;
+}
+
+.type-tab span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5rem 1.1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.type-tab input[type="radio"]:checked + span {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: var(--primary);
+}
+
+.search-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.2rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.search-input-main {
+    width: 100%;
+    padding: 1.1rem 4rem 1.1rem 3rem;
+    font-size: 1.05rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.search-input-main:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.search-submit-btn {
+    position: absolute;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.search-submit-btn:hover {
+    background: #4f46e5;
+    transform: scale(1.05);
+}
+
+/* Quick searches */
+.quick-searches {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+
+.quick-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.quick-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.quick-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+/* Feature Cards */
+.pesquisa-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.feat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: 0.2s;
+}
+
+.feat-card:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+}
+
+.feat-icon {
+    font-size: 1.4rem;
+    color: var(--primary);
+}
+
+.feat-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.feat-card p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .pesquisa-hero h1 { font-size: 1.7rem; }
+    .search-type-tabs { flex-wrap: wrap; justify-content: center; }
+    .pesquisa-features { grid-template-columns: 1fr 1fr; }
+}
+</style>
+
+<script>
+function fillSearch(term) {
+    document.getElementById('q').value = term;
+    document.getElementById('q').focus();
+}
+</script>
+{% endblock %}

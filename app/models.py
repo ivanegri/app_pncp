@@ -4,6 +4,11 @@ from datetime import datetime
 from google.cloud import bigquery
 import os
 
+def _get_bq():
+    """Retorna o cliente BigQuery com credenciais configuradas via GOOGLE_CREDENTIALS_JSON."""
+    from .utils_bigquery import bq_client
+    return bq_client.get_client(), bq_client.project_id, bq_client.dataset_id
+
 class User(UserMixin):
     def __init__(self, id=None, email=None, name=None, password_hash=None, created_at=None, role='user', tier='free'):
         self.id = id
@@ -24,9 +29,8 @@ class User(UserMixin):
 
     @classmethod
     def get(cls, user_id):
-        client = bigquery.Client(project=os.environ.get('GCP_PROJECT_ID', 'pncp-466018'))
-        dataset_id = os.environ.get('GCP_DATASET_ID', 'pncp_data')
-        query = f"SELECT * FROM `{client.project}.{dataset_id}.users` WHERE id = @user_id LIMIT 1"
+        client, project_id, dataset_id = _get_bq()
+        query = f"SELECT * FROM `{project_id}.{dataset_id}.users` WHERE id = @user_id LIMIT 1"
         job_config = bigquery.QueryJobConfig(
             query_parameters=[
                 bigquery.ScalarQueryParameter("user_id", "INTEGER", int(user_id))
@@ -40,9 +44,8 @@ class User(UserMixin):
 
     @classmethod
     def find_by_email(cls, email):
-        client = bigquery.Client(project=os.environ.get('GCP_PROJECT_ID', 'pncp-466018'))
-        dataset_id = os.environ.get('GCP_DATASET_ID', 'pncp_data')
-        query = f"SELECT * FROM `{client.project}.{dataset_id}.users` WHERE email = @email LIMIT 1"
+        client, project_id, dataset_id = _get_bq()
+        query = f"SELECT * FROM `{project_id}.{dataset_id}.users` WHERE email = @email LIMIT 1"
         job_config = bigquery.QueryJobConfig(
             query_parameters=[
                 bigquery.ScalarQueryParameter("email", "STRING", email)
@@ -56,16 +59,14 @@ class User(UserMixin):
 
     @classmethod
     def get_all(cls):
-        client = bigquery.Client(project=os.environ.get('GCP_PROJECT_ID', 'pncp-466018'))
-        dataset_id = os.environ.get('GCP_DATASET_ID', 'pncp_data')
-        query = f"SELECT * FROM `{client.project}.{dataset_id}.users` ORDER BY created_at DESC"
+        client, project_id, dataset_id = _get_bq()
+        query = f"SELECT * FROM `{project_id}.{dataset_id}.users` ORDER BY created_at DESC"
         results = list(client.query(query).result())
         return [cls(r.id, r.email, r.name, r.password_hash, r.created_at, r.role, r.tier) for r in results]
 
     def save(self):
-        client = bigquery.Client(project=os.environ.get('GCP_PROJECT_ID', 'pncp-466018'))
-        dataset_id = os.environ.get('GCP_DATASET_ID', 'pncp_data')
-        table_id = f"{client.project}.{dataset_id}.users"
+        client, project_id, dataset_id = _get_bq()
+        table_id = f"{project_id}.{dataset_id}.users"
 
         if self.id is None:
             max_id_query = f"SELECT IFNULL(MAX(id), 0) + 1 AS next_id FROM `{table_id}`"
