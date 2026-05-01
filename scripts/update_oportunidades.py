@@ -38,7 +38,7 @@ TABLE_ID = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas"
 
 PNCP_BASE_URL = "https://pncp.gov.br/api/pncp/v1"
 REQUEST_DELAY = 0.5   # Segundos entre requisições para não sobrecarregar a API
-PAGE_SIZE = 500        # Máximo suportado pela API PNCP
+PAGE_SIZE = 100        # Máximo suportado pela API PNCP
 
 
 # ─── Criação da tabela se não existir ─────────────────────────────────────────
