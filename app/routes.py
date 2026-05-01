@@ -4,6 +4,7 @@ from .utils_tiers import check_tier_access, requires_tier
 from flask_login import login_required, current_user
 from .utils_bigquery import bq_client
 from . import cache
+import os
 
 main_bp = Blueprint('main', __name__)
 
@@ -981,3 +982,227 @@ def list_itens():
         return jsonify([dict(row) for row in query_job.result()])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# ─── Oportunidades Futuras ─────────────────────────────────────────────────────
+
+@main_bp.route('/oportunidades')
+@login_required
+def oportunidades():
+    """Tela de pesquisa de pregões/licitações em aberto."""
+    from google.cloud import bigquery as bq_module
+
+    query = request.args.get('q', '')
+    selected_uf = request.args.get('uf', '')
+    selected_modalidade = request.args.get('modalidade', '')
+    cnpj_orgao = request.args.get('cnpj_orgao', '')
+    data_fim = request.args.get('data_fim', '')
+    page = request.args.get('page', 1, type=int)
+    per_page = 24
+
+    results = []
+    total_results = 0
+    has_next = False
+
+    try:
+        client = bq_client.get_client()
+        table = f"`{bq_client.project_id}.{bq_client.dataset_id}.compras_abertas`"
+
+        # UFs para filtro
+        ufs_sql = f"SELECT DISTINCT uf FROM {table} WHERE uf IS NOT NULL AND uf != '' ORDER BY uf"
+        ufs = [row['uf'] for row in client.query(ufs_sql).result()]
+
+        if query or selected_uf or selected_modalidade or cnpj_orgao:
+            params = []
+            conditions = [
+                "dataEncerramentoProposta >= CURRENT_TIMESTAMP()",
+                "situacaoCompraId IN (1, 2, 3)",  # Publicado, Aberto, Em andamento
+            ]
+
+            if query:
+                conditions.append("CONTAINS_SUBSTR(objetoCompra, @query)")
+                params.append(bq_module.ScalarQueryParameter("query", "STRING", query))
+
+            if selected_uf:
+                conditions.append("uf = @uf")
+                params.append(bq_module.ScalarQueryParameter("uf", "STRING", selected_uf))
+
+            if selected_modalidade:
+                conditions.append("modalidadeId = @modalidade_id")
+                params.append(bq_module.ScalarQueryParameter("modalidade_id", "INT64", int(selected_modalidade)))
+
+            if cnpj_orgao:
+                cnpj_clean = ''.join(filter(str.isdigit, cnpj_orgao))
+                conditions.append("cnpjOrgao = @cnpj_orgao")
+                params.append(bq_module.ScalarQueryParameter("cnpj_orgao", "STRING", cnpj_clean))
+
+            if data_fim:
+                conditions.append("DATE(dataEncerramentoProposta) <= @data_fim")
+                params.append(bq_module.ScalarQueryParameter("data_fim", "DATE", data_fim))
+
+            where = " AND ".join(conditions)
+            offset = (page - 1) * per_page
+
+            sql = f"""
+                SELECT *,
+                    DATE_DIFF(DATE(dataEncerramentoProposta), CURRENT_DATE(), DAY) AS dias_restantes
+                FROM {table}
+                WHERE {where}
+                ORDER BY dataEncerramentoProposta ASC
+                LIMIT @limit OFFSET @offset
+            """
+            params += [
+                bq_module.ScalarQueryParameter("limit", "INT64", per_page + 1),
+                bq_module.ScalarQueryParameter("offset", "INT64", offset),
+            ]
+
+            job_config = bq_module.QueryJobConfig(query_parameters=params)
+            db_results = [dict(row) for row in client.query(sql, job_config=job_config).result()]
+
+            if len(db_results) > per_page:
+                has_next = True
+                db_results = db_results[:-1]
+
+            results = db_results
+            total_results = len(results) + (1 if has_next else 0) + offset
+
+    except Exception as e:
+        print(f"Oportunidades error: {e}")
+        import traceback; traceback.print_exc()
+        ufs = []
+
+    return render_template(
+        'oportunidades.html',
+        results=results,
+        query=query,
+        ufs=ufs,
+        selected_uf=selected_uf,
+        selected_modalidade=selected_modalidade,
+        cnpj_orgao=cnpj_orgao,
+        data_fim=data_fim,
+        page=page,
+        has_next=has_next,
+        total_results=total_results,
+    )
+
+
+@main_bp.route('/oportunidades/<path:numero_controle>')
+@login_required
+def oportunidade_detail(numero_controle):
+    """Detalhe de um edital futuro com balizamento histórico (match exato + semântico)."""
+    from google.cloud import bigquery as bq_module
+
+    try:
+        client = bq_client.get_client()
+        table = f"`{bq_client.project_id}.{bq_client.dataset_id}.compras_abertas`"
+
+        sql = f"""
+            SELECT *,
+                DATE_DIFF(DATE(dataEncerramentoProposta), CURRENT_DATE(), DAY) AS dias_restantes
+            FROM {table}
+            WHERE numeroControlePNCPCompra = @numero_controle
+            LIMIT 1
+        """
+        job_config = bq_module.QueryJobConfig(
+            query_parameters=[bq_module.ScalarQueryParameter("numero_controle", "STRING", numero_controle)]
+        )
+        rows = list(client.query(sql, job_config=job_config).result())
+
+        if not rows:
+            return render_template('results.html', query="", results=[], error="Edital não encontrado")
+
+        edital = dict(rows[0])
+
+        # ── Balizamento Histórico (Dupla Estratégia) ──
+        benchmark = {"exact_matches": [], "semantic_matches": [], "benchmark": {}}
+        benchmark_error = None
+
+        try:
+            from .utils_embeddings import get_price_benchmark
+            benchmark = get_price_benchmark(
+                description=edital.get("objetoCompra") or "",
+                cnpj_orgao=edital.get("cnpjOrgao"),
+            )
+        except Exception as emb_err:
+            benchmark_error = str(emb_err)
+            print(f"Benchmark error (non-fatal): {emb_err}")
+
+        # ── Itens do Edital via API PNCP ──
+        itens_edital = []
+        try:
+            import requests as req_lib
+            cnpj = edital.get("cnpjOrgao", "")[:14]
+            ano = str(edital.get("anoCompra") or "")
+            seq = str(edital.get("sequencialCompra") or "").zfill(6)
+            if cnpj and ano and seq:
+                url_itens = f"https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{ano}/{seq}/itens"
+                resp = req_lib.get(url_itens, timeout=10)
+                if resp.status_code == 200:
+                    itens_edital = resp.json() if isinstance(resp.json(), list) else []
+        except Exception as api_err:
+            print(f"API itens error (non-fatal): {api_err}")
+
+        return render_template(
+            'oportunidade_detail.html',
+            edital=edital,
+            benchmark=benchmark,
+            benchmark_error=benchmark_error,
+            itens_edital=itens_edital,
+        )
+
+    except Exception as e:
+        print(f"Oportunidade detail error: {e}")
+        import traceback; traceback.print_exc()
+        return render_template('results.html', query="", results=[], error=f"Erro ao carregar edital: {e}")
+
+
+# ─── Agente de IA (Streaming SSE) ─────────────────────────────────────────────
+
+@main_bp.route('/api/ai/analyze', methods=['POST'])
+@login_required
+def ai_analyze():
+    """
+    Endpoint de análise por IA via OpenAI (Server-Sent Events / streaming).
+    Body JSON: { "query": str, "results": [...], "type": "search"|"oportunidade" }
+    """
+    from flask import Response, stream_with_context
+
+    data = request.get_json(silent=True) or {}
+    query = data.get('query', '')
+    results = data.get('results', [])
+    analysis_type = data.get('type', 'search')
+
+    if not query:
+        return jsonify({"error": "query é obrigatório"}), 400
+
+    if not os.environ.get('OPENAI_API_KEY'):
+        return jsonify({"error": "OPENAI_API_KEY não configurada. Adicione ao arquivo .env."}), 503
+
+    def generate():
+        try:
+            from .utils_ai import analyze_search_results, analyze_oportunidade
+            if analysis_type == 'oportunidade':
+                edital = data.get('edital', {})
+                gen = analyze_oportunidade(edital=edital, historico=results)
+            else:
+                gen = analyze_search_results(query=query, results=results)
+
+            for chunk in gen:
+                # Server-Sent Events format
+                yield f"data: {jsonify({'chunk': chunk}).get_data(as_text=True)}\n\n"
+
+        except Exception as e:
+            error_msg = str(e)
+            print(f"AI analyze error: {error_msg}")
+            yield f"data: {jsonify({'error': error_msg}).get_data(as_text=True)}\n\n"
+        finally:
+            yield "data: [DONE]\n\n"
+
+    return Response(
+        stream_with_context(generate()),
+        mimetype='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no',
+        }
+    )
