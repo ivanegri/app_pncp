@@ -181,6 +181,167 @@ def transform(raw: dict) -> dict:
 
 # ─── BigQuery: Upsert ──────────────────────────────────────────────────────────
 def upsert_to_bigquery(rows: list, client: bigquery.Client, dry_run: bool = False) -> tuple[int, int]:
+    if dry_run or not rows:
+        return len(rows), 0
+
+    temp_table = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas_tmp"
+
+    # Schema explícito — sem autodetect
+    schema = [
+        bigquery.SchemaField("numeroControlePNCPCompra",  "STRING"),
+        bigquery.SchemaField("anoCompra",                 "INTEGER"),
+        bigquery.SchemaField("sequencialCompra",          "INTEGER"),
+        bigquery.SchemaField("cnpjOrgao",                 "STRING"),
+        bigquery.SchemaField("nomeOrgao",                 "STRING"),
+        bigquery.SchemaField("nomeUnidadeOrgao",          "STRING"),
+        bigquery.SchemaField("codigoUnidadeOrgao",        "STRING"),
+        bigquery.SchemaField("uf",                        "STRING"),
+        bigquery.SchemaField("ufNome",                    "STRING"),
+        bigquery.SchemaField("municipio",                 "STRING"),
+        bigquery.SchemaField("modalidadeId",              "INTEGER"),
+        bigquery.SchemaField("modalidadeNome",            "STRING"),
+        bigquery.SchemaField("objetoCompra",              "STRING"),
+        bigquery.SchemaField("informacaoComplementar",    "STRING"),
+        bigquery.SchemaField("valorTotalEstimado",        "FLOAT"),
+        bigquery.SchemaField("valorTotalHomologado",      "FLOAT"),
+        bigquery.SchemaField("dataPublicacaoPncp",        "TIMESTAMP"),
+        bigquery.SchemaField("dataAberturaProposta",      "TIMESTAMP"),
+        bigquery.SchemaField("dataEncerramentoProposta",  "TIMESTAMP"),
+        bigquery.SchemaField("situacaoCompraId",          "INTEGER"),
+        bigquery.SchemaField("situacaoCompraNome",        "STRING"),
+        bigquery.SchemaField("linkSistemaOrigem",         "STRING"),
+        bigquery.SchemaField("fonteDados",                "STRING"),
+        bigquery.SchemaField("updated_at",                "TIMESTAMP"),
+    ]
+
+    job_config = bigquery.LoadJobConfig(
+        write_disposition="WRITE_TRUNCATE",
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        schema=schema,  # schema explícito
+    )
+    load_job = client.load_table_from_json(rows, temp_table, job_config=job_config)
+    load_job.result()
+
+    rebuild_sql = f"""
+    CREATE OR REPLACE TABLE `{TABLE_ID}` AS
+    SELECT * EXCEPT(rn)
+    FROM (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                   PARTITION BY numeroControlePNCPCompra
+                   ORDER BY updated_at DESC
+               ) AS rn
+        FROM (
+            SELECT * FROM `{TABLE_ID}`
+            UNION ALL
+            SELECT * FROM `{temp_table}`
+        )
+    )
+    WHERE rn = 1
+    """
+    client.query(rebuild_sql).result()
+    client.delete_table(temp_table, not_found_ok=True)
+
+    return len(rows), 0
+
+
+def old3_upsert_to_bigquery(rows: list, client: bigquery.Client, dry_run: bool = False) -> tuple[int, int]:
+    if dry_run or not rows:
+        return len(rows), 0
+
+    temp_table = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas_tmp"
+
+    # Schema explícito — sem autodetect
+    schema = [
+        bigquery.SchemaField("numeroControlePNCPCompra",  "STRING"),
+        bigquery.SchemaField("anoCompra",                 "INTEGER"),
+        bigquery.SchemaField("sequencialCompra",          "INTEGER"),
+        bigquery.SchemaField("cnpjOrgao",                 "STRING"),
+        bigquery.SchemaField("nomeOrgao",                 "STRING"),
+        bigquery.SchemaField("nomeUnidadeOrgao",          "STRING"),
+        bigquery.SchemaField("codigoUnidadeOrgao",        "STRING"),
+        bigquery.SchemaField("uf",                        "STRING"),
+        bigquery.SchemaField("ufNome",                    "STRING"),
+        bigquery.SchemaField("municipio",                 "STRING"),
+        bigquery.SchemaField("modalidadeId",              "INTEGER"),
+        bigquery.SchemaField("modalidadeNome",            "STRING"),
+        bigquery.SchemaField("objetoCompra",              "STRING"),
+        bigquery.SchemaField("informacaoComplementar",    "STRING"),
+        bigquery.SchemaField("valorTotalEstimado",        "FLOAT"),
+        bigquery.SchemaField("valorTotalHomologado",      "FLOAT"),
+        bigquery.SchemaField("dataPublicacaoPncp",        "TIMESTAMP"),
+        bigquery.SchemaField("dataAberturaProposta",      "TIMESTAMP"),
+        bigquery.SchemaField("dataEncerramentoProposta",  "TIMESTAMP"),
+        bigquery.SchemaField("situacaoCompraId",          "INTEGER"),
+        bigquery.SchemaField("situacaoCompraNome",        "STRING"),
+        bigquery.SchemaField("linkSistemaOrigem",         "STRING"),
+        bigquery.SchemaField("fonteDados",                "STRING"),
+        bigquery.SchemaField("updated_at",                "TIMESTAMP"),
+    ]
+
+    job_config = bigquery.LoadJobConfig(
+        write_disposition="WRITE_TRUNCATE",
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        schema=schema,  # schema explícito
+    )
+    load_job = client.load_table_from_json(rows, temp_table, job_config=job_config)
+    load_job.result()
+
+    merge_sql = f"""
+        MERGE `{TABLE_ID}` T
+        USING `{temp_table}` S
+        ON T.numeroControlePNCPCompra = S.numeroControlePNCPCompra
+        WHEN MATCHED THEN UPDATE SET
+            T.situacaoCompraId         = S.situacaoCompraId,
+            T.situacaoCompraNome       = S.situacaoCompraNome,
+            T.valorTotalEstimado       = S.valorTotalEstimado,
+            T.valorTotalHomologado     = S.valorTotalHomologado,
+            T.dataEncerramentoProposta = S.dataEncerramentoProposta,
+            T.updated_at               = S.updated_at
+        WHEN NOT MATCHED THEN INSERT ROW
+    """
+    client.query(merge_sql).result()
+    client.delete_table(temp_table, not_found_ok=True)
+
+    return len(rows), 0
+
+
+def old2_upsert_to_bigquery(rows: list, client: bigquery.Client, dry_run: bool = False) -> tuple[int, int]:
+    if dry_run or not rows:
+        return len(rows), 0
+
+    temp_table = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas_tmp"
+
+    # 1. Carrega na tabela temporária via load job (sem streaming buffer)
+    job_config = bigquery.LoadJobConfig(
+        write_disposition="WRITE_TRUNCATE",
+        source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
+        autodetect=True,
+    )
+    load_job = client.load_table_from_json(rows, temp_table, job_config=job_config)
+    load_job.result()
+
+    # 2. MERGE da temp na tabela principal
+    merge_sql = f"""
+        MERGE `{TABLE_ID}` T
+        USING `{temp_table}` S
+        ON T.numeroControlePNCPCompra = S.numeroControlePNCPCompra
+        WHEN MATCHED THEN UPDATE SET
+            T.situacaoCompraId          = S.situacaoCompraId,
+            T.situacaoCompraNome        = S.situacaoCompraNome,
+            T.valorTotalEstimado        = S.valorTotalEstimado,
+            T.valorTotalHomologado      = S.valorTotalHomologado,
+            T.dataEncerramentoProposta  = S.dataEncerramentoProposta,
+            T.updated_at                = S.updated_at
+        WHEN NOT MATCHED THEN INSERT ROW
+    """
+    client.query(merge_sql).result()
+
+    # 3. Limpa a tabela temporária
+    client.delete_table(temp_table, not_found_ok=True)
+
+    return len(rows), 0
+def old_upsert_to_bigquery(rows: list, client: bigquery.Client, dry_run: bool = False) -> tuple[int, int]:
     """
     Faz upsert das linhas na tabela compras_abertas do BigQuery.
     BigQuery não tem UPSERT nativo, então: DELETE + INSERT em lote.
