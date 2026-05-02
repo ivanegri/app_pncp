@@ -36,8 +36,8 @@ GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "pncp-466018")
 GCP_DATASET_ID = os.environ.get("GCP_DATASET_ID", "pncp_data")
 TABLE_ID = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas"
 
-PNCP_BASE_URL = "https://pncp.gov.br/api/pncp/v1"
-REQUEST_DELAY = 0.5   # Segundos entre requisições para não sobrecarregar a API
+PNCP_BASE_URL = "https://pncp.gov.br/api/consulta/v1"
+REQUEST_DELAY = 2   # Segundos entre requisições para não sobrecarregar a API
 PAGE_SIZE = 100        # Máximo suportado pela API PNCP
 
 
@@ -76,24 +76,23 @@ OPTIONS (
 
 
 # ─── Funções de API ────────────────────────────────────────────────────────────
-def fetch_compras_abertas(data_inicial: str, data_final: str, pagina: int = 1) -> dict:
+def fetch_compras_abertas(data_final: str, pagina: int = 1) -> dict:
     """
     Consulta a API PNCP de compras com proposta em aberto.
-    Endpoint: GET /contratacoes/proposta?dataInicial=&dataFinal=&pagina=&tamanhoPagina=
+    Endpoint: GET /contratacoes/proposta?dataFinal=&pagina=
     """
     url = f"{PNCP_BASE_URL}/contratacoes/proposta"
     params = {
-        "dataInicial": data_inicial,
         "dataFinal": data_final,
         "pagina": pagina,
-        "tamanhoPagina": PAGE_SIZE,
+        "tamanhoPagina": 50,
     }
-    resp = requests.get(url, params=params, timeout=30)
+    resp = requests.get(url, params=params)
     resp.raise_for_status()
     return resp.json()
 
 
-def fetch_all_pages(data_inicial: str, data_final: str) -> list:
+def fetch_all_pages(data_final: str):
     """Busca todas as páginas de compras abertas para o período especificado."""
     all_items = []
     pagina = 1
@@ -102,7 +101,7 @@ def fetch_all_pages(data_inicial: str, data_final: str) -> list:
     while True:
         log.info(f"  Buscando página {pagina}" + (f"/{total_paginas}" if total_paginas else "") + "...")
         try:
-            data = fetch_compras_abertas(data_inicial, data_final, pagina)
+            data = fetch_compras_abertas(data_final, pagina)
         except requests.HTTPError as e:
             if e.response.status_code == 404:
                 log.info("  Sem mais resultados (404).")
@@ -146,20 +145,23 @@ def transform(raw: dict) -> dict:
     def safe_ts(val):
         if not val:
             return None
-        # Remove timezone info se vier no formato ISO com 'Z'
         return val.replace("Z", "+00:00") if isinstance(val, str) else None
 
+    orgao = raw.get("orgaoEntidade") or {}
+    unidade = raw.get("unidadeOrgao") or {}
+
     return {
-        "numeroControlePNCPCompra": raw.get("numeroControlePNCPCompra") or "",
+        # API retorna "numeroControlePNCP", não "numeroControlePNCPCompra"
+        "numeroControlePNCPCompra": raw.get("numeroControlePNCP") or raw.get("numeroControlePNCPCompra") or "",
         "anoCompra": safe_int(raw.get("anoCompra")),
         "sequencialCompra": safe_int(raw.get("sequencialCompra")),
-        "cnpjOrgao": str(raw.get("orgaoEntidade", {}).get("cnpj") or raw.get("cnpjOrgao") or ""),
-        "nomeOrgao": raw.get("orgaoEntidade", {}).get("razaoSocial") or raw.get("nomeOrgao") or "",
-        "nomeUnidadeOrgao": raw.get("unidadeOrgao", {}).get("nomeUnidade") or raw.get("nomeUnidadeOrgao") or "",
-        "codigoUnidadeOrgao": raw.get("unidadeOrgao", {}).get("codigoUnidade") or raw.get("codigoUnidadeOrgao") or "",
-        "uf": raw.get("unidadeOrgao", {}).get("ufSigla") or raw.get("uf") or "",
-        "ufNome": raw.get("unidadeOrgao", {}).get("ufNome") or raw.get("ufNome") or "",
-        "municipio": raw.get("unidadeOrgao", {}).get("municipioNome") or raw.get("municipio") or "",
+        "cnpjOrgao": str(orgao.get("cnpj") or raw.get("cnpjOrgao") or ""),
+        "nomeOrgao": orgao.get("razaoSocial") or raw.get("nomeOrgao") or "",
+        "nomeUnidadeOrgao": unidade.get("nomeUnidade") or raw.get("nomeUnidadeOrgao") or "",
+        "codigoUnidadeOrgao": unidade.get("codigoUnidade") or raw.get("codigoUnidadeOrgao") or "",
+        "uf": unidade.get("ufSigla") or raw.get("uf") or "",
+        "ufNome": unidade.get("ufNome") or raw.get("ufNome") or "",
+        "municipio": unidade.get("municipioNome") or raw.get("municipio") or "",
         "modalidadeId": safe_int(raw.get("modalidadeId")),
         "modalidadeNome": raw.get("modalidadeNome") or "",
         "objetoCompra": raw.get("objetoCompra") or "",
@@ -246,7 +248,7 @@ def main():
 
     # Fetch
     log.info("Buscando compras abertas na API PNCP...")
-    raw_items = fetch_all_pages(data_inicial, data_final)
+    raw_items = fetch_all_pages(data_final)
     log.info(f"  Total bruto recebido: {len(raw_items)} registros")
 
     if not raw_items:

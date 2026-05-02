@@ -1,0 +1,648 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="detail-page">
+
+    <!-- Cabeçalho -->
+    <div class="detail-header">
+        <a href="/oportunidades" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Voltar às Oportunidades
+        </a>
+
+        <div class="detail-header__top">
+            <div class="detail-badge-row">
+                <span class="modalidade-badge">{{ edital.modalidadeNome or 'Licitação' }}</span>
+                {% if edital.get('dias_restantes') is not none %}
+                    {% set dias = edital.get('dias_restantes') | int %}
+                    {% if dias < 0 %}
+                    <span class="urgency-badge urgency--expired">
+                        <i class="fa-solid fa-ban"></i> Encerrado há {{ dias | abs }} dias
+                    </span>
+                    {% elif dias <= 3 %}
+                    <span class="urgency-badge urgency--critical">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Encerra em {{ dias }}d
+                    </span>
+                    {% elif dias <= 7 %}
+                    <span class="urgency-badge urgency--warning">
+                        <i class="fa-solid fa-clock"></i> {{ dias }} dias restantes
+                    </span>
+                    {% else %}
+                    <span class="urgency-badge urgency--ok">
+                        <i class="fa-regular fa-calendar"></i> {{ dias }} dias restantes
+                    </span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <h1>{{ edital.objetoCompra or 'Objeto não informado' }}</h1>
+            <div class="detail-meta-row">
+                <span><i class="fa-solid fa-building"></i> {{ edital.nomeOrgao or 'Órgão não informado' }}</span>
+                {% if edital.nomeUnidadeOrgao %}
+                <span><i class="fa-solid fa-sitemap"></i> {{ edital.nomeUnidadeOrgao }}</span>
+                {% endif %}
+                {% if edital.uf %}
+                <span><i class="fa-solid fa-location-dot"></i> {{ edital.municipio or '' }}{% if edital.municipio and edital.uf %} / {% endif %}{{ edital.uf }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+
+        <!-- Coluna Esquerda: Dados do Edital -->
+        <div class="detail-main">
+
+            <!-- Info Cards -->
+            <div class="info-cards">
+                {% if edital.valorTotalEstimado %}
+                <div class="info-card info-card--highlight">
+                    <span class="info-card__label">Valor Total Estimado</span>
+                    <span class="info-card__value valor-verde">
+                        R$ {{ "{:,.2f}".format(edital.valorTotalEstimado).replace(',', 'X').replace('.', ',').replace('X', '.') }}
+                    </span>
+                </div>
+                {% endif %}
+                {% if edital.dataAberturaProposta %}
+                <div class="info-card">
+                    <span class="info-card__label">Abertura das Propostas</span>
+                    <span class="info-card__value">{{ edital.dataAberturaProposta[:10] }}</span>
+                </div>
+                {% endif %}
+                {% if edital.dataEncerramentoProposta %}
+                <div class="info-card">
+                    <span class="info-card__label">Encerramento</span>
+                    <span class="info-card__value highlight-date">{{ edital.dataEncerramentoProposta[:10] }}</span>
+                </div>
+                {% endif %}
+                {% if edital.cnpjOrgao %}
+                <div class="info-card">
+                    <span class="info-card__label">CNPJ do Órgão</span>
+                    <span class="info-card__value">{{ edital.cnpjOrgao }}</span>
+                </div>
+                {% endif %}
+                {% if edital.numeroControlePNCPCompra %}
+                <div class="info-card">
+                    <span class="info-card__label">Número PNCP</span>
+                    <span class="info-card__value" style="font-size:0.85rem;">{{ edital.numeroControlePNCPCompra }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Informações Complementares -->
+            {% if edital.informacaoComplementar %}
+            <div class="detail-section">
+                <h2><i class="fa-solid fa-circle-info"></i> Informações Complementares</h2>
+                <p class="complementar-text">{{ edital.informacaoComplementar }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Itens do Edital (via API PNCP) -->
+            {% if itens_edital %}
+            <div class="detail-section">
+                <h2><i class="fa-solid fa-list-check"></i> Itens do Edital <span class="count-badge">{{ itens_edital | length }}</span></h2>
+                <div class="itens-table-wrap">
+                    <table class="itens-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Descrição</th>
+                                <th>Qtd</th>
+                                <th>Unidade</th>
+                                <th>Valor Unit. Est.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in itens_edital %}
+                            <tr>
+                                <td class="item-num">{{ item.numeroItem or loop.index }}</td>
+                                <td>{{ item.descricao or item.descricaoItem or '—' }}</td>
+                                <td>{{ item.quantidade or '—' }}</td>
+                                <td>{{ item.unidadeMedida or '—' }}</td>
+                                <td class="valor-cell">
+                                    {% if item.valorUnitarioEstimado %}
+                                    R$ {{ "{:,.2f}".format(item.valorUnitarioEstimado).replace(',', 'X').replace('.', ',').replace('X', '.') }}
+                                    {% else %}—{% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Ação externa -->
+            {% if edital.linkSistemaOrigem %}
+            <div style="margin-top: 1.5rem;">
+                <a href="{{ edital.linkSistemaOrigem }}" target="_blank" class="btn-externo-full">
+                    <i class="fa-solid fa-external-link"></i> Acessar Edital no Sistema de Origem
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Coluna Direita: Balizamento de Preços -->
+        <div class="detail-sidebar">
+            <div class="balizamento-card">
+                <div class="balizamento-header">
+                    <i class="fa-solid fa-scale-balanced balizamento-icon"></i>
+                    <div>
+                        <h3>Balizamento Histórico</h3>
+                        <p>Comparativo com compras passadas</p>
+                    </div>
+                </div>
+
+                {% if benchmark_error and not benchmark.exact_matches and not benchmark.semantic_matches %}
+                <div class="benchmark-notice">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>O balizamento semântico requer a configuração de embeddings. Por enquanto, mostrando apenas match por CNPJ.</span>
+                </div>
+                {% endif %}
+
+                <!-- Resumo estatístico -->
+                {% if benchmark.benchmark and benchmark.benchmark.count %}
+                <div class="benchmark-summary">
+                    <div class="bench-stat">
+                        <span class="bench-stat__label">Mínimo</span>
+                        <span class="bench-stat__value" style="color:#22c55e;">
+                            R$ {{ "{:,.2f}".format(benchmark.benchmark.min).replace(',', 'X').replace('.', ',').replace('X', '.') }}
+                        </span>
+                    </div>
+                    <div class="bench-stat">
+                        <span class="bench-stat__label">Média</span>
+                        <span class="bench-stat__value" style="color:#f59e0b;">
+                            R$ {{ "{:,.2f}".format(benchmark.benchmark.avg).replace(',', 'X').replace('.', ',').replace('X', '.') }}
+                        </span>
+                    </div>
+                    <div class="bench-stat">
+                        <span class="bench-stat__label">Máximo</span>
+                        <span class="bench-stat__value" style="color:#ef4444;">
+                            R$ {{ "{:,.2f}".format(benchmark.benchmark.max).replace(',', 'X').replace('.', ',').replace('X', '.') }}
+                        </span>
+                    </div>
+                    <div class="bench-stat bench-stat--full">
+                        <span class="bench-stat__label">Fonte</span>
+                        <span class="bench-stat__value" style="font-size:0.8rem; color:var(--text-muted);">
+                            {{ benchmark.benchmark.count }} registros históricos ({{ benchmark.benchmark.source }})
+                        </span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Matches exatos -->
+                {% if benchmark.exact_matches %}
+                <div class="match-section">
+                    <h4><i class="fa-solid fa-bullseye"></i> Match por CNPJ/Código</h4>
+                    {% for m in benchmark.exact_matches[:5] %}
+                    <div class="match-item">
+                        <div class="match-desc">{{ m.descricaoItem or m.objetoContratacao or 'Item' }}</div>
+                        <div class="match-meta">
+                            <span>{{ m.nomeOrgao or '' }}</span>
+                            <strong class="match-valor">R$ {{ "{:,.2f}".format(m.valorUnitario).replace(',', 'X').replace('.', ',').replace('X', '.') }}</strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Matches semânticos -->
+                {% if benchmark.semantic_matches %}
+                <div class="match-section">
+                    <h4><i class="fa-solid fa-brain"></i> Match Semântico (IA)</h4>
+                    {% for m in benchmark.semantic_matches[:5] %}
+                    <div class="match-item">
+                        <div class="match-desc">{{ m.descricaoItem or 'Item' }}</div>
+                        <div class="match-meta">
+                            <span class="similarity-chip">{{ "%.0f"|format(m.similarity_score * 100) }}% similar</span>
+                            <strong class="match-valor">R$ {{ "{:,.2f}".format(m.valorUnitario).replace(',', 'X').replace('.', ',').replace('X', '.') }}</strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if not benchmark.exact_matches and not benchmark.semantic_matches %}
+                <div class="no-benchmark">
+                    <i class="fa-solid fa-magnifying-glass" style="font-size:1.5rem; opacity:0.3;"></i>
+                    <p>Nenhum histórico encontrado para este órgão/objeto ainda.</p>
+                    <p style="font-size:0.78rem;">O balizamento semântico ficará disponível após a geração de embeddings.</p>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.detail-page {
+    padding: 2rem 0 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+.detail-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.back-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    transition: color 0.2s;
+}
+.back-link:hover { color: var(--text-main); }
+
+.detail-header__top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.detail-badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.detail-header__top h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.detail-meta-row {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.detail-meta-row span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Grid Layout */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Info Cards */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-card--highlight {
+    border-color: rgba(34,197,94,0.3);
+    background: rgba(34,197,94,0.04);
+}
+
+.info-card__label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.info-card__value {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.valor-verde { color: #22c55e; font-size: 1.2rem !important; }
+.highlight-date { color: #f59e0b; }
+
+/* Sections */
+.detail-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.detail-section h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+}
+
+.complementar-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.count-badge {
+    background: rgba(99,102,241,0.12);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 1px 8px;
+    font-size: 0.78rem;
+}
+
+/* Itens Table */
+.itens-table-wrap {
+    overflow-x: auto;
+}
+
+.itens-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.itens-table th {
+    background: rgba(255,255,255,0.03);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.itens-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+}
+
+.itens-table tr:last-child td { border-bottom: none; }
+.itens-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.item-num {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: 36px;
+}
+
+.valor-cell {
+    font-weight: 600;
+    color: #22c55e;
+    white-space: nowrap;
+}
+
+/* External Link */
+.btn-externo-full {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.75rem 1.4rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.btn-externo-full:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Balizamento Sidebar */
+.balizamento-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    position: sticky;
+    top: 80px;
+}
+
+.balizamento-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.balizamento-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.balizamento-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.balizamento-header p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.benchmark-notice {
+    background: rgba(99,102,241,0.06);
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 8px;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.benchmark-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.bench-stat {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.bench-stat--full {
+    grid-column: 1 / -1;
+}
+
+.bench-stat__label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.bench-stat__value {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Match Sections */
+.match-section h4 {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin: 0 0 0.8rem 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.match-item {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.match-item:last-child { border-bottom: none; }
+
+.match-desc {
+    font-size: 0.82rem;
+    color: var(--text-main);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.match-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.match-meta span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.match-valor {
+    font-size: 0.88rem;
+    color: #22c55e;
+    white-space: nowrap;
+}
+
+.similarity-chip {
+    background: rgba(99,102,241,0.1);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 1px 7px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.no-benchmark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 1.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+/* Urgency Badges */
+.modalidade-badge {
+    font-size: 0.75rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    font-weight: 500;
+}
+
+.urgency-badge {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.urgency--critical {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.urgency--warning {
+    background: rgba(234, 179, 8, 0.1);
+    color: #eab308;
+    border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+.urgency--ok {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.urgency--expired {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+    border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .balizamento-card {
+        position: static;
+    }
+    .detail-header__top h1 {
+        font-size: 1.3rem;
+    }
+}
+</style>
+{% endblock %}

@@ -75,13 +75,16 @@
 
     <!-- Results -->
     <div class="oportunidades-results">
-        {% if not query and not results %}
+        {% if not table_exists %}
         <div class="empty-state">
-            <div class="empty-state__icon">
-                <i class="fa-solid fa-bolt"></i>
+            <div class="empty-state__icon" style="background: rgba(234,179,8,0.08); color: #eab308;">
+                <i class="fa-solid fa-database"></i>
             </div>
-            <h3>Encontre oportunidades abertas</h3>
-            <p>Use a busca acima para encontrar editais com prazo de proposta em aberto, filtrados por palavra-chave, estado ou órgão.</p>
+            <h3>Base de dados em construção</h3>
+            <p>A tabela de oportunidades ainda não foi preenchida. Execute o script de extração para importar os dados do PNCP.</p>
+            <code style="font-size:0.8rem; color:var(--text-muted); background:rgba(255,255,255,0.04); padding:8px 16px; border-radius:8px; margin-top:0.5rem; display:inline-block;">
+                python scripts/update_oportunidades.py
+            </code>
         </div>
 
         {% elif results %}
@@ -152,7 +155,7 @@
                 <div class="oportunidade-card__footer">
                     <a href="{{ url_for('main.oportunidade_detail', numero_controle=item.numeroControlePNCPCompra) }}"
                        class="btn-ver-edital">
-                        <i class="fa-solid fa-arrow-right"></i> Ver Edital & Balizamento
+                        <i class="fa-solid fa-arrow-right"></i> Ver Edital &amp; Balizamento
                     </a>
                     {% if item.linkSistemaOrigem %}
                     <a href="{{ item.linkSistemaOrigem }}" target="_blank" class="btn-externo">
@@ -179,13 +182,18 @@
             {% endif %}
         </div>
 
-        {% elif query %}
+        {% else %}
         <div class="empty-state">
             <div class="empty-state__icon">
                 <i class="fa-solid fa-search"></i>
             </div>
+            {% if query or selected_uf or selected_modalidade or cnpj_orgao %}
             <h3>Nenhum edital encontrado</h3>
-            <p>Não encontramos oportunidades abertas para "<strong>{{ query }}</strong>". Tente termos mais genéricos.</p>
+            <p>Não encontramos oportunidades abertas com os filtros aplicados. Tente termos mais genéricos.</p>
+            {% else %}
+            <h3>Nenhuma oportunidade aberta no momento</h3>
+            <p>A base está atualizada mas não há editais com proposta em aberto hoje. Use os filtros ou execute o pipeline de extração novamente.</p>
+            {% endif %}
         </div>
         {% endif %}
     </div>

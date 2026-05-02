@@ -1013,21 +1013,29 @@ def oportunidades():
     results = []
     total_results = 0
     has_next = False
+    ufs = []
+    table_exists = True
 
     try:
         client = bq_client.get_client()
         table = f"`{bq_client.project_id}.{bq_client.dataset_id}.compras_abertas`"
 
-        # UFs para filtro
-        ufs_sql = f"SELECT DISTINCT uf FROM {table} WHERE uf IS NOT NULL AND uf != '' ORDER BY uf"
-        ufs = [row['uf'] for row in client.query(ufs_sql).result()]
+        # UFs para filtro — se a tabela não existir, captura graciosamente
+        try:
+            ufs_sql = f"SELECT DISTINCT uf FROM {table} WHERE uf IS NOT NULL AND uf != '' ORDER BY uf"
+            ufs = [row['uf'] for row in client.query(ufs_sql).result()]
+        except Exception as e_ufs:
+            err_str = str(e_ufs)
+            if "Not found" in err_str or "notFound" in err_str or "does not exist" in err_str:
+                table_exists = False
+                print(f"Tabela compras_abertas ainda não existe: {e_ufs}")
+            else:
+                print(f"Erro ao buscar UFs: {e_ufs}")
 
-        if query or selected_uf or selected_modalidade or cnpj_orgao:
+        if table_exists:
             params = []
-            conditions = [
-                "dataEncerramentoProposta >= CURRENT_TIMESTAMP()",
-                "situacaoCompraId IN (1, 2, 3)",  # Publicado, Aberto, Em andamento
-            ]
+            # Sem filtros → retorna TODOS os registros do banco
+            conditions = []
 
             if query:
                 conditions.append("CONTAINS_SUBSTR(objetoCompra, @query)")
@@ -1050,7 +1058,7 @@ def oportunidades():
                 conditions.append("DATE(dataEncerramentoProposta) <= @data_fim")
                 params.append(bq_module.ScalarQueryParameter("data_fim", "DATE", data_fim))
 
-            where = " AND ".join(conditions)
+            where = " AND ".join(conditions) if conditions else "TRUE"
             offset = (page - 1) * per_page
 
             sql = f"""
@@ -1058,7 +1066,7 @@ def oportunidades():
                     DATE_DIFF(DATE(dataEncerramentoProposta), CURRENT_DATE(), DAY) AS dias_restantes
                 FROM {table}
                 WHERE {where}
-                ORDER BY dataEncerramentoProposta ASC
+                ORDER BY dataEncerramentoProposta DESC
                 LIMIT @limit OFFSET @offset
             """
             params += [
@@ -1067,7 +1075,16 @@ def oportunidades():
             ]
 
             job_config = bq_module.QueryJobConfig(query_parameters=params)
-            db_results = [dict(row) for row in client.query(sql, job_config=job_config).result()]
+            raw_rows = list(client.query(sql, job_config=job_config).result())
+
+            # Serializa datetimes para string (evita erros no Jinja2 com [:10])
+            def serialize_row(row):
+                out = {}
+                for k, v in dict(row).items():
+                    out[k] = v.isoformat() if hasattr(v, 'isoformat') else v
+                return out
+
+            db_results = [serialize_row(r) for r in raw_rows]
 
             if len(db_results) > per_page:
                 has_next = True
@@ -1079,7 +1096,6 @@ def oportunidades():
     except Exception as e:
         print(f"Oportunidades error: {e}")
         import traceback; traceback.print_exc()
-        ufs = []
 
     return render_template(
         'oportunidades.html',
@@ -1093,13 +1109,13 @@ def oportunidades():
         page=page,
         has_next=has_next,
         total_results=total_results,
+        table_exists=table_exists,
     )
 
 
 @main_bp.route('/oportunidades/<path:numero_controle>')
 @login_required
 def oportunidade_detail(numero_controle):
-    """Detalhe de um edital futuro com balizamento histórico (match exato + semântico)."""
     from google.cloud import bigquery as bq_module
 
     try:
@@ -1114,14 +1130,27 @@ def oportunidade_detail(numero_controle):
             LIMIT 1
         """
         job_config = bq_module.QueryJobConfig(
-            query_parameters=[bq_module.ScalarQueryParameter("numero_controle", "STRING", numero_controle)]
+            query_parameters=[
+                bq_module.ScalarQueryParameter("numero_controle", "STRING", numero_controle)
+            ]
         )
         rows = list(client.query(sql, job_config=job_config).result())
 
         if not rows:
             return render_template('results.html', query="", results=[], error="Edital não encontrado")
 
-        edital = dict(rows[0])
+        # Converte datetime → string ISO para o Jinja conseguir fazer [:10]
+        def serialize_row(row):
+            result = {}
+            for key, val in dict(row).items():
+                if hasattr(val, 'isoformat'):
+                    result[key] = val.isoformat()
+                else:
+                    result[key] = val
+            return result
+
+        edital = serialize_row(rows[0])
+
 
         # ── Balizamento Histórico (Dupla Estratégia) ──
         benchmark = {"exact_matches": [], "semantic_matches": [], "benchmark": {}}
