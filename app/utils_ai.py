@@ -4,13 +4,14 @@ utils_ai.py — Agente Analisador de Licitações via Google Gemini
 Funções:
 - analyze_search_results(): análise de resultados de pesquisa histórica
 - analyze_oportunidade(): análise de um edital futuro com balizamento histórico
-- get_gemini_model(): retorna o modelo Gemini configurado
+- get_gemini_client(): retorna o cliente Gemini configurado
 """
 
 import os
 import json
 from typing import Generator
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 
 def _get_model_name() -> str:
@@ -18,25 +19,14 @@ def _get_model_name() -> str:
     return os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
 
 
-def get_gemini_model(system_prompt: str) -> genai.GenerativeModel:
+def get_gemini_client() -> genai.Client:
     """
-    Configura e retorna um GenerativeModel Gemini com system_instruction.
-    A system_instruction no Gemini é vinculada ao modelo, não à mensagem.
+    Configura e retorna um cliente Gemini (novo SDK google-genai).
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY não configurada no ambiente.")
-
-    genai.configure(api_key=api_key)
-
-    return genai.GenerativeModel(
-        model_name=_get_model_name(),
-        system_instruction=system_prompt,
-        generation_config=genai.GenerationConfig(
-            temperature=0.3,
-            max_output_tokens=1500,
-        ),
-    )
+    return genai.Client(api_key=api_key)
 
 
 def analyze_search_results(query: str, results: list) -> Generator[str, None, None]:
@@ -101,10 +91,17 @@ Forneça uma análise completa com as seguintes seções:
 - Qual seria um preço competitivo para fornecimento de "{query}"?
 - O que um fornecedor deve saber antes de participar?"""
 
-    model = get_gemini_model(system_prompt)
-    response = model.generate_content(user_prompt, stream=True)
-
-    for chunk in response:
+    client = get_gemini_client()
+    config = types.GenerateContentConfig(
+        system_instruction=system_prompt,
+        temperature=0.3,
+        max_output_tokens=1500,
+    )
+    for chunk in client.models.generate_content_stream(
+        model=_get_model_name(),
+        contents=user_prompt,
+        config=config,
+    ):
         if chunk.text:
             yield chunk.text
 
@@ -173,9 +170,16 @@ Forneça:
 - Documentos típicos exigidos neste tipo de licitação
 - Prazo e próximos passos"""
 
-    model = get_gemini_model(system_prompt)
-    response = model.generate_content(user_prompt, stream=True)
-
-    for chunk in response:
+    client = get_gemini_client()
+    config = types.GenerateContentConfig(
+        system_instruction=system_prompt,
+        temperature=0.3,
+        max_output_tokens=1500,
+    )
+    for chunk in client.models.generate_content_stream(
+        model=_get_model_name(),
+        contents=user_prompt,
+        config=config,
+    ):
         if chunk.text:
             yield chunk.text

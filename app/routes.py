@@ -1201,9 +1201,10 @@ def oportunidade_detail(numero_controle):
 @login_required
 def ai_analyze():
     """
-    Endpoint de análise por IA via OpenAI (Server-Sent Events / streaming).
+    Endpoint de análise por IA via Gemini (Server-Sent Events / streaming).
     Body JSON: { "query": str, "results": [...], "type": "search"|"oportunidade" }
     """
+    import json as _json
     from flask import Response, stream_with_context
 
     data = request.get_json(silent=True) or {}
@@ -1227,13 +1228,13 @@ def ai_analyze():
                 gen = analyze_search_results(query=query, results=results)
 
             for chunk in gen:
-                # Server-Sent Events format
-                yield f"data: {jsonify({'chunk': chunk}).get_data(as_text=True)}\n\n"
+                # Server-Sent Events format — usa json.dumps (sem contexto Flask)
+                yield f"data: {_json.dumps({'chunk': chunk}, ensure_ascii=False)}\n\n"
 
         except Exception as e:
             error_msg = str(e)
             print(f"AI analyze error: {error_msg}")
-            yield f"data: {jsonify({'error': error_msg}).get_data(as_text=True)}\n\n"
+            yield f"data: {_json.dumps({'error': error_msg}, ensure_ascii=False)}\n\n"
         finally:
             yield "data: [DONE]\n\n"
 
