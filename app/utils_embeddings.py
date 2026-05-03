@@ -161,7 +161,7 @@ def find_similar_items(
 def find_similar_by_exact_match(
     codigo_item: Optional[str] = None,
     cnpj_orgao: Optional[str] = None,
-    limit: int = 20,
+    #limit: int = 20,
     project_id: Optional[str] = None,
     dataset_id: Optional[str] = None,
 ) -> list[dict]:
