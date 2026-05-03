@@ -1,13 +1,13 @@
 """
-utils_embeddings.py — Match Semântico via OpenAI Embeddings + BigQuery Vector Search
+utils_embeddings.py — Match Semântico via Google Gemini Embeddings + BigQuery Vector Search
 
 Implementa a Camada 2 de linkagem Passado ↔ Futuro:
-- Gera embeddings vetoriais de descrições de itens via OpenAI
+- Gera embeddings vetoriais de descrições de itens via Gemini text-embedding-004
 - Persiste os embeddings na coluna `embedding` das tabelas BigQuery
 - Busca itens históricos similares via VECTOR_SEARCH() do BigQuery
 
 Arquitetura:
-    Texto → OpenAI text-embedding-3-small → ARRAY<FLOAT64> (1536 dims)
+    Texto → Gemini text-embedding-004 → ARRAY<FLOAT64> (768 dims)
     → Armazenado na coluna `embedding` em `itens` e `compras_abertas`
     → VECTOR_SEARCH() retorna os N vizinhos mais próximos por cosseno
 
@@ -15,44 +15,79 @@ IMPORTANTE:
     Para usar VECTOR_SEARCH no BigQuery, a tabela precisa ter um Vector Index:
     CREATE VECTOR INDEX idx_itens_embedding ON `dataset.itens`(embedding)
     OPTIONS(distance_type='COSINE', index_type='IVF')
+
+    ATENÇÃO — migração de dims:
+    O Gemini text-embedding-004 gera vetores de 768 dimensões (vs 1536 do OpenAI).
+    Se a coluna `embedding` já existia com 1536 dims, recrie-a ou crie uma nova coluna
+    antes de re-indexar os registros existentes.
 """
 
 import os
 import json
 from typing import Optional
+import google.generativeai as genai
 
-EMBEDDING_MODEL = "text-embedding-3-small"  # 1536 dims, custo baixo
-EMBEDDING_DIMS = 1536
+EMBEDDING_MODEL = "text-embedding-004"  # 768 dims, baixo custo, alta qualidade
+EMBEDDING_DIMS = 768
 
 
-def get_openai_client():
-    """Retorna o cliente OpenAI."""
-    from openai import OpenAI
-    api_key = os.environ.get("OPENAI_API_KEY")
+def _configure_genai():
+    """Configura a SDK do Gemini com a API key do ambiente."""
+    api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        raise ValueError("OPENAI_API_KEY não configurada.")
-    return OpenAI(api_key=api_key)
+        raise ValueError("GEMINI_API_KEY não configurada no ambiente.")
+    genai.configure(api_key=api_key)
 
 
 def generate_embedding(text: str) -> list[float]:
     """
-    Gera um vetor de embedding para o texto fornecido.
-    
+    Gera um vetor de embedding para o texto fornecido via Gemini.
+
     Args:
         text: Descrição do item a ser vetorizado
-        
+
     Returns:
-        Lista de 1536 floats representando o embedding
+        Lista de 768 floats representando o embedding
+
+    Notas sobre task_type:
+        "RETRIEVAL_DOCUMENT"  → para textos que serão indexados/armazenados
+        "RETRIEVAL_QUERY"     → para textos de consulta (busca)
+        Usar task_type correto melhora a qualidade do match semântico.
     """
-    client = get_openai_client()
-    # Limpar e truncar texto (máximo ~8191 tokens para este modelo)
+    _configure_genai()
+
+    # Limpar e truncar texto (limite seguro para o modelo)
     text = text.strip().replace("\n", " ")[:2000]
-    
-    response = client.embeddings.create(
-        model=EMBEDDING_MODEL,
-        input=text,
+
+    result = genai.embed_content(
+        model=f"models/{EMBEDDING_MODEL}",
+        content=text,
+        task_type="RETRIEVAL_QUERY",  # usado para buscas pontuais
     )
-    return response.data[0].embedding
+    return result["embedding"]
+
+
+def generate_embedding_for_storage(text: str) -> list[float]:
+    """
+    Variante de generate_embedding com task_type=RETRIEVAL_DOCUMENT.
+    Use esta função ao gerar e persistir embeddings em lote no BigQuery.
+
+    Args:
+        text: Descrição do item a ser indexado
+
+    Returns:
+        Lista de 768 floats
+    """
+    _configure_genai()
+
+    text = text.strip().replace("\n", " ")[:2000]
+
+    result = genai.embed_content(
+        model=f"models/{EMBEDDING_MODEL}",
+        content=text,
+        task_type="RETRIEVAL_DOCUMENT",
+    )
+    return result["embedding"]
 
 
 def find_similar_items(
@@ -70,7 +105,7 @@ def find_similar_items(
         description: Descrição textual do item futuro
         top_n: Número de vizinhos a retornar
         min_similarity: Similaridade mínima (0 a 1) para incluir no resultado
-        project_id: GCP Project ID (usa env PGCP_PROJECT_ID se omitido)
+        project_id: GCP Project ID (usa env GCP_PROJECT_ID se omitido)
         dataset_id: BigQuery Dataset ID (usa env GCP_DATASET_ID se omitido)
 
     Returns:
@@ -86,7 +121,6 @@ def find_similar_items(
 
     client = bq_module.Client(project=pid)
 
-    # VECTOR_SEARCH retorna os top_n vizinhos mais próximos
     sql = f"""
         SELECT
             base.descricaoItem,
@@ -139,7 +173,7 @@ def find_similar_by_exact_match(
         codigo_item: Código CATMAT ou CATSER do item
         cnpj_orgao: CNPJ do órgão comprador (para ver histórico do mesmo órgão)
         limit: Número máximo de resultados
-        
+
     Returns:
         Lista de dicts com itens históricos correspondentes
     """
@@ -205,7 +239,7 @@ def get_price_benchmark(
 ) -> dict:
     """
     Retorna um balizador de preços completo, combinando match exato + semântico.
-    
+
     Returns:
         {
             "exact_matches": [...],
@@ -215,7 +249,7 @@ def get_price_benchmark(
                 "max": float,
                 "avg": float,
                 "count": int,
-                "source": "exact|semantic|both"
+                "source": "exact|semantic|exact+semantic"
             }
         }
     """

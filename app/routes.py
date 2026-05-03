@@ -1214,8 +1214,8 @@ def ai_analyze():
     if not query:
         return jsonify({"error": "query é obrigatório"}), 400
 
-    if not os.environ.get('OPENAI_API_KEY'):
-        return jsonify({"error": "OPENAI_API_KEY não configurada. Adicione ao arquivo .env."}), 503
+    if not os.environ.get('GEMINI_API_KEY'):
+        return jsonify({"error": "GEMINI_API_KEY não configurada. Adicione ao arquivo .env."}), 503
 
     def generate():
         try:

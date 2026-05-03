@@ -1,31 +1,42 @@
 """
-utils_ai.py — Agente Analisador de Licitações via OpenAI
+utils_ai.py — Agente Analisador de Licitações via Google Gemini
 
 Funções:
 - analyze_search_results(): análise de resultados de pesquisa histórica
 - analyze_oportunidade(): análise de um edital futuro com balizamento histórico
-- get_client(): retorna o cliente OpenAI configurado
+- get_gemini_model(): retorna o modelo Gemini configurado
 """
 
 import os
 import json
 from typing import Generator
-
-def get_openai_client():
-    """Retorna o cliente OpenAI configurado via variável de ambiente."""
-    try:
-        from openai import OpenAI
-        api_key = os.environ.get('OPENAI_API_KEY')
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY não configurada no ambiente.")
-        return OpenAI(api_key=api_key)
-    except ImportError:
-        raise ImportError("Pacote 'openai' não instalado. Execute: pip install openai")
+import google.generativeai as genai
 
 
-def _get_model() -> str:
-    """Retorna o modelo OpenAI configurado. Padrão: gpt-4o-mini (custo-benefício)."""
-    return os.environ.get('OPENAI_MODEL', 'gpt-4o-mini')
+def _get_model_name() -> str:
+    """Retorna o modelo Gemini configurado. Padrão: gemini-2.0-flash (custo-benefício)."""
+    return os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+
+
+def get_gemini_model(system_prompt: str) -> genai.GenerativeModel:
+    """
+    Configura e retorna um GenerativeModel Gemini com system_instruction.
+    A system_instruction no Gemini é vinculada ao modelo, não à mensagem.
+    """
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY não configurada no ambiente.")
+
+    genai.configure(api_key=api_key)
+
+    return genai.GenerativeModel(
+        model_name=_get_model_name(),
+        system_instruction=system_prompt,
+        generation_config=genai.GenerationConfig(
+            temperature=0.3,
+            max_output_tokens=1500,
+        ),
+    )
 
 
 def analyze_search_results(query: str, results: list) -> Generator[str, None, None]:
@@ -37,12 +48,9 @@ def analyze_search_results(query: str, results: list) -> Generator[str, None, No
         query: Termo de busca do usuário
         results: Lista de dicts com os itens/atas retornados pelo BigQuery
     """
-    client = get_openai_client()
-
-    # Preparar dados resumidos para poupar tokens
     items_summary = []
     for r in results[:20]:  # Limitar a 20 itens para controle de tokens
-        item = {
+        items_summary.append({
             "descricao": r.get("descricaoItem") or r.get("objetoContratacao") or "",
             "unidade": r.get("unidadeMedida") or "",
             "preco_unitario": r.get("valorUnitario") or r.get("precoUnitario") or 0,
@@ -50,8 +58,7 @@ def analyze_search_results(query: str, results: list) -> Generator[str, None, No
             "orgao": r.get("nomeOrgao") or r.get("nomeUnidadeOrgao") or "",
             "uf": r.get("state") or r.get("uf") or "",
             "data": str(r.get("vigenciaInicio") or r.get("dataHomologacao") or ""),
-        }
-        items_summary.append(item)
+        })
 
     prompt_data = json.dumps(items_summary, ensure_ascii=False, indent=2)
 
@@ -94,21 +101,12 @@ Forneça uma análise completa com as seguintes seções:
 - Qual seria um preço competitivo para fornecimento de "{query}"?
 - O que um fornecedor deve saber antes de participar?"""
 
-    stream = client.chat.completions.create(
-        model=_get_model(),
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        stream=True,
-        temperature=0.3,
-        max_tokens=1500,
-    )
+    model = get_gemini_model(system_prompt)
+    response = model.generate_content(user_prompt, stream=True)
 
-    for chunk in stream:
-        delta = chunk.choices[0].delta
-        if delta and delta.content:
-            yield delta.content
+    for chunk in response:
+        if chunk.text:
+            yield chunk.text
 
 
 def analyze_oportunidade(edital: dict, historico: list) -> Generator[str, None, None]:
@@ -120,8 +118,6 @@ def analyze_oportunidade(edital: dict, historico: list) -> Generator[str, None, 
         edital: Dict com dados do edital/compra aberta
         historico: Lista de itens históricos similares (via match exato ou semântico)
     """
-    client = get_openai_client()
-
     edital_summary = {
         "objeto": edital.get("objetoCompra") or edital.get("objetoContratacao") or "",
         "orgao": edital.get("nomeUnidadeOrgao") or edital.get("nomeOrgao") or "",
@@ -177,18 +173,9 @@ Forneça:
 - Documentos típicos exigidos neste tipo de licitação
 - Prazo e próximos passos"""
 
-    stream = client.chat.completions.create(
-        model=_get_model(),
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        stream=True,
-        temperature=0.3,
-        max_tokens=1500,
-    )
+    model = get_gemini_model(system_prompt)
+    response = model.generate_content(user_prompt, stream=True)
 
-    for chunk in stream:
-        delta = chunk.choices[0].delta
-        if delta and delta.content:
-            yield delta.content
+    for chunk in response:
+        if chunk.text:
+            yield chunk.text

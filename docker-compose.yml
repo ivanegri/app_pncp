@@ -11,6 +11,7 @@ services:
       - DB_NAME=${DB_NAME}
       - GOOGLE_CREDENTIALS_JSON=${GOOGLE_CREDENTIALS_JSON}
       - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     volumes:
       - .:/app
       - /app/venv
