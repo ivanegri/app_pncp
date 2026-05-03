@@ -39,7 +39,7 @@ def analyze_search_results(query: str, results: list) -> Generator[str, None, No
         results: Lista de dicts com os itens/atas retornados pelo BigQuery
     """
     items_summary = []
-    for r in results[:20]:  # Limitar a 20 itens para controle de tokens
+    for r in results[:]:  # Limitar a 20 itens para controle de tokens
         items_summary.append({
             "descricao": r.get("descricaoItem") or r.get("objetoContratacao") or "",
             "unidade": r.get("unidadeMedida") or "",
