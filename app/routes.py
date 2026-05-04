@@ -1195,6 +1195,156 @@ def oportunidade_detail(numero_controle):
         return render_template('results.html', query="", results=[], error=f"Erro ao carregar edital: {e}")
 
 
+# ─── Helper: persiste itens_novos no BigQuery (background) ────────────────────
+
+def _salvar_itens_novos_bg(itens: list, edital_info: dict):
+    """
+    Persiste itens de editais abertos na tabela itens_novos do BigQuery.
+    Executado em daemon thread — não bloqueia o response.
+    Usa INSERT...WHERE NOT EXISTS (batch job, sem streaming buffer).
+    """
+    import threading
+
+    def _run():
+        try:
+            from google.cloud import bigquery as bq_module
+            from datetime import datetime, timezone
+
+            pid = os.environ.get("GCP_PROJECT_ID", "pncp-466018")
+            did = os.environ.get("GCP_DATASET_ID", "pncp_data")
+            table_id = f"{pid}.{did}.itens_novos"
+            client = bq_module.Client(project=pid)
+
+            schema = [
+                bq_module.SchemaField("id",                        "STRING"),
+                bq_module.SchemaField("numeroControlePNCPCompra",  "STRING"),
+                bq_module.SchemaField("cnpjOrgao",                 "STRING"),
+                bq_module.SchemaField("anoCompra",                 "INTEGER"),
+                bq_module.SchemaField("sequencialCompra",          "INTEGER"),
+                bq_module.SchemaField("numeroItem",                "INTEGER"),
+                bq_module.SchemaField("descricao",                 "STRING"),
+                bq_module.SchemaField("quantidade",                "FLOAT"),
+                bq_module.SchemaField("unidadeMedida",             "STRING"),
+                bq_module.SchemaField("valorUnitarioEstimado",     "FLOAT"),
+                bq_module.SchemaField("materialOuServico",         "STRING"),
+                bq_module.SchemaField("criterioJulgamentoNome",    "STRING"),
+                bq_module.SchemaField("nomeOrgao",                 "STRING"),
+                bq_module.SchemaField("uf",                        "STRING"),
+                bq_module.SchemaField("municipio",                 "STRING"),
+                bq_module.SchemaField("dataEncerramentoProposta",  "TIMESTAMP"),
+                bq_module.SchemaField("updated_at",                "TIMESTAMP"),
+            ]
+            table = bq_module.Table(table_id, schema=schema)
+            client.create_table(table, exists_ok=True)
+
+            now = datetime.now(timezone.utc).isoformat()
+            num_controle = edital_info.get("numeroControlePNCPCompra", "")
+
+            for item in itens:
+                num_item = int(item.get("numeroItem") or 0)
+                item_id = f"{num_controle}-{num_item}"
+                enc = str(edital_info.get("dataEncerramentoProposta") or now)
+                if len(enc) > 19:
+                    enc = enc[:19] + "Z"
+
+                sql = f"""
+                    INSERT INTO `{table_id}`
+                        (id, numeroControlePNCPCompra, cnpjOrgao, anoCompra,
+                         sequencialCompra, numeroItem, descricao, quantidade,
+                         unidadeMedida, valorUnitarioEstimado, materialOuServico,
+                         criterioJulgamentoNome, nomeOrgao, uf, municipio,
+                         dataEncerramentoProposta, updated_at)
+                    SELECT
+                        @id, @ctrl, @cnpj, @ano, @seq, @nitem, @desc,
+                        @qty, @unid, @vest, @mat, @crit, @orgao, @uf, @mun,
+                        @enc, @upd
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM `{table_id}` WHERE id = @id
+                    )
+                """
+                params = [
+                    bq_module.ScalarQueryParameter("id",    "STRING",  item_id),
+                    bq_module.ScalarQueryParameter("ctrl",  "STRING",  num_controle),
+                    bq_module.ScalarQueryParameter("cnpj",  "STRING",  str(edital_info.get("cnpjOrgao") or "")),
+                    bq_module.ScalarQueryParameter("ano",   "INT64",   int(edital_info.get("anoCompra") or 0)),
+                    bq_module.ScalarQueryParameter("seq",   "INT64",   int(edital_info.get("sequencialCompra") or 0)),
+                    bq_module.ScalarQueryParameter("nitem", "INT64",   num_item),
+                    bq_module.ScalarQueryParameter("desc",  "STRING",  str(item.get("descricao") or item.get("descricaoItem") or "")),
+                    bq_module.ScalarQueryParameter("qty",   "FLOAT64", float(item.get("quantidade") or 0)),
+                    bq_module.ScalarQueryParameter("unid",  "STRING",  str(item.get("unidadeMedida") or "")),
+                    bq_module.ScalarQueryParameter("vest",  "FLOAT64", float(item.get("valorUnitarioEstimado") or 0)),
+                    bq_module.ScalarQueryParameter("mat",   "STRING",  str(item.get("materialOuServico") or "")),
+                    bq_module.ScalarQueryParameter("crit",  "STRING",  str(item.get("criterioJulgamentoNome") or "")),
+                    bq_module.ScalarQueryParameter("orgao", "STRING",  str(edital_info.get("nomeOrgao") or edital_info.get("nomeUnidadeOrgao") or "")),
+                    bq_module.ScalarQueryParameter("uf",    "STRING",  str(edital_info.get("uf") or "")),
+                    bq_module.ScalarQueryParameter("mun",   "STRING",  str(edital_info.get("municipio") or "")),
+                    bq_module.ScalarQueryParameter("enc",   "TIMESTAMP", enc),
+                    bq_module.ScalarQueryParameter("upd",   "TIMESTAMP", now),
+                ]
+                jc = bq_module.QueryJobConfig(query_parameters=params)
+                client.query(sql, job_config=jc).result()
+
+            print(f"[itens_novos] {len(itens)} itens salvos para {num_controle}")
+        except Exception as e:
+            print(f"[itens_novos] Erro (non-fatal): {e}")
+            import traceback; traceback.print_exc()
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
+# ─── Balizamento por Item (mecânico, Jaccard) ──────────────────────────────────
+
+@main_bp.route('/api/balizamento/por-item', methods=['POST'])
+@login_required
+def balizamento_por_item():
+    """
+    Recebe lista de itens de um edital e retorna balizamento histórico mecânico.
+    Body JSON: { "itens": [...], "edital": {...} }
+    Processa todos em paralelo (ThreadPoolExecutor) e salva em itens_novos (background).
+    """
+    import concurrent.futures
+
+    data = request.get_json(silent=True) or {}
+    itens = data.get('itens', [])
+    edital_info = data.get('edital', {})
+
+    if not itens:
+        return jsonify({"error": "itens é obrigatório"}), 400
+
+    from .utils_embeddings import balizamento_mecanico_por_item
+
+    def baliza_item(item):
+        desc = item.get('descricao') or item.get('descricaoItem') or ''
+        num  = item.get('numeroItem')
+        if not desc:
+            return {"numeroItem": num, "matches": [], "benchmark": {}, "aderencia_max": 0.0, "descricao": ""}
+        result = balizamento_mecanico_por_item(descricao=desc, top_n=5, min_aderencia=0.75)
+        result["numeroItem"] = num
+        result["descricao"]  = desc
+        return result
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(8, len(itens))) as executor:
+        futures = {executor.submit(baliza_item, item): item for item in itens}
+        resultados = []
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                resultados.append(future.result())
+            except Exception as e:
+                item = futures[future]
+                resultados.append({
+                    "numeroItem": item.get('numeroItem'),
+                    "error": str(e),
+                    "matches": [], "benchmark": {}, "aderencia_max": 0.0,
+                })
+
+    # Salva itens_novos em background (não bloqueia o response)
+    if edital_info:
+        _salvar_itens_novos_bg(itens, edital_info)
+
+    resultados.sort(key=lambda x: x.get('numeroItem') or 0)
+    return jsonify({"resultados": resultados})
+
+
 # ─── Agente de IA (Streaming SSE) ─────────────────────────────────────────────
 
 @main_bp.route('/api/ai/analyze', methods=['POST'])

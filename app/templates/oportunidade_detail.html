@@ -97,10 +97,25 @@
 
             <!-- Itens do Edital (via API PNCP) -->
             {% if itens_edital %}
-            <div class="detail-section">
-                <h2><i class="fa-solid fa-list-check"></i> Itens do Edital <span class="count-badge">{{ itens_edital | length }}</span></h2>
+            <div class="detail-section" id="itens-section">
+                <div class="itens-section-header">
+                    <h2><i class="fa-solid fa-list-check"></i> Itens do Edital <span class="count-badge">{{ itens_edital | length }}</span></h2>
+                    <button id="btn-balizamento-item" class="btn-baliza" onclick="iniciarBalizamentoPorItem()">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        <span id="btn-baliza-label">Balizamento por Item</span>
+                    </button>
+                </div>
+
+                <!-- Progress bar (oculta inicialmente) -->
+                <div id="baliza-progress" style="display:none; margin-bottom:1rem;">
+                    <div class="baliza-progress-bar">
+                        <div class="baliza-progress-fill" id="baliza-fill"></div>
+                    </div>
+                    <p id="baliza-progress-text" style="font-size:0.78rem; color:var(--text-muted); margin:4px 0 0 0;"></p>
+                </div>
+
                 <div class="itens-table-wrap">
-                    <table class="itens-table">
+                    <table class="itens-table" id="itens-table">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -108,19 +123,36 @@
                                 <th>Qtd</th>
                                 <th>Unidade</th>
                                 <th>Valor Unit. Est.</th>
+                                <th id="th-baliza" style="display:none;">Aderência</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for item in itens_edital %}
-                            <tr>
+                            <tr class="item-row" data-num="{{ item.numeroItem or loop.index }}"
+                                data-desc="{{ (item.descricao or item.descricaoItem or '') | e }}"
+                                data-qty="{{ item.quantidade or '' }}"
+                                data-unid="{{ item.unidadeMedida or '' }}"
+                                data-vest="{{ item.valorUnitarioEstimado or '' }}">
                                 <td class="item-num">{{ item.numeroItem or loop.index }}</td>
-                                <td>{{ item.descricao or item.descricaoItem or '—' }}</td>
+                                <td class="item-desc-cell">{{ item.descricao or item.descricaoItem or '—' }}</td>
                                 <td>{{ item.quantidade or '—' }}</td>
                                 <td>{{ item.unidadeMedida or '—' }}</td>
                                 <td class="valor-cell">
                                     {% if item.valorUnitarioEstimado %}
                                     R$ {{ "{:,.2f}".format(item.valorUnitarioEstimado).replace(',', 'X').replace('.', ',').replace('X', '.') }}
                                     {% else %}—{% endif %}
+                                </td>
+                                <td class="td-baliza" style="display:none;">
+                                    <span class="badge-aderencia badge-loading" id="badge-{{ item.numeroItem or loop.index }}">
+                                        <i class="fa-solid fa-spinner fa-spin"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- Painel expandível de balizamento (injetado via JS) -->
+                            <tr class="baliza-detail-row" id="detail-row-{{ item.numeroItem or loop.index }}" style="display:none;">
+                                <td colspan="6" class="baliza-detail-cell">
+                                    <div class="baliza-detail-panel" id="detail-panel-{{ item.numeroItem or loop.index }}">
+                                    </div>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -129,6 +161,7 @@
                 </div>
             </div>
             {% endif %}
+
 
             <!-- Ação externa -->
             {% if edital.linkSistemaOrigem %}
@@ -632,7 +665,133 @@
     border: 1px solid rgba(107, 114, 128, 0.2);
 }
 
-/* Responsive */
+/* Itens section header with button */
+.itens-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+.itens-section-header h2 { margin: 0; }
+
+/* Botão de balizamento */
+.btn-baliza {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(99,102,241,0.1);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: var(--primary);
+    padding: 0.5rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-baliza:hover:not(:disabled) {
+    background: rgba(99,102,241,0.2);
+    border-color: var(--primary);
+}
+.btn-baliza:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Progress bar */
+.baliza-progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.baliza-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #a78bfa);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+/* Badges de aderência */
+.badge-aderencia {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+.badge-aderencia:hover { opacity: 0.8; }
+.badge-loading { background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: default; }
+.badge-verde   { background: rgba(34,197,94,0.12);  color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+.badge-amarelo { background: rgba(234,179,8,0.12);  color: #eab308; border: 1px solid rgba(234,179,8,0.25); }
+.badge-vermelho{ background: rgba(239,68,68,0.1);   color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+
+/* Painel expandível por item */
+.baliza-detail-row { background: rgba(99,102,241,0.03); }
+.baliza-detail-cell { padding: 0 !important; border-bottom: 2px solid rgba(99,102,241,0.15) !important; }
+.baliza-detail-panel {
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.baliza-match-list { display: flex; flex-direction: column; gap: 6px; }
+.baliza-match-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.82rem;
+    flex-wrap: wrap;
+}
+.baliza-match-aderencia {
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 2px 7px;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+.baliza-match-desc { flex: 1; color: var(--text-main); min-width: 120px; }
+.baliza-match-orgao { color: var(--text-muted); font-size: 0.75rem; }
+.baliza-match-data  { color: var(--text-muted); font-size: 0.72rem; flex-shrink: 0; }
+.baliza-match-preco { color: #22c55e; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+
+.baliza-stats-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 8px 10px;
+    background: rgba(34,197,94,0.04);
+    border: 1px solid rgba(34,197,94,0.1);
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+.baliza-stat-item { display: flex; flex-direction: column; gap: 1px; }
+.baliza-stat-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; }
+.baliza-stat-value { font-weight: 700; }
+.bsv-min { color: #22c55e; }
+.bsv-avg { color: #f59e0b; }
+.bsv-max { color: #ef4444; }
+
+.baliza-no-match {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
 @media (max-width: 900px) {
     .detail-grid {
         grid-template-columns: 1fr;
@@ -643,6 +802,177 @@
     .detail-header__top h1 {
         font-size: 1.3rem;
     }
+    .itens-section-header { flex-direction: column; align-items: flex-start; }
+    .btn-baliza { width: 100%; justify-content: center; }
 }
 </style>
+
+<script>
+// ─── Balizamento por Item ────────────────────────────────────────────────────
+
+// Edital serializado pelo Jinja para envio junto aos itens (salva em itens_novos)
+const _editalInfo = {{ edital | tojson }};
+
+function fmtBRL(v) {
+    if (v == null || isNaN(v)) return '—';
+    return 'R$ ' + Number(v).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 4});
+}
+
+function aderenciaBadgeClass(pct) {
+    if (pct >= 75) return 'badge-verde';
+    if (pct >= 50) return 'badge-amarelo';
+    return 'badge-vermelho';
+}
+
+function toggleDetalhe(num) {
+    const row = document.getElementById('detail-row-' + num);
+    if (!row) return;
+    row.style.display = row.style.display === 'none' ? '' : 'none';
+}
+
+function renderDetalhe(num, resultado) {
+    const panel = document.getElementById('detail-panel-' + num);
+    if (!panel) return;
+
+    const matches = resultado.matches || [];
+    const bm      = resultado.benchmark || {};
+
+    if (matches.length === 0) {
+        panel.innerHTML = `<div class="baliza-no-match">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Nenhum histórico com aderência ≥ 75% encontrado para este item.
+        </div>`;
+        return;
+    }
+
+    // Lista de matches
+    const matchesHtml = matches.map(m => {
+        const adClass = aderenciaBadgeClass(m.aderencia);
+        const adLabel = m.aderencia.toFixed(1) + '%';
+        const preco   = fmtBRL(m.valorUnitario);
+        const orgao   = m.nomeOrgao || '';
+        const data    = m.vigenciaInicio ? m.vigenciaInicio.slice(0,7) : '';
+        const desc    = (m.descricaoItem || '').substring(0, 120);
+        return `<div class="baliza-match-item">
+            <span class="baliza-match-aderencia ${adClass}">${adLabel}</span>
+            <span class="baliza-match-desc" title="${m.descricaoItem || ''}">${desc}</span>
+            <span class="baliza-match-orgao">${orgao}</span>
+            ${data ? `<span class="baliza-match-data">${data}</span>` : ''}
+            <span class="baliza-match-preco">${preco}</span>
+        </div>`;
+    }).join('');
+
+    // Barra de estatísticas
+    let statsHtml = '';
+    if (bm.count) {
+        statsHtml = `<div class="baliza-stats-bar">
+            <div class="baliza-stat-item">
+                <span class="baliza-stat-label">Mínimo</span>
+                <span class="baliza-stat-value bsv-min">${fmtBRL(bm.min)}</span>
+            </div>
+            <div class="baliza-stat-item">
+                <span class="baliza-stat-label">Média</span>
+                <span class="baliza-stat-value bsv-avg">${fmtBRL(bm.avg)}</span>
+            </div>
+            <div class="baliza-stat-item">
+                <span class="baliza-stat-label">Máximo</span>
+                <span class="baliza-stat-value bsv-max">${fmtBRL(bm.max)}</span>
+            </div>
+            <div class="baliza-stat-item">
+                <span class="baliza-stat-label">Registros</span>
+                <span class="baliza-stat-value" style="color:var(--text-muted)">${bm.count}</span>
+            </div>
+        </div>`;
+    }
+
+    panel.innerHTML = `<div class="baliza-match-list">${matchesHtml}</div>${statsHtml}`;
+}
+
+async function iniciarBalizamentoPorItem() {
+    const btn   = document.getElementById('btn-balizamento-item');
+    const label = document.getElementById('btn-baliza-label');
+    const prog  = document.getElementById('baliza-progress');
+    const fill  = document.getElementById('baliza-fill');
+    const ptext = document.getElementById('baliza-progress-text');
+
+    // Coleta todos os itens da tabela
+    const rows = document.querySelectorAll('.item-row');
+    if (!rows.length) return;
+
+    const itens = Array.from(rows).map(r => ({
+        numeroItem:             parseInt(r.dataset.num) || 0,
+        descricao:              r.dataset.desc || '',
+        quantidade:             parseFloat(r.dataset.qty) || null,
+        unidadeMedida:          r.dataset.unid || '',
+        valorUnitarioEstimado:  parseFloat(r.dataset.vest) || null,
+    }));
+
+    // UI: loading state
+    btn.disabled = true;
+    label.textContent = `Balizando ${itens.length} itens...`;
+    prog.style.display = '';
+    fill.style.width = '5%';
+    ptext.textContent = 'Consultando base histórica...';
+
+    // Mostra coluna de aderência
+    document.getElementById('th-baliza').style.display = '';
+    document.querySelectorAll('.td-baliza').forEach(td => td.style.display = '');
+
+    try {
+        fill.style.width = '30%';
+        const resp = await fetch('/api/balizamento/por-item', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ itens, edital: _editalInfo }),
+        });
+
+        fill.style.width = '80%';
+        const data = await resp.json();
+
+        if (!resp.ok || data.error) {
+            throw new Error(data.error || 'Erro na API');
+        }
+
+        const resultados = data.resultados || [];
+        let comMatch = 0;
+
+        resultados.forEach(r => {
+            const num   = r.numeroItem;
+            const badge = document.getElementById('badge-' + num);
+            const adMax = r.aderencia_max || 0;
+
+            if (!badge) return;
+
+            if (adMax >= 75) {
+                comMatch++;
+                badge.className = 'badge-aderencia badge-verde';
+                badge.innerHTML = `<i class="fa-solid fa-check"></i> ${adMax.toFixed(1)}%`;
+                badge.onclick = () => toggleDetalhe(num);
+                renderDetalhe(num, r);
+                // Auto-expande o primeiro item com match
+                if (comMatch === 1) {
+                    document.getElementById('detail-row-' + num).style.display = '';
+                }
+            } else {
+                badge.className = 'badge-aderencia badge-vermelho';
+                badge.innerHTML = `<i class="fa-solid fa-minus"></i> Sem match`;
+                badge.style.cursor = 'default';
+            }
+        });
+
+        fill.style.width = '100%';
+        ptext.textContent = `✓ Concluído: ${comMatch} de ${itens.length} itens com match ≥ 75%`;
+        label.textContent = `Balizamento concluído (${comMatch}/${itens.length})`;
+        btn.disabled = false;
+
+    } catch (err) {
+        fill.style.width = '100%';
+        fill.style.background = '#ef4444';
+        ptext.textContent = 'Erro: ' + err.message;
+        label.textContent = 'Balizamento por Item';
+        btn.disabled = false;
+        console.error('Balizamento error:', err);
+    }
+}
+</script>
 {% endblock %}

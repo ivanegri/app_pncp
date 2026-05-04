@@ -284,3 +284,144 @@ def get_price_benchmark(
         "semantic_matches": semantic,
         "benchmark": benchmark,
     }
+
+
+# ─── Match Mecânico por Jaccard (zero custo de IA) ───────────────────────────
+
+_STOPWORDS_PT = frozenset({
+    "de", "do", "da", "dos", "das", "para", "com", "em", "e", "ou", "a", "o",
+    "as", "os", "um", "uma", "por", "no", "na", "nos", "nas", "ao", "aos",
+    "que", "se", "num", "nao", "nao", "nao", "mais", "mas", "seu", "sua",
+    "tipo", "ref", "cod", "un", "und", "cx", "pct", "cj", "kit", "jg", "par",
+    "este", "esta", "esse", "essa", "ser", "ter", "ha", "ja",
+})
+
+
+def tokenize_descricao(text: str) -> set:
+    """Tokeniza uma descrição para cálculo de similaridade Jaccard."""
+    import re
+    if not text:
+        return set()
+    text = text.lower()
+    text = re.sub(r'[^\w\s]', ' ', text)
+    tokens = text.split()
+    return {t for t in tokens if t not in _STOPWORDS_PT and len(t) > 2}
+
+
+def jaccard_score(set_a: set, set_b: set) -> float:
+    """Calcula o índice de Jaccard entre dois conjuntos de tokens."""
+    if not set_a or not set_b:
+        return 0.0
+    intersection = len(set_a & set_b)
+    union = len(set_a | set_b)
+    return intersection / union if union > 0 else 0.0
+
+
+def balizamento_mecanico_por_item(
+    descricao: str,
+    top_n: int = 5,
+    min_aderencia: float = 0.75,
+    project_id: Optional[str] = None,
+    dataset_id: Optional[str] = None,
+) -> dict:
+    """
+    Busca matches históricos para um item de edital usando similaridade Jaccard.
+
+    Estratégia em 2 etapas (sem custo de IA):
+    1. Busca grossa no BigQuery por tokens âncora (CONTAINS_SUBSTR)
+    2. Score Jaccard no Python → filtra >= min_aderencia
+
+    Returns:
+        {
+            "matches": [{"descricaoItem", "valorUnitario", "aderencia", "nomeOrgao", ...}],
+            "benchmark": {"min", "max", "avg", "count"},
+            "aderencia_max": float,
+        }
+    """
+    from google.cloud import bigquery as bq_module
+
+    pid = project_id or os.environ.get("GCP_PROJECT_ID", "pncp-466018")
+    did = dataset_id or os.environ.get("GCP_DATASET_ID", "pncp_data")
+
+    tokens_query = tokenize_descricao(descricao)
+    if not tokens_query:
+        return {"matches": [], "benchmark": {}, "aderencia_max": 0.0}
+
+    # Tokens âncora: os mais longos (mais discriminantes), máx 4
+    anchor_tokens = sorted(tokens_query, key=len, reverse=True)[:4]
+
+    client = bq_module.Client(project=pid)
+
+    # Busca grossa — OR dos tokens âncora para não ser muito restritivo
+    conditions = " OR ".join(
+        [f"CONTAINS_SUBSTR(LOWER(i.descricaoItem), @t{idx})" for idx, _ in enumerate(anchor_tokens)]
+    )
+    params = [
+        bq_module.ScalarQueryParameter(f"t{idx}", "STRING", t)
+        for idx, t in enumerate(anchor_tokens)
+    ]
+
+    sql = f"""
+        SELECT
+            i.descricaoItem,
+            i.valorUnitario,
+            i.quantidadeHomologada,
+            i.unidadeMedida,
+            i.nomeOrgao,
+            i.parent_numeroControlePNCPAta,
+            i.numeroItem,
+            a.vigenciaInicio
+        FROM `{pid}.{did}.itens` i
+        LEFT JOIN `{pid}.{did}.atas` a
+            ON i.parent_numeroControlePNCPAta = a.numeroControlePNCPAta
+        WHERE ({conditions})
+            AND i.valorUnitario IS NOT NULL
+            AND i.valorUnitario > 0
+        ORDER BY a.vigenciaInicio DESC
+        LIMIT 300
+    """
+
+    job_config = bq_module.QueryJobConfig(query_parameters=params)
+
+    try:
+        results = list(client.query(sql, job_config=job_config).result())
+    except Exception as e:
+        return {"matches": [], "benchmark": {}, "aderencia_max": 0.0, "error": str(e)}
+
+    # Calcula Jaccard no Python e filtra >= min_aderencia
+    matches = []
+    for row in results:
+        desc_hist = row.get("descricaoItem") or ""
+        if not desc_hist:
+            continue
+        tokens_hist = tokenize_descricao(desc_hist)
+        score = jaccard_score(tokens_query, tokens_hist)
+        if score >= min_aderencia:
+            m = dict(row)
+            m["aderencia"] = round(score * 100, 1)
+            # Serializa datetime para string
+            if m.get("vigenciaInicio") and hasattr(m["vigenciaInicio"], "isoformat"):
+                m["vigenciaInicio"] = m["vigenciaInicio"].isoformat()[:10]
+            matches.append(m)
+
+    # Ordena por aderência DESC
+    matches.sort(key=lambda x: -x["aderencia"])
+    matches = matches[:top_n]
+
+    # Estatísticas de preço
+    benchmark = {}
+    precos = [m["valorUnitario"] for m in matches if m.get("valorUnitario")]
+    if precos:
+        benchmark = {
+            "min": round(min(precos), 4),
+            "max": round(max(precos), 4),
+            "avg": round(sum(precos) / len(precos), 4),
+            "count": len(precos),
+        }
+
+    return {
+        "matches": matches,
+        "benchmark": benchmark,
+        "aderencia_max": matches[0]["aderencia"] if matches else 0.0,
+    }
+
