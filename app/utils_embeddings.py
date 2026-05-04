@@ -319,10 +319,33 @@ def jaccard_score(set_a: set, set_b: set) -> float:
     return intersection / union if union > 0 else 0.0
 
 
+def token_recall_score(tokens_query: set, tokens_candidate: set) -> float:
+    """
+    Calcula Token Recall: que fração dos tokens do MENOR conjunto
+    está presente no maior. Ideal para licitações onde descrições
+    têm tamanhos muito diferentes (edital longo vs histórico curto).
+
+    Exemplo: query='REFLETOR LED 200W' vs candidato='LUMINÁRIA LED POTÊNCIA 200W COR BRANCO'
+    Jaccard = 2/7 = 28%  (muito baixo)
+    Recall  = 2/3 = 66%  (mais justo)
+    """
+    if not tokens_query or not tokens_candidate:
+        return 0.0
+    # Ignora candidatos muito genéricos (1 token) e exige mínimo 2 tokens em cada
+    if len(tokens_query) < 2 or len(tokens_candidate) < 2:
+        return 0.0
+    smaller = tokens_query if len(tokens_query) <= len(tokens_candidate) else tokens_candidate
+    intersection = len(tokens_query & tokens_candidate)
+    # Exige pelo menos 2 tokens em comum
+    if intersection < 2:
+        return 0.0
+    return intersection / len(smaller)
+
+
 def balizamento_mecanico_por_item(
     descricao: str,
-    top_n: int = 5,
-    min_aderencia: float = 0.75,
+    top_n: int = 10,
+    min_aderencia: float = 0.50,
     project_id: Optional[str] = None,
     dataset_id: Optional[str] = None,
 ) -> dict:
@@ -333,9 +356,12 @@ def balizamento_mecanico_por_item(
     1. Busca grossa no BigQuery por tokens âncora (CONTAINS_SUBSTR)
     2. Score Jaccard no Python → filtra >= min_aderencia
 
+    Campos reais da tabela itens:
+        descricao, valorUnitarioEstimado, quantidade, unidadeMedida
+
     Returns:
         {
-            "matches": [{"descricaoItem", "valorUnitario", "aderencia", "nomeOrgao", ...}],
+            "matches": [{"descricao", "valorUnitarioEstimado", "aderencia", ...}],
             "benchmark": {"min", "max", "avg", "count"},
             "aderencia_max": float,
         }
@@ -354,9 +380,9 @@ def balizamento_mecanico_por_item(
 
     client = bq_module.Client(project=pid)
 
-    # Busca grossa — OR dos tokens âncora para não ser muito restritivo
+    # Busca grossa — OR dos tokens âncora para maximizar recall
     conditions = " OR ".join(
-        [f"CONTAINS_SUBSTR(LOWER(i.descricaoItem), @t{idx})" for idx, _ in enumerate(anchor_tokens)]
+        [f"CONTAINS_SUBSTR(LOWER(i.descricao), @t{idx})" for idx, _ in enumerate(anchor_tokens)]
     )
     params = [
         bq_module.ScalarQueryParameter(f"t{idx}", "STRING", t)
@@ -365,22 +391,22 @@ def balizamento_mecanico_por_item(
 
     sql = f"""
         SELECT
-            i.descricaoItem,
-            i.valorUnitario,
-            i.quantidadeHomologada,
+            i.descricao,
+            i.valorUnitarioEstimado,
+            i.quantidade,
             i.unidadeMedida,
-            i.nomeOrgao,
-            i.parent_numeroControlePNCPAta,
             i.numeroItem,
+            i.parent_numeroControlePNCPAta,
+            a.nomeOrgao,
             a.vigenciaInicio
         FROM `{pid}.{did}.itens` i
         LEFT JOIN `{pid}.{did}.atas` a
             ON i.parent_numeroControlePNCPAta = a.numeroControlePNCPAta
         WHERE ({conditions})
-            AND i.valorUnitario IS NOT NULL
-            AND i.valorUnitario > 0
+            AND i.descricao IS NOT NULL
+            AND i.descricao != ''
         ORDER BY a.vigenciaInicio DESC
-        LIMIT 300
+        LIMIT 500
     """
 
     job_config = bq_module.QueryJobConfig(query_parameters=params)
@@ -393,14 +419,17 @@ def balizamento_mecanico_por_item(
     # Calcula Jaccard no Python e filtra >= min_aderencia
     matches = []
     for row in results:
-        desc_hist = row.get("descricaoItem") or ""
+        desc_hist = row.get("descricao") or ""
         if not desc_hist:
             continue
         tokens_hist = tokenize_descricao(desc_hist)
-        score = jaccard_score(tokens_query, tokens_hist)
+        score = token_recall_score(tokens_query, tokens_hist)
         if score >= min_aderencia:
             m = dict(row)
             m["aderencia"] = round(score * 100, 1)
+            # Campos com nomes consistentes para o frontend
+            m["descricaoItem"] = m.get("descricao", "")
+            m["valorUnitario"] = m.get("valorUnitarioEstimado") or 0
             # Serializa datetime para string
             if m.get("vigenciaInicio") and hasattr(m["vigenciaInicio"], "isoformat"):
                 m["vigenciaInicio"] = m["vigenciaInicio"].isoformat()[:10]
@@ -410,9 +439,9 @@ def balizamento_mecanico_por_item(
     matches.sort(key=lambda x: -x["aderencia"])
     matches = matches[:top_n]
 
-    # Estatísticas de preço
+    # Estatísticas de preço (só itens com preço real > 0)
     benchmark = {}
-    precos = [m["valorUnitario"] for m in matches if m.get("valorUnitario")]
+    precos = [m["valorUnitario"] for m in matches if m.get("valorUnitario") and m["valorUnitario"] > 0.01]
     if precos:
         benchmark = {
             "min": round(min(precos), 4),
@@ -426,4 +455,5 @@ def balizamento_mecanico_por_item(
         "benchmark": benchmark,
         "aderencia_max": matches[0]["aderencia"] if matches else 0.0,
     }
+
 
