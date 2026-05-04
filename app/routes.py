@@ -1020,6 +1020,8 @@ def oportunidades():
         client = bq_client.get_client()
         table = f"`{bq_client.project_id}.{bq_client.dataset_id}.compras_abertas`"
 
+        total_abertas = 0
+
         # UFs para filtro — se a tabela não existir, captura graciosamente
         try:
             ufs_sql = f"SELECT DISTINCT uf FROM {table} WHERE uf IS NOT NULL AND uf != '' ORDER BY uf"
@@ -1033,6 +1035,13 @@ def oportunidades():
                 print(f"Erro ao buscar UFs: {e_ufs}")
 
         if table_exists:
+            try:
+                count_sql = f"SELECT COUNT(*) as total FROM {table} WHERE DATE(dataEncerramentoProposta) >= CURRENT_DATE()"
+                total_abertas_result = list(client.query(count_sql).result())
+                total_abertas = total_abertas_result[0]['total'] if total_abertas_result else 0
+            except Exception as e_count:
+                print(f"Erro ao buscar count de abertas: {e_count}")
+
             params = []
             # Sem filtros → retorna TODOS os registros do banco
             conditions = []
@@ -1110,6 +1119,7 @@ def oportunidades():
         has_next=has_next,
         total_results=total_results,
         table_exists=table_exists,
+        total_abertas=total_abertas,
     )
 
 

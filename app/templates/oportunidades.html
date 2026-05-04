@@ -11,7 +11,14 @@
                 <i class="fa-solid fa-bolt"></i>
             </div>
             <div>
-                <h1>Oportunidades Futuras</h1>
+                <h1 style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    Oportunidades Futuras
+                    {% if total_abertas is defined and total_abertas > 0 %}
+                    <span style="font-size: 0.9rem; font-weight: 600; padding: 4px 12px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.2); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-check"></i> {{ total_abertas }} em aberto
+                    </span>
+                    {% endif %}
+                </h1>
                 <p class="page-subtitle">Editais e pregões com proposta em aberto agora</p>
             </div>
         </div>
