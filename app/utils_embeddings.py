@@ -25,18 +25,19 @@ IMPORTANTE:
 import os
 import json
 from typing import Optional
-import google.generativeai as genai
+from google import genai
+from google.genai import types as genai_types
 
 EMBEDDING_MODEL = "text-embedding-004"  # 768 dims, baixo custo, alta qualidade
 EMBEDDING_DIMS = 768
 
 
-def _configure_genai():
-    """Configura a SDK do Gemini com a API key do ambiente."""
+def _get_genai_client() -> genai.Client:
+    """Retorna um cliente Gemini configurado via variável de ambiente."""
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY não configurada no ambiente.")
-    genai.configure(api_key=api_key)
+    return genai.Client(api_key=api_key)
 
 
 def generate_embedding(text: str) -> list[float]:
@@ -54,17 +55,18 @@ def generate_embedding(text: str) -> list[float]:
         "RETRIEVAL_QUERY"     → para textos de consulta (busca)
         Usar task_type correto melhora a qualidade do match semântico.
     """
-    _configure_genai()
+    _get_genai_client()  # valida a chave
+    client = _get_genai_client()
 
     # Limpar e truncar texto (limite seguro para o modelo)
     text = text.strip().replace("\n", " ")[:2000]
 
-    result = genai.embed_content(
-        model=f"models/{EMBEDDING_MODEL}",
-        content=text,
-        task_type="RETRIEVAL_QUERY",  # usado para buscas pontuais
+    result = client.models.embed_content(
+        model=EMBEDDING_MODEL,
+        contents=text,
+        config=genai_types.EmbedContentConfig(task_type="RETRIEVAL_QUERY"),
     )
-    return result["embedding"]
+    return result.embeddings[0].values
 
 
 def generate_embedding_for_storage(text: str) -> list[float]:
@@ -78,16 +80,16 @@ def generate_embedding_for_storage(text: str) -> list[float]:
     Returns:
         Lista de 768 floats
     """
-    _configure_genai()
+    client = _get_genai_client()
 
     text = text.strip().replace("\n", " ")[:2000]
 
-    result = genai.embed_content(
-        model=f"models/{EMBEDDING_MODEL}",
-        content=text,
-        task_type="RETRIEVAL_DOCUMENT",
+    result = client.models.embed_content(
+        model=EMBEDDING_MODEL,
+        contents=text,
+        config=genai_types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT"),
     )
-    return result["embedding"]
+    return result.embeddings[0].values
 
 
 def find_similar_items(
