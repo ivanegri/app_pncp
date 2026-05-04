@@ -949,10 +949,16 @@ async function iniciarBalizamentoPorItem() {
                 badge.innerHTML = `<i class="fa-solid fa-check"></i> ${adMax.toFixed(1)}%`;
                 badge.onclick = () => toggleDetalhe(num);
                 renderDetalhe(num, r);
-                // Auto-expande o primeiro item com match
+                // Auto-expande o primeiro item com match verde
                 if (comMatch === 1) {
                     document.getElementById('detail-row-' + num).style.display = '';
                 }
+            } else if (adMax >= 50) {
+                comMatch++;
+                badge.className = 'badge-aderencia badge-amarelo';
+                badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${adMax.toFixed(1)}%`;
+                badge.onclick = () => toggleDetalhe(num);
+                renderDetalhe(num, r);
             } else {
                 badge.className = 'badge-aderencia badge-vermelho';
                 badge.innerHTML = `<i class="fa-solid fa-minus"></i> Sem match`;
@@ -961,7 +967,7 @@ async function iniciarBalizamentoPorItem() {
         });
 
         fill.style.width = '100%';
-        ptext.textContent = `✓ Concluído: ${comMatch} de ${itens.length} itens com match ≥ 75%`;
+        ptext.textContent = `✓ Concluído: ${comMatch} de ${itens.length} itens com match ≥ 50%`;
         label.textContent = `Balizamento concluído (${comMatch}/${itens.length})`;
         btn.disabled = false;
 

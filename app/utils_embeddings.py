@@ -293,21 +293,42 @@ def get_price_benchmark(
 _STOPWORDS_PT = frozenset({
     "de", "do", "da", "dos", "das", "para", "com", "em", "e", "ou", "a", "o",
     "as", "os", "um", "uma", "por", "no", "na", "nos", "nas", "ao", "aos",
-    "que", "se", "num", "nao", "nao", "nao", "mais", "mas", "seu", "sua",
-    "tipo", "ref", "cod", "un", "und", "cx", "pct", "cj", "kit", "jg", "par",
+    "que", "se", "num", "nao", "mais", "mas", "seu", "sua",
+    "tipo", "ref", "cod",
     "este", "esta", "esse", "essa", "ser", "ter", "ha", "ja",
+    "conforme", "referencia", "especificacao", "minima", "minimo",
 })
 
 
 def tokenize_descricao(text: str) -> set:
-    """Tokeniza uma descrição para cálculo de similaridade Jaccard."""
+    """
+    Tokeniza uma descrição preservando:
+    - Números inteiros e decimais (7,5 / 7.5 / 200)
+    - Tokens alfanuméricos (200w, 50ml, 10cm)
+    - Dimensões (10x10, 10x15)
+    - Unidades (un, cx, pct, ml, kg, etc.)
+    """
     import re
     if not text:
         return set()
     text = text.lower()
-    text = re.sub(r'[^\w\s]', ' ', text)
-    tokens = text.split()
-    return {t for t in tokens if t not in _STOPWORDS_PT and len(t) > 2}
+
+    # 1. Normaliza separadores de dimensão: "10 x 10" → "10x10"
+    text = re.sub(r'(\d+)\s*x\s*(\d+)', r'\1x\2', text)
+
+    # 2. Preserva vírgulas/pontos decimais: "7,5" → "7,5" (não separar)
+    #    Extrai tokens preservando números com vírgula/ponto e alfanuméricos
+    tokens = re.findall(
+        r'\d+[,.]\d+|'          # números decimais: 7,5 / 7.5 / 0,001
+        r'\d+x\d+|'             # dimensões: 10x10, 20x30
+        r'[a-záàâãéèêíïóôõöúüç]+\d+[a-záàâãéèêíïóôõöúüç]*|'  # letras+num: p50, n95
+        r'\d+[a-záàâãéèêíïóôõöúüç]+|'  # num+letras: 200w, 50ml, 10cm
+        r'[a-záàâãéèêíïóôõöúüç]{2,}|'  # palavras (min 2 chars)
+        r'\d{1,}',              # números puros (todos, incluindo 7, 50, 200)
+        text
+    )
+
+    return {t for t in tokens if t not in _STOPWORDS_PT}
 
 
 def jaccard_score(set_a: set, set_b: set) -> float:
@@ -376,19 +397,36 @@ def balizamento_mecanico_por_item(
     if not tokens_query:
         return {"matches": [], "benchmark": {}, "aderencia_max": 0.0}
 
-    # Tokens âncora: os mais longos (mais discriminantes), máx 4
-    anchor_tokens = sorted(tokens_query, key=len, reverse=True)[:4]
+    # Tokens âncora: os mais longos (mais discriminantes)
+    anchor_tokens = sorted(tokens_query, key=len, reverse=True)
 
     client = bq_client.get_client()
 
-    # Busca grossa — OR dos tokens âncora para maximizar recall
-    conditions = " OR ".join(
-        [f"CONTAINS_SUBSTR(LOWER(i.descricao), @t{idx})" for idx, _ in enumerate(anchor_tokens)]
+    # Busca AND+OR: 2 tokens mais específicos são obrigatórios (AND),
+    # restantes são opcionais (OR) — reduz ruído sem perder recall.
+    # Sem LIMIT: full-scan para máxima cobertura.
+    mandatory = anchor_tokens[:2]  # sempre presentes
+    optional  = anchor_tokens[2:6]  # até 4 extras opcionais
+
+    and_conditions = " AND ".join(
+        [f"CONTAINS_SUBSTR(LOWER(i.descricao), @m{idx})" for idx, _ in enumerate(mandatory)]
     )
     params = [
-        bq_module.ScalarQueryParameter(f"t{idx}", "STRING", t)
-        for idx, t in enumerate(anchor_tokens)
+        bq_module.ScalarQueryParameter(f"m{idx}", "STRING", t)
+        for idx, t in enumerate(mandatory)
     ]
+
+    if optional:
+        or_conditions = " OR ".join(
+            [f"CONTAINS_SUBSTR(LOWER(i.descricao), @o{idx})" for idx, _ in enumerate(optional)]
+        )
+        params += [
+            bq_module.ScalarQueryParameter(f"o{idx}", "STRING", t)
+            for idx, t in enumerate(optional)
+        ]
+        where_clause = f"({and_conditions}) AND ({or_conditions})"
+    else:
+        where_clause = and_conditions
 
     sql = f"""
         SELECT
@@ -403,11 +441,10 @@ def balizamento_mecanico_por_item(
         FROM `{pid}.{did}.itens` i
         LEFT JOIN `{pid}.{did}.atas` a
             ON i.parent_numeroControlePNCPAta = a.numeroControlePNCPAta
-        WHERE ({conditions})
+        WHERE {where_clause}
             AND i.descricao IS NOT NULL
             AND i.descricao != ''
         ORDER BY a.vigenciaInicio DESC
-        LIMIT 500
     """
 
     job_config = bq_module.QueryJobConfig(query_parameters=params)
