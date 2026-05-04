@@ -1209,11 +1209,12 @@ def _salvar_itens_novos_bg(itens: list, edital_info: dict):
         try:
             from google.cloud import bigquery as bq_module
             from datetime import datetime, timezone
+            from .utils_bigquery import bq_client as _bq
 
-            pid = os.environ.get("GCP_PROJECT_ID", "pncp-466018")
-            did = os.environ.get("GCP_DATASET_ID", "pncp_data")
+            pid = _bq.project_id
+            did = _bq.dataset_id
             table_id = f"{pid}.{did}.itens_novos"
-            client = bq_module.Client(project=pid)
+            client = _bq.get_client()
 
             schema = [
                 bq_module.SchemaField("id",                        "STRING"),

@@ -367,9 +367,10 @@ def balizamento_mecanico_por_item(
         }
     """
     from google.cloud import bigquery as bq_module
+    from .utils_bigquery import bq_client
 
-    pid = project_id or os.environ.get("GCP_PROJECT_ID", "pncp-466018")
-    did = dataset_id or os.environ.get("GCP_DATASET_ID", "pncp_data")
+    pid = project_id or bq_client.project_id
+    did = dataset_id or bq_client.dataset_id
 
     tokens_query = tokenize_descricao(descricao)
     if not tokens_query:
@@ -378,7 +379,7 @@ def balizamento_mecanico_por_item(
     # Tokens âncora: os mais longos (mais discriminantes), máx 4
     anchor_tokens = sorted(tokens_query, key=len, reverse=True)[:4]
 
-    client = bq_module.Client(project=pid)
+    client = bq_client.get_client()
 
     # Busca grossa — OR dos tokens âncora para maximizar recall
     conditions = " OR ".join(
