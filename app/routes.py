@@ -1081,14 +1081,21 @@ def oportunidades():
                     FROM {table} c
                     LEFT JOIN {table_itens} i ON c.numeroControlePNCPCompra = i.numeroControlePNCPCompra
                     WHERE {where}
+                ),
+                MatchedItens AS (
+                    SELECT i2.numeroControlePNCPCompra,
+                           ARRAY_AGG(STRUCT(i2.numeroItem, i2.descricao, i2.quantidade, i2.unidadeMedida, i2.valorUnitarioEstimado) LIMIT 3) as itens_encontrados
+                    FROM {table_itens} i2
+                    JOIN FilteredCompras fc ON i2.numeroControlePNCPCompra = fc.numeroControlePNCPCompra
+                    WHERE {item_match_cond}
+                    GROUP BY i2.numeroControlePNCPCompra
                 )
                 SELECT c.*, 
                        DATE_DIFF(DATE(c.dataEncerramentoProposta), CURRENT_DATE(), DAY) AS dias_restantes,
-                       (SELECT ARRAY_AGG(STRUCT(i2.numeroItem, i2.descricao, i2.quantidade, i2.unidadeMedida, i2.valorUnitarioEstimado) LIMIT 3) 
-                        FROM {table_itens} i2 
-                        WHERE i2.numeroControlePNCPCompra = c.numeroControlePNCPCompra AND {item_match_cond}) as itens_encontrados
+                       mi.itens_encontrados
                 FROM {table} c
                 JOIN FilteredCompras fc ON c.numeroControlePNCPCompra = fc.numeroControlePNCPCompra
+                LEFT JOIN MatchedItens mi ON c.numeroControlePNCPCompra = mi.numeroControlePNCPCompra
                 ORDER BY c.dataEncerramentoProposta DESC
                 LIMIT @limit OFFSET @offset
             """
