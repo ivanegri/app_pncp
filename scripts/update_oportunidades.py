@@ -2,23 +2,14 @@
 update_oportunidades.py — Pipeline Diário de Oportunidades PNCP
 
 Consulta a API do PNCP para listar compras com proposta em aberto
-e faz upsert incremental na tabela `compras_abertas` do BigQuery.
+e faz upsert incremental na tabela `compras_abertas` e `compras_abertas_itens` do BigQuery.
 
 Funcionalidades:
+  - Busca de itens: baixa os itens de cada edital para possibilitar pesquisa detalhada
   - Checkpoint automático: retoma do ponto de parada em caso de interrupção
   - Upsert por lote: salva no BigQuery a cada página (não perde dados)
-  - Retry com backoff: 3 tentativas por página com espera exponencial
+  - Retry com backoff: 3 tentativas por página/item com espera exponencial
   - Credenciais via GOOGLE_CREDENTIALS_JSON (mesmo padrão do app Flask)
-
-Uso:
-    python scripts/update_oportunidades.py
-    python scripts/update_oportunidades.py --dias 7
-    python scripts/update_oportunidades.py --data-inicial 20260101 --data-final 20260131
-    python scripts/update_oportunidades.py --dry-run
-    python scripts/update_oportunidades.py --limpar-checkpoint  (força restart do zero)
-
-Sugestão de agendamento (crontab):
-    0 3 * * * cd /app && python scripts/update_oportunidades.py >> /var/log/pncp_update.log 2>&1
 """
 
 import os
@@ -29,6 +20,7 @@ import argparse
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import concurrent.futures
 
 import requests
 from google.cloud import bigquery
@@ -45,22 +37,21 @@ log = logging.getLogger(__name__)
 GCP_PROJECT_ID  = os.environ.get("GCP_PROJECT_ID",  "pncp-466018")
 GCP_DATASET_ID  = os.environ.get("GCP_DATASET_ID",  "pncp_data")
 TABLE_ID        = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas"
+TABLE_ID_ITENS  = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas_itens"
 
 PNCP_BASE_URL   = "https://pncp.gov.br/api/consulta/v1"
+PNCP_API_URL    = "https://pncp.gov.br/api/pncp/v1"
 PAGE_SIZE       = 50    # Tamanho de página da API PNCP
 REQUEST_DELAY   = 3     # Segundos entre requisições
 MAX_RETRIES     = 3     # Tentativas por página
 RETRY_BACKOFF   = 2     # Fator de backoff: 2s, 4s, 8s
+MAX_WORKERS     = 10    # Workers para buscar itens concorrentemente
 
 CHECKPOINT_DIR  = Path(__file__).parent  # mesma pasta do script
 
 
 # ─── Credenciais BigQuery ──────────────────────────────────────────────────────
 def get_bq_client() -> bigquery.Client:
-    """
-    Cria um cliente BigQuery usando GOOGLE_CREDENTIALS_JSON (mesmo padrão do app Flask).
-    Fallback para Application Default Credentials.
-    """
     creds_json_str = os.environ.get("GOOGLE_CREDENTIALS_JSON", "")
     if creds_json_str and creds_json_str.strip():
         try:
@@ -79,38 +70,30 @@ def get_bq_client() -> bigquery.Client:
 def checkpoint_path(data_final: str) -> Path:
     return CHECKPOINT_DIR / f".pncp_checkpoint_{data_final}.json"
 
-
 def load_checkpoint(data_final: str) -> dict:
-    """Carrega o checkpoint da execução anterior, se existir."""
     cp = checkpoint_path(data_final)
     if cp.exists():
         try:
             data = json.loads(cp.read_text())
-            log.info(
-                f"Checkpoint encontrado: retomando da pagina {data['proxima_pagina']} "
-                f"({data['registros_salvos']} registros ja salvos)"
-            )
+            log.info(f"Checkpoint encontrado: retomando da pagina {data['proxima_pagina']} ({data['registros_salvos']} compras ja salvas)")
             return data
         except Exception as e:
             log.warning(f"Checkpoint invalido, ignorando: {e}")
-    return {"proxima_pagina": 1, "total_paginas": None, "registros_salvos": 0, "paginas_com_erro": []}
+    return {"proxima_pagina": 1, "total_paginas": None, "registros_salvos": 0, "itens_salvos": 0, "paginas_com_erro": []}
 
-
-def save_checkpoint(data_final: str, proxima_pagina: int, total_paginas, registros_salvos: int, paginas_com_erro: list):
-    """Persiste o checkpoint após cada página bem-sucedida."""
+def save_checkpoint(data_final: str, proxima_pagina: int, total_paginas, registros_salvos: int, itens_salvos: int, paginas_com_erro: list):
     cp = checkpoint_path(data_final)
     data = {
         "proxima_pagina":   proxima_pagina,
         "total_paginas":    total_paginas,
         "registros_salvos": registros_salvos,
+        "itens_salvos":     itens_salvos,
         "paginas_com_erro": paginas_com_erro,
         "atualizado_em":    datetime.now(timezone.utc).isoformat(),
     }
     cp.write_text(json.dumps(data, ensure_ascii=False, indent=2))
 
-
 def clear_checkpoint(data_final: str):
-    """Remove o checkpoint ao concluir com sucesso."""
     cp = checkpoint_path(data_final)
     if cp.exists():
         cp.unlink()
@@ -144,10 +127,21 @@ CREATE TABLE IF NOT EXISTS `{TABLE_ID}` (
     linkSistemaOrigem           STRING,
     fonteDados                  STRING,
     updated_at                  TIMESTAMP
-)
-OPTIONS (
-    description = "Compras abertas extraidas da API PNCP - atualizacao diaria"
-)
+) OPTIONS (description = "Compras abertas extraidas da API PNCP - atualizacao diaria")
+"""
+
+CREATE_TABLE_SQL_ITENS = f"""
+CREATE TABLE IF NOT EXISTS `{TABLE_ID_ITENS}` (
+    numeroControlePNCPCompra    STRING NOT NULL,
+    numeroItem                  INT64 NOT NULL,
+    descricao                   STRING,
+    quantidade                  FLOAT64,
+    valorUnitarioEstimado       FLOAT64,
+    valorTotal                  FLOAT64,
+    unidadeMedida               STRING,
+    situacaoItem                STRING,
+    updated_at                  TIMESTAMP
+) OPTIONS (description = "Itens das compras abertas extraidas da API PNCP")
 """
 
 BQ_SCHEMA = [
@@ -177,90 +171,115 @@ BQ_SCHEMA = [
     bigquery.SchemaField("updated_at",                "TIMESTAMP"),
 ]
 
+BQ_SCHEMA_ITENS = [
+    bigquery.SchemaField("numeroControlePNCPCompra",  "STRING"),
+    bigquery.SchemaField("numeroItem",                "INTEGER"),
+    bigquery.SchemaField("descricao",                 "STRING"),
+    bigquery.SchemaField("quantidade",                "FLOAT"),
+    bigquery.SchemaField("valorUnitarioEstimado",     "FLOAT"),
+    bigquery.SchemaField("valorTotal",                "FLOAT"),
+    bigquery.SchemaField("unidadeMedida",             "STRING"),
+    bigquery.SchemaField("situacaoItem",              "STRING"),
+    bigquery.SchemaField("updated_at",                "TIMESTAMP"),
+]
 
-def ensure_table_exists(client: bigquery.Client):
-    """Cria a tabela se não existir."""
+def ensure_tables_exist(client: bigquery.Client):
     try:
         client.query(CREATE_TABLE_SQL).result()
-        log.info("Tabela compras_abertas verificada/criada.")
+        client.query(CREATE_TABLE_SQL_ITENS).result()
+        log.info("Tabelas compras_abertas e compras_abertas_itens verificadas/criadas.")
     except Exception as e:
-        log.error(f"Erro ao criar tabela: {e}")
+        log.error(f"Erro ao criar tabelas: {e}")
         raise
 
 
 # ─── Funções de API ────────────────────────────────────────────────────────────
 def fetch_pagina(data_final: str, pagina: int, timeout: int = 60) -> dict:
-    """Consulta uma página da API PNCP com timeout explícito."""
     url = f"{PNCP_BASE_URL}/contratacoes/proposta"
-    params = {
-        "dataFinal":     data_final,
-        "pagina":        pagina,
-        "tamanhoPagina": PAGE_SIZE,
-    }
+    params = {"dataFinal": data_final, "pagina": pagina, "tamanhoPagina": PAGE_SIZE}
     resp = requests.get(url, params=params, timeout=timeout)
     resp.raise_for_status()
     return resp.json()
 
-
 def fetch_pagina_com_retry(data_final: str, pagina: int):
-    """
-    Tenta buscar uma página com MAX_RETRIES tentativas e backoff exponencial.
-    Retorna None se todas as tentativas falharem.
-    """
     for tentativa in range(1, MAX_RETRIES + 1):
         try:
             return fetch_pagina(data_final, pagina)
         except requests.HTTPError as e:
             if e.response.status_code == 404:
-                log.info(f"  Pagina {pagina}: 404 (fim dos dados).")
                 return None
             wait = RETRY_BACKOFF ** tentativa
-            log.warning(
-                f"  Pagina {pagina}: HTTP {e.response.status_code} — "
-                f"tentativa {tentativa}/{MAX_RETRIES}, aguardando {wait}s..."
-            )
             time.sleep(wait)
         except (requests.ConnectionError, requests.Timeout) as e:
             wait = RETRY_BACKOFF ** tentativa
-            log.warning(
-                f"  Pagina {pagina}: conexao falhou ({type(e).__name__}) — "
-                f"tentativa {tentativa}/{MAX_RETRIES}, aguardando {wait}s..."
-            )
             time.sleep(wait)
         except Exception as e:
-            log.error(f"  Pagina {pagina}: erro inesperado: {e}")
             break
-
     log.error(f"  Pagina {pagina}: falhou apos {MAX_RETRIES} tentativas. Sera pulada.")
     return None
 
+def fetch_itens(cnpj: str, ano: str, seq: str, timeout: int = 15) -> list:
+    url = f"{PNCP_API_URL}/orgaos/{cnpj}/compras/{ano}/{seq}/itens"
+    resp = requests.get(url, timeout=timeout)
+    resp.raise_for_status()
+    data = resp.json()
+    return data if isinstance(data, list) else []
+
+def fetch_itens_com_retry(cnpj: str, ano: str, seq: str):
+    for tentativa in range(1, MAX_RETRIES + 1):
+        try:
+            return fetch_itens(cnpj, ano, seq)
+        except requests.HTTPError as e:
+            if e.response.status_code == 404:
+                return []
+            wait = RETRY_BACKOFF ** tentativa
+            time.sleep(wait)
+        except (requests.ConnectionError, requests.Timeout):
+            wait = RETRY_BACKOFF ** tentativa
+            time.sleep(wait)
+        except Exception:
+            break
+    return []
+
+def worker_fetch_itens(row: dict):
+    """Busca itens para um edital específico e os retorna formatados"""
+    if not row or not row.get("cnpjOrgao") or not row.get("anoCompra") or not row.get("sequencialCompra"):
+        return []
+    
+    cnpj = str(row["cnpjOrgao"])[:14]
+    ano = str(row["anoCompra"])
+    seq = str(row["sequencialCompra"]).zfill(6)
+    
+    raw_items = fetch_itens_com_retry(cnpj, ano, seq)
+    
+    formatted_items = []
+    for item in raw_items:
+        transformed = transform_item(item, row["numeroControlePNCPCompra"])
+        if transformed:
+            formatted_items.append(transformed)
+    return formatted_items
+
 
 # ─── Transformação ─────────────────────────────────────────────────────────────
+def safe_float(val):
+    try: return float(val) if val is not None else None
+    except (ValueError, TypeError): return None
+
+def safe_int(val):
+    try: return int(val) if val is not None else None
+    except (ValueError, TypeError): return None
+
+def safe_ts(val):
+    if not val: return None
+    return val.replace("Z", "+00:00") if isinstance(val, str) else None
+
 def transform(raw: dict):
-    """Normaliza um item da API PNCP para o schema BigQuery. Retorna None se inválido."""
-    def safe_float(val):
-        try:
-            return float(val) if val is not None else None
-        except (ValueError, TypeError):
-            return None
-
-    def safe_int(val):
-        try:
-            return int(val) if val is not None else None
-        except (ValueError, TypeError):
-            return None
-
-    def safe_ts(val):
-        if not val:
-            return None
-        return val.replace("Z", "+00:00") if isinstance(val, str) else None
-
     orgao   = raw.get("orgaoEntidade") or {}
     unidade = raw.get("unidadeOrgao") or {}
     numero  = raw.get("numeroControlePNCP") or raw.get("numeroControlePNCPCompra") or ""
 
     if not numero:
-        return None  # Registro inválido, descarta
+        return None
 
     return {
         "numeroControlePNCPCompra": numero,
@@ -289,176 +308,162 @@ def transform(raw: dict):
         "updated_at":               datetime.now(timezone.utc).isoformat(),
     }
 
+def transform_item(raw: dict, numero_controle: str):
+    numero_item = safe_int(raw.get("numeroItem"))
+    if not numero_item or not numero_controle:
+        return None
+    return {
+        "numeroControlePNCPCompra": numero_controle,
+        "numeroItem":               numero_item,
+        "descricao":                raw.get("descricao") or "",
+        "quantidade":               safe_float(raw.get("quantidade")),
+        "valorUnitarioEstimado":    safe_float(raw.get("valorUnitarioEstimado")),
+        "valorTotal":               safe_float(raw.get("valorTotal")),
+        "unidadeMedida":            raw.get("unidadeMedida") or "",
+        "situacaoItem":             raw.get("situacaoItemNome") or "",
+        "updated_at":               datetime.now(timezone.utc).isoformat(),
+    }
+
 
 # ─── BigQuery: Upsert por lote ─────────────────────────────────────────────────
-def upsert_lote(rows: list, client: bigquery.Client, dry_run: bool = False) -> int:
-    """
-    Faz upsert de um lote via tabela temporária + MERGE.
-    Salva imediatamente — não acumula em RAM.
-    Retorna a quantidade de registros processados.
-    """
+def upsert_lote(rows: list, client: bigquery.Client, table_id: str, schema: list, merge_on: list, merge_updates: list, dry_run: bool = False) -> int:
     if not rows:
         return 0
-
     if dry_run:
-        log.info(f"  [DRY RUN] {len(rows)} registros (nao salvos)")
         return len(rows)
 
-    temp_table = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.compras_abertas_tmp"
+    temp_table = f"{GCP_PROJECT_ID}.{GCP_DATASET_ID}.temp_" + table_id.split(".")[-1]
 
-    # 1. Carrega lote na temp (WRITE_TRUNCATE — substitui completamente)
     job_config = bigquery.LoadJobConfig(
         write_disposition="WRITE_TRUNCATE",
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
-        schema=BQ_SCHEMA,
+        schema=schema,
     )
     load_job = client.load_table_from_json(rows, temp_table, job_config=job_config)
     load_job.result()
 
-    # 2. MERGE temp → tabela principal (upsert real, sem streaming buffer)
+    on_clause = " AND ".join([f"T.{m} = S.{m}" for m in merge_on])
+    update_clause = ",\n            ".join([f"T.{u} = S.{u}" for u in merge_updates])
+
     merge_sql = f"""
-        MERGE `{TABLE_ID}` T
+        MERGE `{table_id}` T
         USING `{temp_table}` S
-        ON T.numeroControlePNCPCompra = S.numeroControlePNCPCompra
+        ON {on_clause}
         WHEN MATCHED THEN UPDATE SET
-            T.situacaoCompraId          = S.situacaoCompraId,
-            T.situacaoCompraNome        = S.situacaoCompraNome,
-            T.valorTotalEstimado        = S.valorTotalEstimado,
-            T.valorTotalHomologado      = S.valorTotalHomologado,
-            T.dataEncerramentoProposta  = S.dataEncerramentoProposta,
-            T.objetoCompra              = S.objetoCompra,
-            T.informacaoComplementar    = S.informacaoComplementar,
-            T.updated_at                = S.updated_at
+            {update_clause}
         WHEN NOT MATCHED THEN INSERT ROW
     """
     client.query(merge_sql).result()
-
-    # 3. Limpa a temporária
     client.delete_table(temp_table, not_found_ok=True)
-
-    log.info(f"  Lote salvo: {len(rows)} registros no BigQuery")
     return len(rows)
 
 
 # ─── Main ──────────────────────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(description="Pipeline de Oportunidades PNCP")
-    parser.add_argument("--dias", type=int, default=1,
-                        help="Quantos dias retroativos buscar (padrao: 1 = hoje)")
-    parser.add_argument("--data-inicial", type=str, default=None,
-                        help="Data inicial no formato YYYYMMDD (sobrepoem --dias)")
-    parser.add_argument("--data-final", type=str, default=None,
-                        help="Data final no formato YYYYMMDD (padrao: hoje)")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Apenas exibe os dados, nao salva no BigQuery")
-    parser.add_argument("--limpar-checkpoint", action="store_true",
-                        help="Ignora checkpoint existente e reinicia do zero")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dias", type=int, default=1)
+    parser.add_argument("--data-inicial", type=str, default=None)
+    parser.add_argument("--data-final", type=str, default=None)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--limpar-checkpoint", action="store_true")
     args = parser.parse_args()
 
     hoje = datetime.now(timezone.utc)
     data_final_dt   = datetime.strptime(args.data_final,   "%Y%m%d") if args.data_final   else hoje
     data_inicial_dt = datetime.strptime(args.data_inicial, "%Y%m%d") if args.data_inicial else (data_final_dt - timedelta(days=args.dias - 1))
-
     data_inicial = data_inicial_dt.strftime("%Y%m%d")
     data_final   = data_final_dt.strftime("%Y%m%d")
 
     log.info(f"{'[DRY RUN] ' if args.dry_run else ''}Iniciando extracao PNCP: {data_inicial} -> {data_final}")
 
-    # BigQuery (com credenciais via GOOGLE_CREDENTIALS_JSON)
     bq = get_bq_client()
-    ensure_table_exists(bq)
+    ensure_tables_exist(bq)
 
-    # Checkpoint: retoma de onde parou (ou começa do zero)
     if args.limpar_checkpoint:
         clear_checkpoint(data_final)
 
-    cp               = load_checkpoint(data_final)
+    cp = load_checkpoint(data_final)
     pagina           = cp["proxima_pagina"]
     total_paginas    = cp["total_paginas"]
     registros_salvos = cp["registros_salvos"]
+    itens_salvos     = cp.get("itens_salvos", 0)
     paginas_com_erro = cp.get("paginas_com_erro", [])
 
-    log.info(
-        f"Iniciando da pagina {pagina}"
-        + (f"/{total_paginas}" if total_paginas else "")
-        + f" | Ja salvos: {registros_salvos}"
-    )
+    log.info(f"Iniciando da pagina {pagina} | Compras salvas: {registros_salvos} | Itens salvos: {itens_salvos}")
 
-    # ─── Loop principal: busca e salva 1 página por vez ───────────────────────
     while True:
-        log.info(
-            f"  Pagina {pagina}"
-            + (f"/{total_paginas}" if total_paginas else "")
-            + "..."
-        )
-
+        log.info(f"  Pagina {pagina}" + (f"/{total_paginas}" if total_paginas else "") + "...")
         data = fetch_pagina_com_retry(data_final, pagina)
 
-        # None = 404 ou falha total
         if data is None:
             if total_paginas and pagina <= total_paginas:
-                # Erro em página intermediária: pula e continua
                 log.warning(f"  Pagina {pagina} falhou permanentemente. Pulando.")
                 paginas_com_erro.append(pagina)
-                save_checkpoint(data_final, pagina + 1, total_paginas, registros_salvos, paginas_com_erro)
+                save_checkpoint(data_final, pagina + 1, total_paginas, registros_salvos, itens_salvos, paginas_com_erro)
                 pagina += 1
                 time.sleep(REQUEST_DELAY)
                 continue
             else:
-                log.info("  Fim dos dados (sem mais paginas).")
                 break
 
-        # Extrai itens da resposta
         if isinstance(data, dict):
             items = data.get("data", [])
-            # Atualiza total de páginas na primeira vez
             if not total_paginas:
                 total_paginas = data.get("totalPaginas") or data.get("totalPages")
-                if total_paginas:
-                    log.info(f"  Total de paginas detectado: {total_paginas}")
         elif isinstance(data, list):
             items = data
         else:
             items = []
 
         if not items:
-            log.info("  Pagina vazia — fim dos dados.")
             break
 
-        # Transforma registros (filtra inválidos)
         rows = [r for raw in items if (r := transform(raw)) is not None]
-        log.info(f"  {len(items)} itens recebidos | {len(rows)} validos")
+        log.info(f"  {len(items)} compras recebidas | {len(rows)} validas")
 
-        # Exibe exemplo no dry-run (só na primeira página nova)
-        if args.dry_run and rows and pagina == cp["proxima_pagina"]:
-            log.info(f"  [DRY RUN] Exemplo: {json.dumps(rows[0], ensure_ascii=False, indent=2)}")
-
-        # Upsert IMEDIATO — não perde dados se travar depois
+        # Busca itens concorrentemente
+        all_items_rows = []
         if rows:
-            registros_salvos += upsert_lote(rows, bq, dry_run=args.dry_run)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                results = executor.map(worker_fetch_itens, rows)
+                for res in results:
+                    all_items_rows.extend(res)
+        
+        log.info(f"  Baixados {len(all_items_rows)} itens vinculados.")
 
-        # Salva checkpoint ANTES de avançar para próxima página
-        save_checkpoint(data_final, pagina + 1, total_paginas, registros_salvos, paginas_com_erro)
+        if rows:
+            # Upsert Compras
+            registros_salvos += upsert_lote(
+                rows, bq, TABLE_ID, BQ_SCHEMA,
+                merge_on=["numeroControlePNCPCompra"],
+                merge_updates=["situacaoCompraId", "situacaoCompraNome", "valorTotalEstimado", "valorTotalHomologado", "dataEncerramentoProposta", "objetoCompra", "informacaoComplementar", "updated_at"],
+                dry_run=args.dry_run
+            )
+            # Upsert Itens
+            itens_salvos += upsert_lote(
+                all_items_rows, bq, TABLE_ID_ITENS, BQ_SCHEMA_ITENS,
+                merge_on=["numeroControlePNCPCompra", "numeroItem"],
+                merge_updates=["descricao", "quantidade", "valorUnitarioEstimado", "valorTotal", "unidadeMedida", "situacaoItem", "updated_at"],
+                dry_run=args.dry_run
+            )
 
-        # Verifica fim
+        save_checkpoint(data_final, pagina + 1, total_paginas, registros_salvos, itens_salvos, paginas_com_erro)
+
         if total_paginas and pagina >= total_paginas:
-            log.info(f"  Ultima pagina ({pagina}/{total_paginas}) concluida.")
             break
 
         pagina += 1
         time.sleep(REQUEST_DELAY)
 
-    # ─── Sumário final ─────────────────────────────────────────────────────────
     log.info("=" * 60)
-    log.info(f"Extracao concluida!")
-    log.info(f"  Total de registros salvos: {registros_salvos}")
+    log.info("Extracao concluida!")
+    log.info(f"  Total compras salvas: {registros_salvos}")
+    log.info(f"  Total itens salvos:   {itens_salvos}")
     if paginas_com_erro:
         log.warning(f"  Paginas com erro (puladas): {paginas_com_erro}")
-        log.info("  Checkpoint mantido. Re-execute para tentar as paginas com erro.")
     else:
         clear_checkpoint(data_final)
     log.info("=" * 60)
-
 
 if __name__ == "__main__":
     main()

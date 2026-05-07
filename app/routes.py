@@ -1047,35 +1047,49 @@ def oportunidades():
             conditions = []
 
             if query:
-                conditions.append("CONTAINS_SUBSTR(objetoCompra, @query)")
+                conditions.append("(CONTAINS_SUBSTR(c.objetoCompra, @query) OR CONTAINS_SUBSTR(i.descricao, @query))")
                 params.append(bq_module.ScalarQueryParameter("query", "STRING", query))
 
             if selected_uf:
-                conditions.append("uf = @uf")
+                conditions.append("c.uf = @uf")
                 params.append(bq_module.ScalarQueryParameter("uf", "STRING", selected_uf))
 
             if selected_modalidade:
-                conditions.append("modalidadeId = @modalidade_id")
+                conditions.append("c.modalidadeId = @modalidade_id")
                 params.append(bq_module.ScalarQueryParameter("modalidade_id", "INT64", int(selected_modalidade)))
 
             if cnpj_orgao:
                 cnpj_clean = ''.join(filter(str.isdigit, cnpj_orgao))
-                conditions.append("cnpjOrgao = @cnpj_orgao")
+                conditions.append("c.cnpjOrgao = @cnpj_orgao")
                 params.append(bq_module.ScalarQueryParameter("cnpj_orgao", "STRING", cnpj_clean))
 
             if data_fim:
-                conditions.append("DATE(dataEncerramentoProposta) <= @data_fim")
+                conditions.append("DATE(c.dataEncerramentoProposta) <= @data_fim")
                 params.append(bq_module.ScalarQueryParameter("data_fim", "DATE", data_fim))
 
             where = " AND ".join(conditions) if conditions else "TRUE"
             offset = (page - 1) * per_page
+            
+            table_itens = f"`{bq_client.project_id}.{bq_client.dataset_id}.compras_abertas_itens`"
+            
+            # Subquery condition for getting the matched items
+            item_match_cond = "CONTAINS_SUBSTR(i2.descricao, @query)" if query else "TRUE"
 
             sql = f"""
-                SELECT *,
-                    DATE_DIFF(DATE(dataEncerramentoProposta), CURRENT_DATE(), DAY) AS dias_restantes
-                FROM {table}
-                WHERE {where}
-                ORDER BY dataEncerramentoProposta DESC
+                WITH FilteredCompras AS (
+                    SELECT DISTINCT c.numeroControlePNCPCompra
+                    FROM {table} c
+                    LEFT JOIN {table_itens} i ON c.numeroControlePNCPCompra = i.numeroControlePNCPCompra
+                    WHERE {where}
+                )
+                SELECT c.*, 
+                       DATE_DIFF(DATE(c.dataEncerramentoProposta), CURRENT_DATE(), DAY) AS dias_restantes,
+                       (SELECT ARRAY_AGG(STRUCT(i2.numeroItem, i2.descricao, i2.quantidade, i2.unidadeMedida, i2.valorUnitarioEstimado) LIMIT 3) 
+                        FROM {table_itens} i2 
+                        WHERE i2.numeroControlePNCPCompra = c.numeroControlePNCPCompra AND {item_match_cond}) as itens_encontrados
+                FROM {table} c
+                JOIN FilteredCompras fc ON c.numeroControlePNCPCompra = fc.numeroControlePNCPCompra
+                ORDER BY c.dataEncerramentoProposta DESC
                 LIMIT @limit OFFSET @offset
             """
             params += [
