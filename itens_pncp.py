@@ -5,10 +5,10 @@ import sys
 import time
 
 # Configuration
-INPUT_CSV = "./CSVs/compras_2024_unificadas.csv"
+INPUT_CSV = "./compras_2026_unificadas.csv"
 OUTPUT_DIR = "./data"
-OUTPUT_CSV = os.path.join(OUTPUT_DIR, "itens_consolidado.csv")
-LOG_FILE = os.path.join(OUTPUT_DIR, "itens_processados.txt")
+OUTPUT_CSV = os.path.join(OUTPUT_DIR, "itens_consolidado_2026.csv")
+LOG_FILE = os.path.join(OUTPUT_DIR, "itens_processados_2026.txt")
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)

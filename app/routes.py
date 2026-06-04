@@ -1407,7 +1407,54 @@ def ai_analyze():
                 edital = data.get('edital', {})
                 gen = analyze_oportunidade(edital=edital, historico=results)
             else:
-                gen = analyze_search_results(query=query, results=results)
+                # Busca 100 itens diretamente no BigQuery com JOINs para obter órgão, estado e fornecedor vencedor
+                from .utils_bigquery import bq_client
+                from google.cloud import bigquery as bq_module
+                
+                client = bq_client.get_client()
+                sql = f"""
+                    SELECT 
+                        i.descricao,
+                        i.valorUnitarioEstimado,
+                        i.quantidade,
+                        i.unidadeMedida,
+                        i.dataAtualizacao,
+                        o.razaoSocial as orgaoNome,
+                        o.State as estado,
+                        r.nomeRazaoSocialFornecedor as fornecedor,
+                        r.valorUnitarioHomologado as valorVencedor
+                    FROM `{bq_client.project_id}.{bq_client.dataset_id}.itens` i
+                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.orgaos` o
+                        ON SAFE_CAST(i.parent_cnpj AS STRING) = SAFE_CAST(o.cnpj AS STRING)
+                    LEFT JOIN `{bq_client.project_id}.{bq_client.dataset_id}.resultados` r
+                        ON SAFE_CAST(i.parent_numeroControlePNCPAta AS STRING) = SAFE_CAST(r.numeroControlePNCPCompra AS STRING)
+                        AND SAFE_CAST(i.numeroItem AS STRING) = SAFE_CAST(r.numeroItem AS STRING)
+                    WHERE SEARCH(i.descricao, @query)
+                    LIMIT @limit
+                """
+                job_config = bq_module.QueryJobConfig(
+                    query_parameters=[
+                        bq_module.ScalarQueryParameter("query", "STRING", query),
+                        bq_module.ScalarQueryParameter("limit", "INT64", 100),
+                    ]
+                )
+                query_job = client.query(sql, job_config=job_config)
+                raw_results = [dict(row) for row in query_job.result()]
+                
+                results_mapped = []
+                for r in raw_results:
+                    results_mapped.append({
+                        "descricaoItem": r.get("descricao") or "",
+                        "valorUnitario": r.get("valorUnitarioEstimado") or 0,
+                        "quantidadeHomologada": r.get("quantidade") or 0,
+                        "unidadeMedida": r.get("unidadeMedida") or "",
+                        "nomeOrgao": r.get("orgaoNome") or "",
+                        "state": r.get("estado") or "",
+                        "fornecedor": r.get("fornecedor") or "",
+                        "valorVencedor": r.get("valorVencedor") or 0,
+                        "vigenciaInicio": str(r.get("dataAtualizacao") or ""),
+                    })
+                gen = analyze_search_results(query=query, results=results_mapped)
 
             for chunk in gen:
                 # Server-Sent Events format — usa json.dumps (sem contexto Flask)

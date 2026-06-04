@@ -15,21 +15,21 @@ FILES_TO_MIGRATE = {
     #     'atas_2026_full.csv',]
     #     'atas_2025_full.csv'
     # ],
-    #'itens': [
-    #     'itens_consolidado_2024_padronizado.csv',
-    #     'itens_consolidado_2025_padronizado.csv'
-    'users': [
-         'users.csv'
+    'itens': [
+         'itens_consolidado_2026_padronizado.csv'
     ],
+    #'users': [
+    #     'users.csv'
+    # ],
     #'orgaos': [
     #   'orgaos_full_regiao.csv'
     #]
     #'compras_futuras':[
     #    'compras_2026_abertas_processed.csv'
     #]
-    'resultados':[
-        'resultados_2.csv'
-    ]
+    #'resultados':[
+    #    'resultados_2.csv'
+    #]
 }
 
 CHUNK_SIZE = 50000  # Adjust based on memory

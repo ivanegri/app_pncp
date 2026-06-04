@@ -12,8 +12,8 @@ total_pages = None
 while True:
     try:
         params = {
-            'dataInicial': '20250101',
-            'dataFinal': '20251231',
+            'dataInicial': '20260101',
+            'dataFinal': '20261231',
             "pagina": page,
             'tamanhoPagina': 50,  
         }

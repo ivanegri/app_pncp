@@ -166,7 +166,8 @@
     </div>
     <div class="ai-panel__body" id="ai-panel-body">
         <div class="ai-start-state" id="ai-start-state">
-            <p>Clique em <strong>Iniciar Análise</strong> para o agente analisar os resultados desta pesquisa e gerar insights sobre preços, fornecedores e oportunidades.</p>
+            <p>Clique em <strong>Iniciar Análise</strong> para o agente analisar os resultados desta pesquisa e gerar
+                insights sobre preços, fornecedores e oportunidades.</p>
             <button class="ai-start-btn" id="ai-start-btn" onclick="startAnalysis()">
                 <i class="fa-solid fa-play"></i> Iniciar Análise
             </button>
@@ -183,305 +184,377 @@
 <div class="ai-overlay" id="ai-overlay" onclick="toggleAIPanel()"></div>
 
 <style>
-/* AI Floating Button */
-.ai-fab-container {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 1000;
-}
+    /* AI Floating Button */
+    .ai-fab-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+    }
 
-.ai-fab {
-    background: linear-gradient(135deg, #6366f1, #ec4899);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 0.9rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    box-shadow: 0 8px 32px -8px rgba(99, 102, 241, 0.6);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    animation: fab-float 3s ease-in-out infinite;
-}
+    .ai-fab {
+        background: linear-gradient(135deg, #6366f1, #ec4899);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        box-shadow: 0 8px 32px -8px rgba(99, 102, 241, 0.6);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        animation: fab-float 3s ease-in-out infinite;
+    }
 
-@keyframes fab-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
+    @keyframes fab-float {
 
-.ai-fab:hover {
-    transform: scale(1.06) translateY(-3px);
-    box-shadow: 0 12px 40px -8px rgba(99, 102, 241, 0.8);
-}
+        0%,
+        100% {
+            transform: translateY(0);
+        }
 
-.ai-fab__icon { font-size: 1.1rem; }
+        50% {
+            transform: translateY(-5px);
+        }
+    }
 
-/* AI Panel */
-.ai-panel {
-    position: fixed;
-    top: 0;
-    right: -480px;
-    width: 460px;
-    max-width: 95vw;
-    height: 100vh;
-    background: var(--bg-card);
-    border-left: 1px solid var(--border);
-    z-index: 2000;
-    transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    box-shadow: -20px 0 60px rgba(0,0,0,0.4);
-}
+    .ai-fab:hover {
+        transform: scale(1.06) translateY(-3px);
+        box-shadow: 0 12px 40px -8px rgba(99, 102, 241, 0.8);
+    }
 
-.ai-panel.open {
-    right: 0;
-}
+    .ai-fab__icon {
+        font-size: 1.1rem;
+    }
 
-.ai-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 1999;
-    display: none;
-    backdrop-filter: blur(4px);
-}
+    /* AI Panel */
+    .ai-panel {
+        position: fixed;
+        top: 0;
+        right: -480px;
+        width: 460px;
+        max-width: 95vw;
+        height: 100vh;
+        background: var(--bg-card);
+        border-left: 1px solid var(--border);
+        z-index: 2000;
+        transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        box-shadow: -20px 0 60px rgba(0, 0, 0, 0.4);
+    }
 
-.ai-overlay.show { display: block; }
+    .ai-panel.open {
+        right: 0;
+    }
 
-.ai-panel__header {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(236,72,153,0.05));
-}
+    .ai-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1999;
+        display: none;
+        backdrop-filter: blur(4px);
+    }
 
-.ai-panel__title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+    .ai-overlay.show {
+        display: block;
+    }
 
-.ai-panel__emoji {
-    font-size: 2rem;
-}
+    .ai-panel__header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(236, 72, 153, 0.05));
+    }
 
-.ai-panel__title h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0;
-}
+    .ai-panel__title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-.ai-panel__title p {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin: 0;
-}
+    .ai-panel__emoji {
+        font-size: 2rem;
+    }
 
-.ai-panel__close {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .ai-panel__title h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0;
+    }
 
-.ai-panel__close:hover { color: var(--text-main); border-color: var(--text-muted); }
+    .ai-panel__title p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
 
-.ai-panel__body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+    .ai-panel__close {
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.ai-start-state {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
-    text-align: center;
-    padding: 2rem 1rem;
-}
+    .ai-panel__close:hover {
+        color: var(--text-main);
+        border-color: var(--text-muted);
+    }
 
-.ai-start-state p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
+    .ai-panel__body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 
-.ai-start-btn {
-    background: linear-gradient(135deg, #6366f1, #ec4899);
-    color: white;
-    border: none;
-    padding: 0.8rem 2rem;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+    .ai-start-state {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
 
-.ai-start-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.ai-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .ai-start-state p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
 
-/* Loading animation */
-.ai-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding: 3rem 0;
-}
+    .ai-start-btn {
+        background: linear-gradient(135deg, #6366f1, #ec4899);
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-.ai-loading p { color: var(--text-muted); font-size: 0.9rem; }
+    .ai-start-btn:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
 
-.ai-loading__dots { display: flex; gap: 6px; }
-.ai-loading__dots span {
-    width: 10px; height: 10px;
-    background: var(--primary);
-    border-radius: 50%;
-    animation: dot-bounce 1.2s ease-in-out infinite;
-}
-.ai-loading__dots span:nth-child(2) { animation-delay: 0.2s; }
-.ai-loading__dots span:nth-child(3) { animation-delay: 0.4s; }
+    .ai-start-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 
-@keyframes dot-bounce {
-    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
-    40% { transform: scale(1.2); opacity: 1; }
-}
+    /* Loading animation */
+    .ai-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 3rem 0;
+    }
 
-/* AI Result Markdown-like rendering */
-.ai-result {
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--text-main);
-    white-space: pre-wrap;
-    word-break: break-word;
-}
+    .ai-loading p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
 
-.ai-result h2 { font-size: 1rem; color: var(--primary); margin: 1.2rem 0 0.5rem 0; border-bottom: 1px solid rgba(99,102,241,0.2); padding-bottom: 4px; }
-.ai-result h3 { font-size: 0.95rem; color: var(--secondary); margin: 1rem 0 0.4rem 0; }
-.ai-result strong { color: var(--text-main); }
-.ai-result ul, .ai-result ol { padding-left: 1.2rem; }
-.ai-result li { margin-bottom: 4px; }
-.ai-result code { background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
+    .ai-loading__dots {
+        display: flex;
+        gap: 6px;
+    }
+
+    .ai-loading__dots span {
+        width: 10px;
+        height: 10px;
+        background: var(--primary);
+        border-radius: 50%;
+        animation: dot-bounce 1.2s ease-in-out infinite;
+    }
+
+    .ai-loading__dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .ai-loading__dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dot-bounce {
+
+        0%,
+        80%,
+        100% {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+
+        40% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+    }
+
+    /* AI Result Markdown-like rendering */
+    .ai-result {
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: var(--text-main);
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .ai-result h2 {
+        font-size: 1rem;
+        color: var(--primary);
+        margin: 1.2rem 0 0.5rem 0;
+        border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        padding-bottom: 4px;
+    }
+
+    .ai-result h3 {
+        font-size: 0.95rem;
+        color: var(--secondary);
+        margin: 1rem 0 0.4rem 0;
+    }
+
+    .ai-result strong {
+        color: var(--text-main);
+    }
+
+    .ai-result ul,
+    .ai-result ol {
+        padding-left: 1.2rem;
+    }
+
+    .ai-result li {
+        margin-bottom: 4px;
+    }
+
+    .ai-result code {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
 </style>
 
 <script>
-// Collect results data for AI analysis
-const AI_QUERY = "{{ query | e }}";
-const AI_TYPE = "{{ type }}";
-const AI_RESULTS = {{ results | tojson }};
+    // Collect results data for AI analysis
+    const AI_QUERY = "{{ query | e }}";
+    const AI_TYPE = "{{ type }}";
+    const AI_RESULTS = {{ results | tojson }};
 
-function toggleAIPanel() {
-    const panel = document.getElementById('ai-panel');
-    const overlay = document.getElementById('ai-overlay');
-    panel.classList.toggle('open');
-    overlay.classList.toggle('show');
-}
+    function toggleAIPanel() {
+        const panel = document.getElementById('ai-panel');
+        const overlay = document.getElementById('ai-overlay');
+        panel.classList.toggle('open');
+        overlay.classList.toggle('show');
+    }
 
-function startAnalysis() {
-    const startState = document.getElementById('ai-start-state');
-    const loading = document.getElementById('ai-loading');
-    const resultDiv = document.getElementById('ai-result');
-    const startBtn = document.getElementById('ai-start-btn');
+    function startAnalysis() {
+        const startState = document.getElementById('ai-start-state');
+        const loading = document.getElementById('ai-loading');
+        const resultDiv = document.getElementById('ai-result');
+        const startBtn = document.getElementById('ai-start-btn');
 
-    startState.style.display = 'none';
-    loading.style.display = 'flex';
-    resultDiv.style.display = 'none';
-    resultDiv.innerHTML = '';
+        startState.style.display = 'none';
+        loading.style.display = 'flex';
+        resultDiv.style.display = 'none';
+        resultDiv.innerHTML = '';
 
-    // Slim down results to save tokens (max 20, just essential fields)
-    const slimResults = AI_RESULTS.slice(0, 20).map(r => ({
-        descricaoItem: r.descricaoItem || r.objetoContratacao || r.descricao || '',
-        valorUnitario: r.valorUnitario || r.precoUnitario || r.valorUnitarioEstimado || 0,
-        quantidadeHomologada: r.quantidadeHomologada || r.quantidade || 0,
-        unidadeMedida: r.unidadeMedida || '',
-        nomeOrgao: r.nomeOrgao || r.nomeUnidadeOrgao || '',
-        state: r.state || r.uf || '',
-        vigenciaInicio: r.vigenciaInicio || '',
-    }));
+        // Slim down results to save tokens (max 20, just essential fields)
+        const slimResults = AI_RESULTS.slice(0, 100).map(r => ({
+            descricaoItem: r.descricaoItem || r.objetoContratacao || r.descricao || '',
+            valorUnitario: r.valorUnitario || r.precoUnitario || r.valorUnitarioEstimado || 0,
+            quantidadeHomologada: r.quantidadeHomologada || r.quantidade || 0,
+            unidadeMedida: r.unidadeMedida || '',
+            nomeOrgao: r.nomeOrgao || r.nomeUnidadeOrgao || '',
+            state: r.state || r.uf || '',
+            vigenciaInicio: r.vigenciaInicio || '',
+        }));
 
-    fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: AI_QUERY, results: slimResults, type: AI_TYPE }),
-    }).then(response => {
-        loading.style.display = 'none';
-        resultDiv.style.display = 'block';
+        fetch('/api/ai/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: AI_QUERY, results: slimResults, type: AI_TYPE }),
+        }).then(response => {
+            loading.style.display = 'none';
+            resultDiv.style.display = 'block';
 
-        if (!response.ok) {
-            return response.json().then(err => {
-                resultDiv.innerHTML = `<div style="color:#ef4444;padding:1rem;background:rgba(239,68,68,0.08);border-radius:8px;">❌ ${err.error || 'Erro ao conectar com o agente de IA.'}</div>`;
-            });
-        }
+            if (!response.ok) {
+                return response.json().then(err => {
+                    resultDiv.innerHTML = `<div style="color:#ef4444;padding:1rem;background:rgba(239,68,68,0.08);border-radius:8px;">❌ ${err.error || 'Erro ao conectar com o agente de IA.'}</div>`;
+                });
+            }
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
 
-        function renderMarkdown(text) {
-            // Basic markdown rendering
-            return text
-                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                .replace(/`(.+?)`/g, '<code>$1</code>')
-                .replace(/^- (.+)$/gm, '<li>$1</li>')
-                .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
-        }
+            function renderMarkdown(text) {
+                // Basic markdown rendering
+                return text
+                    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/`(.+?)`/g, '<code>$1</code>')
+                    .replace(/^- (.+)$/gm, '<li>$1</li>')
+                    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+            }
 
-        function pump() {
-            return reader.read().then(({ done, value }) => {
-                if (done) return;
-                const text = decoder.decode(value, { stream: true });
-                const lines = text.split('\n');
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        const raw = line.slice(6).trim();
-                        if (raw === '[DONE]') return;
-                        try {
-                            const parsed = JSON.parse(raw);
-                            if (parsed.chunk) {
-                                buffer += parsed.chunk;
-                                resultDiv.innerHTML = renderMarkdown(buffer);
-                                resultDiv.scrollTop = resultDiv.scrollHeight;
-                            } else if (parsed.error) {
-                                resultDiv.innerHTML = `<div style="color:#ef4444;">❌ ${parsed.error}</div>`;
-                            }
-                        } catch(e) {}
+            function pump() {
+                return reader.read().then(({ done, value }) => {
+                    if (done) return;
+                    const text = decoder.decode(value, { stream: true });
+                    const lines = text.split('\n');
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const raw = line.slice(6).trim();
+                            if (raw === '[DONE]') return;
+                            try {
+                                const parsed = JSON.parse(raw);
+                                if (parsed.chunk) {
+                                    buffer += parsed.chunk;
+                                    resultDiv.innerHTML = renderMarkdown(buffer);
+                                    resultDiv.scrollTop = resultDiv.scrollHeight;
+                                } else if (parsed.error) {
+                                    resultDiv.innerHTML = `<div style="color:#ef4444;">❌ ${parsed.error}</div>`;
+                                }
+                            } catch (e) { }
+                        }
                     }
-                }
-                return pump();
-            });
-        }
-        pump();
-    }).catch(err => {
-        loading.style.display = 'none';
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = `<div style="color:#ef4444;">❌ Erro de conexão: ${err.message}</div>`;
-    });
-}
+                    return pump();
+                });
+            }
+            pump();
+        }).catch(err => {
+            loading.style.display = 'none';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<div style="color:#ef4444;">❌ Erro de conexão: ${err.message}</div>`;
+        });
+    }
 </script>
 {% endif %}
 

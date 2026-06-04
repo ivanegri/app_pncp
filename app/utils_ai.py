@@ -39,7 +39,7 @@ def analyze_search_results(query: str, results: list) -> Generator[str, None, No
         results: Lista de dicts com os itens/atas retornados pelo BigQuery
     """
     items_summary = []
-    for r in results[:]:  # Limitar a 20 itens para controle de tokens
+    for r in results[:100]:  # Limitar a 20 itens para controle de tokens
         items_summary.append({
             "descricao": r.get("descricaoItem") or r.get("objetoContratacao") or "",
             "unidade": r.get("unidadeMedida") or "",
@@ -48,6 +48,8 @@ def analyze_search_results(query: str, results: list) -> Generator[str, None, No
             "orgao": r.get("nomeOrgao") or r.get("nomeUnidadeOrgao") or "",
             "uf": r.get("state") or r.get("uf") or "",
             "data": str(r.get("vigenciaInicio") or r.get("dataHomologacao") or ""),
+            "fornecedor": r.get("fornecedor") or "",
+            "preco_vencedor": r.get("valorVencedor") or r.get("precoVencedor") or 0,
         })
 
     prompt_data = json.dumps(items_summary, ensure_ascii=False, indent=2)
@@ -95,7 +97,7 @@ Forneça uma análise completa com as seguintes seções:
     config = types.GenerateContentConfig(
         system_instruction=system_prompt,
         temperature=0.3,
-        max_output_tokens=1500,
+        max_output_tokens=8000,
     )
     for chunk in client.models.generate_content_stream(
         model=_get_model_name(),
@@ -125,7 +127,7 @@ def analyze_oportunidade(edital: dict, historico: list) -> Generator[str, None, 
     }
 
     historico_summary = []
-    for h in historico[:15]:
+    for h in historico[:50]:   #LIMITAÇÃO DO HISTÓRICO DE OPORTUNIDADES
         historico_summary.append({
             "descricao": h.get("descricaoItem") or "",
             "preco": h.get("valorUnitario") or 0,
@@ -174,7 +176,7 @@ Forneça:
     config = types.GenerateContentConfig(
         system_instruction=system_prompt,
         temperature=0.3,
-        max_output_tokens=1500,
+        max_output_tokens=8000,
     )
     for chunk in client.models.generate_content_stream(
         model=_get_model_name(),

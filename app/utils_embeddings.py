@@ -28,8 +28,8 @@ from typing import Optional
 from google import genai
 from google.genai import types as genai_types
 
-EMBEDDING_MODEL = "text-embedding-004"  # 768 dims, baixo custo, alta qualidade
-EMBEDDING_DIMS = 768
+EMBEDDING_MODEL = "gemini-embedding-001"  # 3072 dims, modelo estável da API Gemini
+EMBEDDING_DIMS  = 3072
 
 
 def _get_genai_client() -> genai.Client:
@@ -114,14 +114,15 @@ def find_similar_items(
         Lista de dicts com colunas do item + `similarity_score`
     """
     from google.cloud import bigquery as bq_module
+    from .utils_bigquery import bq_client
 
-    pid = project_id or os.environ.get("GCP_PROJECT_ID", "pncp-466018")
-    did = dataset_id or os.environ.get("GCP_DATASET_ID", "pncp_data")
+    pid = project_id or bq_client.project_id
+    did = dataset_id or bq_client.dataset_id
 
     embedding = generate_embedding(description)
     embedding_str = json.dumps(embedding)
 
-    client = bq_module.Client(project=pid)
+    client = bq_client.get_client()
 
     sql = f"""
         SELECT
@@ -180,14 +181,15 @@ def find_similar_by_exact_match(
         Lista de dicts com itens históricos correspondentes
     """
     from google.cloud import bigquery as bq_module
+    from .utils_bigquery import bq_client
 
-    pid = project_id or os.environ.get("GCP_PROJECT_ID", "pncp-466018")
-    did = dataset_id or os.environ.get("GCP_DATASET_ID", "pncp_data")
+    pid = project_id or bq_client.project_id
+    did = dataset_id or bq_client.dataset_id
 
     if not codigo_item and not cnpj_orgao:
         return []
 
-    client = bq_module.Client(project=pid)
+    client = bq_client.get_client()
 
     conditions = []
     params = []

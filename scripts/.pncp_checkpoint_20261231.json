@@ -1,7 +1,8 @@
 {
-  "proxima_pagina": 651,
+  "proxima_pagina": 653,
   "total_paginas": 650,
-  "registros_salvos": 30929,
+  "registros_salvos": 31029,
+  "itens_salvos": 460,
   "paginas_com_erro": [
     10,
     26,
@@ -35,5 +36,5 @@
     628,
     635
   ],
-  "atualizado_em": "2026-05-05T04:53:22.587322+00:00"
+  "atualizado_em": "2026-06-03T21:29:05.049059+00:00"
 }
