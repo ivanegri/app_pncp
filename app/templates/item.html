@@ -13,6 +13,9 @@
         <!-- Item Info -->
         <div class="detail-card main-info">
             <span class="badge-type">Item #{{ item.numeroItem }}</span>
+            {% if item.situacaoCompraItemNome %}
+            <span class="badge-status {{ item.situacaoCompraItemNome|lower|replace(' ', '-')|replace('/', '-') }}">{{ item.situacaoCompraItemNome }}</span>
+            {% endif %}
             <h1>{{ item.descricao }}</h1>
 
             <div class="price-highlight">
@@ -79,7 +82,23 @@
                 </div>
                 {% endfor %}
                 {% else %}
-                <p style="opacity: 0.7;">Informações do fornecedor não disponíveis na API do PNCP.</p>
+                <div class="status-warning" style="padding: 1.5rem; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 8px; text-align: center; margin: 1rem 0;">
+                    <i class="fa-solid fa-circle-info" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.75rem; display: block;"></i>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem; font-size: 1.1rem;">Status do Item: {{ item.situacaoCompraItemNome or 'Sem Resultado' }}</p>
+                    <p style="font-size: 0.9rem; opacity: 0.7; line-height: 1.4;">
+                        {% if item.situacaoCompraItemNome == 'Deserto' %}
+                        Este item foi declarado deserto (não houve interessados/propostas).
+                        {% elif item.situacaoCompraItemNome == 'Fracassado' %}
+                        Este item foi declarado fracassado (as propostas foram desclassificadas ou reprovadas).
+                        {% elif item.situacaoCompraItemNome == 'Em andamento' %}
+                        Este item ainda está em andamento/fase de lances, e não possui resultado homologado no PNCP.
+                        {% elif item.situacaoCompraItemNome == 'Anulado/Revogado/Cancelado' %}
+                        Este item foi anulado, revogado ou cancelado pelo órgão licitante.
+                        {% else %}
+                        Não foram encontrados fornecedores adjudicados/homologados para este item no PNCP.
+                        {% endif %}
+                    </p>
+                </div>
                 {% endif %}
             </div>
         </div>
